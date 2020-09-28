@@ -15,6 +15,7 @@ app.use(morgan("dev")); //para mostrar mensajes en consola
 //Variables Globales
 
 //Routes
+app.use(require("./routes/index.js"));
 
 //Archivos Publicos (codigo que el navegador puede acceder)
 
