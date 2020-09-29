@@ -1,0 +1,18 @@
+CREATE DATABASE database_pacientes;
+USE database_pacientes;
+CREATE TABLE usuario(
+  id INT(11) NOT NULL,
+  username VARCHAR(50) NOT NULL,
+  clave VARCHAR(40) NOT NULL,
+  ROL VARCHAR(10) NOT NULL,
+);
+ALTER TABLE
+  usuario
+ADD
+  PRIMARY KEY (id);
+ALTER TABLE
+  usuario
+MODIFY
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  AUTO_INCREMENT = 1;
+DESCRIBE users;
