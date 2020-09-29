@@ -26,3 +26,9 @@ Y luego:
 ```
 npm i nodemon -D
 ```
+
+Ejecutamos el programa
+
+```
+npm run dev
+```
