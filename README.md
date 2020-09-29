@@ -27,7 +27,7 @@ Y luego:
 npm i nodemon -D
 ```
 
-Ejecutamos el programa
+Y para ejecutar corremos el siguiente comando
 
 ```
 npm run dev
