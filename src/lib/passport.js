@@ -18,7 +18,7 @@ passport.use(
         password
       };
       newUser.password = await helpers.encryptPassword(password);
-      const result = await pool.query("INSERT INTO Usuario SET ?", [newUser]);
+      const result = await pool.query("INSERT INTO usuario SET ?", [newUser]);
       newUser.id = result.insertId;
       return done(null, newUser);
     }
@@ -31,6 +31,6 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const rows = await pool.query("SELECT * FROM Usuario Where id = ?", [id]);
+  const rows = await pool.query("SELECT * FROM usuario Where id = ?", [id]);
   done(null, rows[0]);
 });

@@ -19,7 +19,7 @@ router.post("/login", async (req, res) => {
   };
 
   //Buscamos en la base de datos si el usuario existe
-  await pool.query("INSERT INTO Usuario set ? ", [newLogin]);
+  await pool.query("INSERT INTO usuario set ? ", [newLogin]);
 
   res.send("Logueado!");
 
