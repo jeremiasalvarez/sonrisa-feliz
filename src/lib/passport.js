@@ -4,6 +4,18 @@ const pool = require("../datebase");
 const helpers = require("../lib/helpers");
 
 passport.use(
+  "local.signin",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+      passReqToCallback: true
+    },
+    () => {}
+  )
+);
+
+passport.use(
   "local.signup",
   new LocalStrategy(
     {

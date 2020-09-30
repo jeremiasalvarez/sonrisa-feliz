@@ -16,6 +16,10 @@ router.post(
   })
 );
 
+router.get("/login", (req, res) => {
+  res.render("auth/login");
+});
+
 router.get("/perfil", (req, res) => {
   res.render("auth/perfil");
 });

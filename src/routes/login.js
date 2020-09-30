@@ -4,7 +4,7 @@ const router = express.Router();
 const pool = require("../datebase");
 
 router.get("/login", (req, res) => {
-  res.render("turnos/login");
+  res.render("auth/login");
 });
 
 //manejo logueo
