@@ -24,7 +24,7 @@ passport.use(
           user.password
         );
         if (validPassword) {
-          done(null, user, req.flash("success", "Bienvenido!" + user.email));
+          done(null, user, req.flash("success", "Bienvenido " + user.email));
         } else {
           done(null, false, req.flash("message", "Contraseña incorrecta"));
         }

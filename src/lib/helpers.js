@@ -13,7 +13,7 @@ helpers.encryptPassword = async (password) => {
 //contraseña en texto plano y la contraseña guardada en la bd
 helpers.matchPassword = async (password, savedPassword) => {
   try {
-    await bcrypt.compare(password, savedPassword);
+    return await bcrypt.compare(password, savedPassword);
   } catch (e) {
     console.log(e);
   }
