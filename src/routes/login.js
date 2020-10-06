@@ -8,24 +8,24 @@ router.get("/login", (req, res) => {
 });
 
 //manejo logueo
-router.post("/login", async (req, res) => {
-  //obtenemos los datos del usuario a partir del request
-  const { email, password } = req.body;
-  //creamos un objeto nuevo---
-  //controlar que los campos de la tabla coincidan
-  const newLogin = {
-    email,
-    password
-  };
+// router.post("/login", async (req, res) => {
+//   //obtenemos los datos del usuario a partir del request
+//   const { email, password } = req.body;
+//   //creamos un objeto nuevo---
+//   //controlar que los campos de la tabla coincidan
+//   const newLogin = {
+//     email,
+//     password
+//   };
 
-  //Buscamos en la base de datos si el usuario existe
-  await pool.query("INSERT INTO usuario set ? ", [newLogin]);
+//   //Buscamos en la base de datos si el usuario existe
+//   //await pool.query("INSERT INTO usuario set ? ", [newLogin]);
 
-  res.send("Logueado!");
+//   res.send("Logueado!");
 
-  //Si existe, ir a la pagina de ficha medica
+//   //Si existe, ir a la pagina de ficha medica
 
-  //Si no existe, mostrar mensaje error
-});
+//   //Si no existe, mostrar mensaje error
+// });
 
 module.exports = router;

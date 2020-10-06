@@ -20,6 +20,14 @@ router.get("/login", (req, res) => {
   res.render("auth/login");
 });
 
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local.signin", {
+    successRedirect: "/perfil",
+    failureRedirect: "/login",
+    failureFlash: true
+  })(req, res, next);
+});
+
 router.get("/perfil", (req, res) => {
   res.render("auth/perfil");
 });

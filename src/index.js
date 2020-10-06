@@ -4,10 +4,15 @@ const expresshbs = require("express-handlebars");
 const path = require("path");
 const passport = require("passport");
 const session = require("express-session");
+const mysqlStore = require("express-mysql-session");
+const flash = require("connect-flash");
+
+const { database } = require("./keys");
 
 //Inicializaciones
 const app = express();
 require("./lib/passport");
+
 //Configuraciones
 app.set("port", process.env.PORT || 4000);
 //ruta de la carpeta views
@@ -27,7 +32,15 @@ app.engine(
 app.set("view engine", ".hbs");
 //Middlewares
 //cada vez que un cliente envia una peticion
-//por ejemplo morgan
+app.use(
+  session({
+    secret: "DentistaSession",
+    resave: false,
+    saveUninitialized: false,
+    store: new mysqlStore(database)
+  })
+);
+app.use(flash());
 app.use(morgan("dev")); //para mostrar mensajes en consola con las solicitudes y que valor retorna
 app.use(express.urlencoded({ extended: false })); //aceptar desde el formulario los datos del usuario
 app.use(express.json());
@@ -39,6 +52,8 @@ app.use((req, res, next) => {
   //toma el pedido del usuario con req
   //toma lo que quiere responder el servidor
   //next continua con el resto del código
+  app.locals.success = req.flash("success");
+  app.locals.message = req.flash("message");
   next();
 });
 
