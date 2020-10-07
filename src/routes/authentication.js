@@ -1,7 +1,9 @@
 //rutas relacionadas con el loggeo
 const express = require("express");
 const router = express.Router();
+
 const passport = require("passport");
+const { isLoggedIn } = require("../lib/auth");
 
 router.get("/signup", (req, res) => {
   res.render("auth/signup");
@@ -28,8 +30,13 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/perfil", (req, res) => {
+router.get("/perfil", isLoggedIn, (req, res) => {
   res.render("auth/perfil");
+});
+
+router.get("/logout", (req, res) => {
+  req.logOut();
+  res.redirect("/login");
 });
 
 module.exports = router;

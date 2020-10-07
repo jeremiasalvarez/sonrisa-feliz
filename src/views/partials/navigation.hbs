@@ -1,11 +1,31 @@
-<nav class="navbar navbar-dark " style="background-color: deepskyblue;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" href="#">
             <img src="/img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
             Consultorio Dental
         </a>
-        <form class="form-inline">
-            <button class="btn btn-dark my-2 my-sm-0" type="submit">Salir</button>
-        </form>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {{#if user}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/perfil">Mi Perfil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Cerrar Sesión</a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">Registrarse</a>
+                </li>
+                {{/if}}
+            </ul>
+        </div>
     </div>
 </nav>

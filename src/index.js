@@ -54,13 +54,14 @@ app.use((req, res, next) => {
   //next continua con el resto del código
   app.locals.success = req.flash("success");
   app.locals.message = req.flash("message");
+  app.locals.user = req.user;
   next();
 });
 
 //Routes
 app.use(require("./routes/index.js"));
 app.use(require("./routes/authentication.js"));
-app.use(require("./routes/login"));
+app.use(require("./routes/controlTurnos"));
 
 //Archivos Publicos (codigo que el navegador puede acceder)
 app.use(express.static(path.join(__dirname, "public")));
