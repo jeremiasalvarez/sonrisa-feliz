@@ -2,9 +2,9 @@
 //numero de puerto
 module.exports = {
   database: {
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "pacientes"
+    host: "sql10.freemysqlhosting.net",
+    user: "sql10369633",
+    password: "ysarmG9Du9",
+    database: "sql10369633"
   }
 };
