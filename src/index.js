@@ -64,7 +64,7 @@ app.use(require("./routes/authentication.js"));
 app.use(require("./routes/controlTurnos"));
 
 //Archivos Publicos (codigo que el navegador puede acceder)
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 //Inicialización del servidor
 app.listen(app.get("port"), () => {

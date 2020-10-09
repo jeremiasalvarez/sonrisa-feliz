@@ -56,10 +56,6 @@ passport.use(
 
       const dni = await nuevaFichaMedica(result.insertId, req.body);
 
-      //const { obra } = req.body;
-
-
-
       return done(null, newUser);
     }
   )
@@ -89,6 +85,8 @@ async function nuevaFichaMedica(id, datos) {
 async function nuevaObraSocialPaciente(obra, dniPaciente) {
 
   const queryObra = await pool.query("SELECT cod_obra_social FROM obra_social WHERE nombre = ?", [obra]);
+
+  
 
   const idObra = queryObra[0];
 

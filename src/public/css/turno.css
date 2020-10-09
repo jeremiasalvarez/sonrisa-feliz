@@ -1,0 +1,34 @@
+#appointment {
+    padding: 2em;
+}
+
+.check-group {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+.check-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.error-div {
+    padding: 1rem;
+    color: #fe005c;
+}
+
+.appointment button[type="submit"] {
+    background: #1977cc;
+    border: 0;
+    padding: 10px 35px;
+    color: #fff;
+    transition: 0.4s;
+    border-radius: 50px;
+}
+
+.appointment button[type="submit"]:hover {
+    background: #1c84e3;
+}

@@ -27,4 +27,21 @@ helpers.getObrasSociales = async () => {
   return result;
 }
 
+helpers.getPrestaciones = async () => {
+  const result = await pool.query("SELECT nombre, descripcion FROM prestaciones");
+
+  const json = toJson(result);
+
+  return json;
+}
+
+function toJson(data) {
+
+  const string = JSON.stringify(data);
+
+  const json = JSON.parse(string);
+ 
+  return json;
+}
+
 module.exports = helpers;
