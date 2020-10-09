@@ -1,12 +1,20 @@
 //rutas relacionadas con el loggeo
 const express = require("express");
 const router = express.Router();
+const helpers = require("../lib/helpers");
 
 const passport = require("passport");
 const { isLoggedIn } = require("../lib/auth");
 
-router.get("/signup", (req, res) => {
-  res.render("auth/signup");
+router.get("/signup", async (req, res) => {
+  const obras =  await helpers.getObrasSociales();
+
+  let string = JSON.stringify(obras);
+
+  let obrasJson = JSON.parse(string);
+
+
+  res.render("auth/signup", {obrasJson});
 });
 
 router.post(
@@ -28,6 +36,7 @@ router.post("/login", (req, res, next) => {
     failureRedirect: "/login",
     failureFlash: true
   })(req, res, next);
+
 });
 
 router.get("/perfil", isLoggedIn, (req, res) => {

@@ -45,7 +45,7 @@ passport.use(
       passReqToCallback: true
     },
     async (req, username, password, done) => {
-      //const {} = req.body; -- Elegir parametros que queremos de la request
+
       const newUser = {
         email: username,
         password
@@ -53,10 +53,60 @@ passport.use(
       newUser.password = await helpers.encryptPassword(password);
       const result = await pool.query("INSERT INTO usuario SET ?", [newUser]);
       newUser.id = result.insertId;
+
+      const dni = await nuevaFichaMedica(result.insertId, req.body);
+
+      //const { obra } = req.body;
+
+
+
       return done(null, newUser);
     }
   )
 );
+
+async function nuevaFichaMedica(id, datos) {
+
+  const { nombre, apellido, dni, obra, telefono, nacimiento } = datos;
+
+  const nuevaFicha = {
+      id_usuario: id,
+      nombre,
+      apellido,
+      dni,
+      telefono,
+      fecha_nacimiento: nacimiento
+  }
+
+  const result = await pool.query("INSERT INTO ficha_paciente SET ?", [nuevaFicha]);
+
+  const resultObraSocialPaciente = await nuevaObraSocialPaciente(obra, dni);
+
+  return result;
+
+}
+
+async function nuevaObraSocialPaciente(obra, dniPaciente) {
+
+  const queryObra = await pool.query("SELECT cod_obra_social FROM obra_social WHERE nombre = ?", [obra]);
+
+  const idObra = queryObra[0];
+
+  const string = JSON.stringify(idObra);
+
+  const idJson = JSON.parse(string);
+
+
+  console.log(idJson.cod_obra_social);
+
+  const nuevaObra =  {
+      dni_paciente: dniPaciente,
+      cod_obra_social: idJson.cod_obra_social
+  }
+
+  const result = await pool.query("INSERT INTO obra_social_paciente SET ?", [nuevaObra]);
+
+}
 
 //guardar usuario en la sesion
 passport.serializeUser((user, done) => {
