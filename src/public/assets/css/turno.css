@@ -1,0 +1,21 @@
+#appointment {
+    margin-top: 8rem;
+}
+
+.check-group {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+.check-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.error-div {
+    padding: 1rem;
+    color: #fe005c;
+}
