@@ -4,7 +4,7 @@ const router = express.Router();
 const helpers = require("../lib/helpers");
 
 const passport = require("passport");
-const { isLoggedIn } = require("../lib/auth");
+const { isLoggedIn, validateLogInForm } = require("../lib/auth");
 
 router.get("/signup", async (req, res) => {
   const obras =  await helpers.getObrasSociales();
@@ -27,10 +27,19 @@ router.post(
 );
 
 router.get("/login", (req, res) => {
-  res.render("auth/login");
+  
+  //* se renderiza perfil + el mensaje porque si llega hasta aca significa que ya estaba loggeado
+  //console.log(req.isAuthenticated());
+
+  if (req.isAuthenticated()){
+    res.render("auth/perfil", {message: "Ya iniciaste sesion en el sitio"});
+  } else {
+    res.render("auth/login");
+  }
 });
 
-router.post("/login", (req, res, next) => {
+router.post("/login", validateLogInForm, (req, res, next) => {
+  
   passport.authenticate("local.signin", {
     successRedirect: "/perfil",
     failureRedirect: "/login",
@@ -45,7 +54,7 @@ router.get("/perfil", isLoggedIn, (req, res) => {
 
 router.get("/logout", (req, res) => {
   req.logOut();
-  res.redirect("/login");
+  res.redirect("/");
 });
 
 module.exports = router;

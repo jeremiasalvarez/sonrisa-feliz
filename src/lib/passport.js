@@ -13,6 +13,22 @@ passport.use(
       passReqToCallback: true
     },
     async (req, username, password, done) => {
+
+      // const errors = [];
+      // console.log("asd")
+      // if (!username) {
+      //   console.log("No hay usuario")
+      //   errors.push("No se ingreso un email valido");
+      // }
+      // if (!password) {
+      //   errors.push("No se ingreso una contraseña");
+      // }
+
+      // if (errors.length > 0) {
+      //   const errorList = errors.join(" </br> ");
+      //   return done(null, false, req.flash("message", errorList));
+      // }
+
       const rows = await pool.query("SELECT * FROM usuario WHERE email = ? ", [
         username
       ]);
@@ -25,13 +41,10 @@ passport.use(
         );
         if (validPassword) {
           done(null, user, req.flash("success", "Bienvenido " + user.email));
-        } else {
-          done(null, false, req.flash("message", "Contraseña incorrecta"));
-        }
-      } else {
+        } 
+      } 
         //no se encontraron emails registrados
-        return done(null, false, req.flash("message", "Email no registrado!"));
-      }
+        return done(null, false, req.flash("message", "El email y/o la contraseña son incorrectos"));
     }
   )
 );

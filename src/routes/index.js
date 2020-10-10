@@ -1,14 +1,14 @@
 const express = require("express");
+const { isLoggedIn } = require("../lib/auth");
 const router = express.Router();
 
 //Ruta inicial de la pagina web
-router.get("/", (req, res) => {
+router.get("/", isLoggedIn, (req, res) => {
   //pagina raiz
   //Si ya se inicio sesion mostrar pagina bienvenida
   //Si no se inicio sesion redireccionar a /login
-  res.render("auth/login");
+  console.log(req.logged);
+  res.render("auth/perfil");
 });
-
-const pool = require("../datebase");
 
 module.exports = router;
