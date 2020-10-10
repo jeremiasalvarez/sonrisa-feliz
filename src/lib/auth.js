@@ -21,17 +21,9 @@ module.exports = {
 
 function validate(username, password) { 
 
-  const errors = [];
-
-  if (!username) {
-    errors.push("No se ingreso un email valido");
-  }
-  if (!password) {
-    errors.push("No se ingreso una contraseña");
-  }
-
-  if (errors.length > 0) {
-    const message = errors.join("<br>");
+ 
+  if (!username || !password) {
+    const message = "Asegurese de rellenar todos los campos"
     return {
       success: false,
       message

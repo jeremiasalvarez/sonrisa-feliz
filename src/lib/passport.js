@@ -14,21 +14,6 @@ passport.use(
     },
     async (req, username, password, done) => {
 
-      // const errors = [];
-      // console.log("asd")
-      // if (!username) {
-      //   console.log("No hay usuario")
-      //   errors.push("No se ingreso un email valido");
-      // }
-      // if (!password) {
-      //   errors.push("No se ingreso una contraseña");
-      // }
-
-      // if (errors.length > 0) {
-      //   const errorList = errors.join(" </br> ");
-      //   return done(null, false, req.flash("message", errorList));
-      // }
-
       const rows = await pool.query("SELECT * FROM usuario WHERE email = ? ", [
         username
       ]);
@@ -40,7 +25,7 @@ passport.use(
           user.password
         );
         if (validPassword) {
-          done(null, user, req.flash("success", "Bienvenido " + user.email));
+          return done(null, user, req.flash("success", "Bienvenido " + user.email));
         } 
       } 
         //no se encontraron emails registrados
@@ -59,12 +44,25 @@ passport.use(
     },
     async (req, username, password, done) => {
 
+      const params = {
+        email: req.body.email,
+        dni: req.body.dni
+      }
+      
+      const validate = await userExists(params);
+
+      if (!validate.success) {
+        return done(null, false, req.flash("message", validate.message));
+      }
+
       const newUser = {
         email: username,
-        password
+        password,
+        fecha_creacion: new Date().toISOString()
       };
       newUser.password = await helpers.encryptPassword(password);
       const result = await pool.query("INSERT INTO usuario SET ?", [newUser]);
+
       newUser.id = result.insertId;
 
       const dni = await nuevaFichaMedica(result.insertId, req.body);
@@ -107,15 +105,50 @@ async function nuevaObraSocialPaciente(obra, dniPaciente) {
 
   const idJson = JSON.parse(string);
 
-
-  console.log(idJson.cod_obra_social);
-
   const nuevaObra =  {
       dni_paciente: dniPaciente,
       cod_obra_social: idJson.cod_obra_social
   }
 
   const result = await pool.query("INSERT INTO obra_social_paciente SET ?", [nuevaObra]);
+
+}
+
+function emptySingUpForm(formBody) {
+
+
+}
+
+
+async function userExists(params) {
+
+  const { email, dni } = params;
+
+  const result = await pool.query("SELECT * FROM usuario WHERE email = ?", [email]);
+
+  if (result.length !== 0){
+
+    return {
+      success: false,
+      message: "El email ingresado ya esta en uso"
+    }
+
+  }
+
+  const result2 = await pool.query("SELECT * FROM ficha_paciente WHERE dni = ?", [dni]);
+
+  if (result2.length !== 0){
+
+    return {
+      success: false,
+      message: "El D.N.I ingresado ya esta en uso"
+    }
+    
+  }
+
+  return {
+    success: true
+  }
 
 }
 

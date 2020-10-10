@@ -35,6 +35,32 @@ helpers.getPrestaciones = async () => {
   return json;
 }
 
+helpers.getUserData = async (id) => {
+
+  try {
+    const data = await pool.query("SELECT usuario.id, usuario.email, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono FROM usuario INNER JOIN ficha_paciente ON usuario.id=ficha_paciente.id_usuario WHERE usuario.id=?",[id]);
+
+    return toJson(data);
+    
+  } catch(e) {
+    console.error(e)
+  }
+}
+
+helpers.getDias = async () => {
+
+  const result = await pool.query("SELECT nombre_dia FROM dias");
+
+  return toJson(result);
+}
+
+helpers.getHorarios = async () => {
+
+  const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turno ORDER BY hora_inicio ASC");
+
+  return toJson(result);
+}
+
 
 function toJson(data) {
 

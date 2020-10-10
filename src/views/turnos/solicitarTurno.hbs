@@ -16,41 +16,56 @@
         <form action="" method="post" role="form" class="php-email-form">
             <div class="form-row">
                 <div class="col-md-4 form-group">
-                    <input type="text" name="from_name" id="from_name" class="form-control" placeholder="Nombre"
-                        data-rule="minlen:4" data-msg="Debes ingresar un nombre valido" />
+                    <input type="email" class="form-control" name="from_email" id="from_email" placeholder="Email"
+                        data-rule="email" data-msg="Debes ingresar un email valido" value={{userData.nombre}}
+                        disabled />
+                    <div class="validate"></div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <input type="text" class="form-control" name="from_email" id="apellido" placeholder="Email"
+                        data-rule="text" data-msg="Debes ingresar un apellido valido" value={{userData.apellido}}
+                        disabled />
                     <div class="validate"></div>
                 </div>
                 <div class="col-md-4 form-group">
                     <input type="email" class="form-control" name="from_email" id="from_email" placeholder="Email"
-                        data-rule="email" data-msg="Debes ingresar un email valido" />
+                        data-rule="email" data-msg="Debes ingresar un email valido" value={{userData.email}} disabled />
                     <div class="validate"></div>
                 </div>
                 <div class="col-md-4 form-group">
                     <input type="tel" class="form-control" name="tel" id="tel" placeholder="Teléfono"
-                        data-rule="minlen:4" data-msg="Debes ingresar un telefono valido" />
+                        data-rule="minlen:4" data-msg="Debes ingresar un telefono valido" value={{userData.telefono}}
+                        disabled />
                     <div class="validate"></div>
                 </div>
             </div>
 
             <div class="form-row">
-                {{!-- <div class="col-md-4 form-group">
-                    <label for="cars">Tipo de Consulta (<a href="index.html#services">Puede consultar los servicios
-                            ofrecidos
-                            aqui</a>)</label>
-
-                    <select class="form-control" name="prestaciones" id="type">
-                        {{#each prestaciones}}
-                        <option value={{nombre}}> {{nombre}}</option>
+                <div class="col-md-4 form-group">
+                    <label for="dia">Dias Disponibles:</label>
+                    <select class="form-control" name="dia" id="dia">
+                        {{#each dias}}
+                        <option value={{nombre_dia}}> {{nombre_dia}}</option>
                         {{/each}}
                     </select>
-                </div> --}}
+                </div>
+                <div class="col-md-4 form-group">
+                    <label for="dia">Horarios Disponibles:</label>
+                    <select class="form-control" name="dia" id="dia">
+                        {{#each horarios}}
+                        <option value={{id}}> {{hora_inicio}} - {{hora_fin}}
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+                {{!-- 
                 <div class="col-md-4 my-1">
                     <h6 style="text-align: left">
                         Fecha tentativa para su turno:
                     </h6>
                     <input type="date" class="form-control" name="fecha" id="fecha">
 
-                </div>
+                </div> --}}
 
             </div>
 
