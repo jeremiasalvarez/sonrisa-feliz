@@ -7,18 +7,18 @@
         <div class="section-title">
             <h2>Solicitar un turno</h2>
             <p>
-                Complete el formulario con una fecha
-                tentativa para su turno. Luego nos pondremos en contacto
-                para evaluar su solicitud.
+                Complete el formulario con un dia y un horario
+                tentativo para su turno. Luego evaluaremos su solicitud y nos pondremos en contacto con usted.
             </p>
         </div>
 
-        <form action="" method="post" role="form" class="php-email-form">
+        <form action="/pedirTurno" method="post" role="form" class="php-email-form">
             <div class="form-row">
                 <div class="col-md-4 form-group">
-                    <input type="email" class="form-control" name="from_email" id="from_email" placeholder="Email"
-                        data-rule="email" data-msg="Debes ingresar un email valido" value={{userData.nombre}}
-                        disabled />
+                    {{!-- <input type="hidden" name="user_id" value={{userData.id}}> --}}
+                    <input disabled type="text" class="form-control" name="from_email" id="from_email"
+                        placeholder="Email" data-rule="text" data-msg="Debes ingresar un email valido"
+                        value={{userData.nombre}} />
                     <div class="validate"></div>
                 </div>
                 <div class="col-md-4 form-group">
@@ -45,13 +45,13 @@
                     <label for="dia">Dias Disponibles:</label>
                     <select class="form-control" name="dia" id="dia">
                         {{#each dias}}
-                        <option value={{nombre_dia}}> {{nombre_dia}}</option>
+                        <option value={{id_dia}}> {{nombre_dia}}</option>
                         {{/each}}
                     </select>
                 </div>
                 <div class="col-md-4 form-group">
                     <label for="dia">Horarios Disponibles:</label>
-                    <select class="form-control" name="dia" id="dia">
+                    <select class="form-control" name="horario" id="horario">
                         {{#each horarios}}
                         <option value={{id}}> {{hora_inicio}} - {{hora_fin}}
                         </option>

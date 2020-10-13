@@ -82,7 +82,8 @@ async function nuevaFichaMedica(id, datos) {
       apellido,
       dni,
       telefono,
-      fecha_nacimiento: nacimiento
+      fecha_nacimiento: nacimiento,
+      fecha_creacion: new Date().toISOString()
   }
 
   const result = await pool.query("INSERT INTO ficha_paciente SET ?", [nuevaFicha]);

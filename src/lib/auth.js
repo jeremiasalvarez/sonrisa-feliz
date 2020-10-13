@@ -16,6 +16,10 @@ module.exports = {
   
     
     return next();
+  },
+
+  isAdmin(req, res, next) {
+    
   }
 };
 

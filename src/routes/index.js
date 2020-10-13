@@ -7,7 +7,6 @@ router.get("/", isLoggedIn, (req, res) => {
   //pagina raiz
   //Si ya se inicio sesion mostrar pagina bienvenida
   //Si no se inicio sesion redireccionar a /login
-  console.log(req.logged);
   res.render("auth/perfil");
 });
 

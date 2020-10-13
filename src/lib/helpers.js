@@ -49,16 +49,45 @@ helpers.getUserData = async (id) => {
 
 helpers.getDias = async () => {
 
-  const result = await pool.query("SELECT nombre_dia FROM dias");
+  const result = await pool.query("SELECT id_dia, nombre_dia FROM turnos_dias");
 
   return toJson(result);
 }
 
 helpers.getHorarios = async () => {
 
-  const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turno ORDER BY hora_inicio ASC");
+  const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turnos_horarios ORDER BY hora_inicio ASC");
 
   return toJson(result);
+}
+
+helpers.guardarSolicitud = async (data) => {
+
+  const result = {}
+
+  try {
+
+    const nuevaSolicitud = {
+      id_usuario: data.user_id,
+      id_horario: data.horario_id,
+      id_dia: data.dia_id,
+      fecha_solicitud: new Date().toISOString(),
+      mensaje_solicitud: data.msg
+    }
+
+    const query = await pool.query("INSERT INTO solicitudes_turno SET ?", [nuevaSolicitud]);
+
+    result.insert_id = query.insertId;
+    result.success = true;
+    result.msg = "Insertado";
+
+  } catch(e){
+
+    result.success = false;
+    result.error = e
+  };
+
+  return result;
 }
 
 
