@@ -26,24 +26,27 @@ router.get("/pedirTurno", isLoggedIn, async (req, res) => {
 
 router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
   
-  //console.log(req.body.dia);
-
   const data = {
     user_id: req.user.id,
-    horario_id: req.body.horario,
-    dia_id: req.body.dia,
+    horario_id: req.body.horario_id,
+    dia_id: req.body.dia_id,
     msg: req.body.msg
   }
 
-  // console.log(data);
+  console.log(data);
 
   const result = await guardarSolicitud(data);
   
-  // console.log(result);
+  // // console.log(result);
 
   if (result.success) {
 
-    res.redirect('http://localhost:4000')
+    res.status(200).json(result);
+
+  } else {
+    
+    res.status(500).json(result);
+  
   }
 
 

@@ -80,6 +80,7 @@ helpers.guardarSolicitud = async (data) => {
     result.insert_id = query.insertId;
     result.success = true;
     result.msg = "Insertado";
+    result.redirectAdress = "/perfil"
 
   } catch(e){
 

@@ -54,52 +54,53 @@ function validate() {
 const btn = $("#submit");
 
 $("form").on("submit", function (event) {
+    console.log("SUBMIT")
     event.preventDefault();
 
     errorList.empty();
 
-    if (!validate()) {
-        return;
-    }
+    // if (!validate()) {
+    //     return;
+    // }
 
-    btn.text("Enviando...");
+    // btn.text("Enviando...");
 
-    const serviceID = "default_service";
-    const templateID = "template_3sgl7e3";
+    // const serviceID = "default_service";
+    // const templateID = "template_3sgl7e3";
 
-    emailjs.sendForm(serviceID, templateID, form).then(
-        () => {
-            btn.text("Solicitar Turno");
-            swal({
-                title: "Envio exitoso!",
-                text:
-                    "Tu solicitud se envio correctamente. La doctora se comunicara con usted a la brevedad.",
-                icon: "success",
-                button: {
-                    text: "Entendido",
-                    value: true,
-                    visible: true,
-                    className: "btn btn-primary btn-xl js-scroll-trigger",
-                    closeModal: true,
-                },
-            });
-            form.reset();
-        },
-        (err) => {
-            btn.text("Solicitar Turno");
-            swal({
-                title: "Error",
-                text:
-                    "Lo sentimos, ocurrio un error y tu solicitud no se envio correctamente",
-                icon: "error",
-                button: {
-                    text: "Entendido",
-                    value: true,
-                    visible: true,
-                    className: "btn btn-primary btn-xl js-scroll-trigger",
-                    closeModal: true,
-                },
-            });
-        }
-    );
+    // emailjs.sendForm(serviceID, templateID, form).then(
+    //     () => {
+    //         btn.text("Solicitar Turno");
+            // swal({
+            //     title: "Envio exitoso!",
+            //     text:
+            //         "Tu solicitud se envio correctamente. La doctora se comunicara con usted a la brevedad.",
+            //     icon: "success",
+            //     button: {
+            //         text: "Entendido",
+            //         value: true,
+            //         visible: true,
+            //         className: "btn btn-primary btn-xl js-scroll-trigger",
+            //         closeModal: true,
+            //     },
+            // });
+    //         form.reset();
+    //     },
+    //     (err) => {
+    //         btn.text("Solicitar Turno");
+            // swal({
+            //     title: "Error",
+            //     text:
+            //         "Lo sentimos, ocurrio un error y tu solicitud no se envio correctamente",
+            //     icon: "error",
+            //     button: {
+            //         text: "Entendido",
+            //         value: true,
+            //         visible: true,
+            //         className: "btn btn-primary btn-xl js-scroll-trigger",
+            //         closeModal: true,
+            //     },
+            // });
+    //     }
+    // );
 });
