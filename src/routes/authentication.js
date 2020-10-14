@@ -4,7 +4,7 @@ const router = express.Router();
 const helpers = require("../lib/helpers");
 
 const passport = require("passport");
-const { isLoggedIn, validateLogInForm } = require("../lib/auth");
+const { isLoggedIn, validateLogInForm, isAdmin } = require("../lib/auth");
 
 router.get("/signup", async (req, res) => {
   const obras =  await helpers.getObrasSociales();
@@ -29,12 +29,16 @@ router.post(
 router.get("/login", (req, res) => {
   
   //* se renderiza perfil + el mensaje porque si llega hasta aca significa que ya estaba loggeado
-  //console.log(req.isAuthenticated());
+
 
   if (req.isAuthenticated()){
-    res.render("auth/perfil", {message: "Ya iniciaste sesion en el sitio"});
+    return res.render("auth/perfil", {message: "Ya iniciaste sesion en el sitio"});
   } else {
-    res.render("auth/login");
+    
+    if (req.query.redirected) {
+      return res.render("auth/login", {message: "Debes iniciar sesion para ver esta seccion"});
+    }
+    return res.render("auth/login");
   }
 });
 
@@ -48,13 +52,17 @@ router.post("/login", validateLogInForm, (req, res, next) => {
 
 });
 
-router.get("/perfil", isLoggedIn, (req, res) => {
-  res.render("auth/perfil");
+router.get("/perfil", isLoggedIn, isAdmin, (req, res) => {
+
+  if (req.admin)
+    return res.redirect("/admin");
+
+  return res.render("auth/perfil");
 });
 
 router.get("/logout", (req, res) => {
   req.logOut();
-  res.redirect("/");
+  res.redirect("/login");
 });
 
 module.exports = router;

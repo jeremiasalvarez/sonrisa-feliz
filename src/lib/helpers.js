@@ -91,6 +91,44 @@ helpers.guardarSolicitud = async (data) => {
   return result;
 }
 
+helpers.getRol = async (userId) => {
+  const result = {};
+  const rows = await pool.query("SELECT rol FROM usuario WHERE id = ?", [userId]);
+
+  if (rows.length > 0) {
+    
+    const user = toJson(rows[0]);
+
+    result.isAdmin = user.rol === 'admin';
+
+  } else {
+    result.isAdmin = false;
+  }
+
+  return result;
+  
+}
+
+helpers.getPacientes = async () => {
+  
+  const pacientes = await pool.query("SELECT usuario.id, usuario.email, ficha_paciente.dni, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono FROM usuario INNER JOIN ficha_paciente ON usuario.id=ficha_paciente.id_usuario");
+
+  return toJson(pacientes);
+
+}
+
+helpers.getPaciente = async (id) => {
+  
+}
+
+helpers.getSolicitudes = async (id) => {
+
+  const solicitudes = await pool.query("SELECT * FROM solicitudes_turno");
+
+  return toJson(solicitudes);
+
+}
+
 
 function toJson(data) {
 

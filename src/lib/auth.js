@@ -1,9 +1,11 @@
+const { getRol } = require("../lib/helpers");
+
 module.exports = {
   isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
-    return res.redirect("/login");
+    return res.redirect("/login?redirected=true");
   },
 
   validateLogInForm(req, res, next) {
@@ -18,8 +20,14 @@ module.exports = {
     return next();
   },
 
-  isAdmin(req, res, next) {
-    
+  async isAdmin(req, res, next) {
+
+    const result = await getRol(req.user.id);
+
+    req.admin = result.isAdmin;
+    req.notAllowedMessage = !result.isAdmin ? "No tienes permisos para ver esta seccion" : "";
+
+    next();
   }
 };
 
