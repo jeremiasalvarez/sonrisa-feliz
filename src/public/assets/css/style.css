@@ -1802,3 +1802,33 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
+/* SOLICITUDES */
+
+.solicitudes-container {
+    width: 95% !important;
+    padding: 1.5rem !important;
+}
+
+.accordion {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .solicitudes-container {
+        /* width: 75% !important; */
+        padding: 3rem !important;
+    }
+
+    .accordion {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
+    }
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

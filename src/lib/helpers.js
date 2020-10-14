@@ -121,12 +121,16 @@ helpers.getPaciente = async (id) => {
   
 }
 
-helpers.getSolicitudes = async (id) => {
+helpers.getSolicitudes = async () => {
 
-  const solicitudes = await pool.query("SELECT * FROM solicitudes_turno");
+  const solicitudes = await pool.query("SELECT solicitudes_turno.id, solicitudes_id_usuario, solicitudes_turno.id_horario, solicitudes_turno.id_dia, solicitudes_turno.fecha_solicitud, solicitudes_turno.mensaje_solicitud, usuario.email FROM solicitudes_turno INNER JOIN usuario ON solicitudes_turno.id_usuario=usuario.id");
 
   return toJson(solicitudes);
 
+}
+
+helpers.eliminarSolicitud = async (id) => {
+  
 }
 
 

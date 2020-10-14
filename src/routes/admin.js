@@ -15,7 +15,7 @@ router.get("/admin", isLoggedIn, isAdmin, (req, res) => {
 })
 
 
-router.get("/admin/pacientes", isLoggedIn, isAdmin, async (req,res) => {
+router.get("/pacientes", isLoggedIn, isAdmin, async (req,res) => {
     if (req.admin){
 
         const pacientes = await getPacientes();
@@ -29,14 +29,15 @@ router.get("/admin/pacientes", isLoggedIn, isAdmin, async (req,res) => {
     }
 })
 
-router.get("/admin/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
+router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
     if (req.admin) {
 
-        const solicitudes = await getSolicitudes();
+        //const solicitudes = await getSolicitudes();
         
-        console.log(solicitudes);
+        // console.log(solicitudes);
         
+        res.render("admin/solicitudes");
     }
 
 })
