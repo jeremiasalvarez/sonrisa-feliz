@@ -44,16 +44,14 @@ function procesarAccion(e) {
 async function rechazarSolicitud(id){
 
     const confirm = await swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this imaginary file!",
+        title: "¿Esta seguro(a)?",
+        text: "Una vez eliminada, ya no podra ver la solicitud",
         icon: "warning",
         buttons: true,
         dangerMode: true,
                 });
-
-    console.log(confirm);
-
-return;
+    
+    if (!confirm) return;
 
     const result = await fetch(`/solicitudes/rechazar?id=${id}`,
     {
