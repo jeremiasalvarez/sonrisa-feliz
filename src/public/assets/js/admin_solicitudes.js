@@ -1,5 +1,12 @@
 const buttons = document.querySelectorAll('.btn-event-control');
 
+const iconoRechazadoClass = "custom-icon bx bx-x-circle icon-x";
+
+const iconoAceptadoClass = "custom-icon bx bx-check-circle icon-check";
+
+
+
+
 buttons.forEach(button => button.addEventListener("click", procesarAccion));
 
 function procesarAccion(e) {
@@ -21,19 +28,13 @@ function procesarAccion(e) {
         prestacion_id: document.querySelector(`#prestacion_${idSolicitud}`).value
     }
 
-    if (!data.fecha) {
-        mostrarError(idSolicitud)
-    } else {
-        ocultarError(idSolicitud)
-    }
-
     switch (accion) {
 
         case 'rechazar':
              rechazarSolicitud(idSolicitud)
             break;
         case 'confirmar': 
-            // confirmarSolicitud(idSolicitud);
+             confirmarSolicitud(data);
             break;
         default:
             return;    
@@ -42,6 +43,12 @@ function procesarAccion(e) {
 }
 
 async function rechazarSolicitud(id){
+
+    cambiarIconoEstado(id, "del");
+
+    desactivarCarta(id);
+
+    return;
 
     const confirm = await swal({
         title: "¿Esta seguro(a)?",
@@ -67,15 +74,30 @@ async function rechazarSolicitud(id){
     const { success } = await result.json();
 
     if (success) {
+        const iconoEliminado = document.querySelector(`#estado_${id}`);
+        const pendienteClass = iconoEliminado.classList.values();
+
+        iconoEliminado.className.replace(pendienteClass, iconoRechazadoClass);
 
     }
 
-    console.log(json);
-
 }
 
-function confirmarSolicitud(id) {
-    console.log("funcion confirmar")
+function confirmarSolicitud(data) {
+
+    const { id_solicitud: id, fecha } = data;
+
+    if (!fecha) {
+        mostrarError(id);
+        return;
+    }
+
+    document.querySelector(`#hiddenButton_${id}`).click();
+
+    cambiarIconoEstado(id, "acc");
+
+    desactivarCarta(id);
+
 }
 
 function mostrarError(id) {
@@ -89,5 +111,39 @@ function ocultarError(id) {
     const errorDiv = document.querySelector(`#error_${id}`);
 
     errorDiv.classList.add('d-none')
+}
+
+function cambiarIconoEstado(id, accion) {
+
+    const eliminadoColor = "var(--danger)";
+    const aceptadoColor = "var(--success)";
+
+    const className = accion === "del" ? iconoRechazadoClass : iconoAceptadoClass;
+    
+    const iconoAfectado = document.querySelector(`#estado_${id}`);
+    iconoAfectado.classList.forEach(name => {
+        iconoAfectado.classList.remove(name)
+    });
+
+    className.split(" ").forEach(name => {
+        iconoAfectado.classList.add(name);
+    })
+    
+    iconoAfectado.style.color = accion === "del" ? eliminadoColor : aceptadoColor;
+}
+
+function desactivarCarta(id) {
+    
+    const link = document.querySelector(`#solicitudLink_${id}`);
+    const arrows = document.querySelectorAll(`#solicitudLink_${id} i`);
+
+    arrows.forEach(arrow => arrow.style.color = "#6c757d");
+
+    link.style.pointerEvents = "none";
+    link.style.color = "#6c757d";
+    link.click();
+
+    const carta = document.querySelector(`#solicitudCarta_${id}`);
+
 
 }

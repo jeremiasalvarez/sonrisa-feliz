@@ -24,9 +24,10 @@
             <ul>
                 {{#each solicitudes}}
                 <li data-aos="fade-up">
-                    <div class="solicitud-titulo d-flex justify-content-start align-items-center">
-                        <i class='custom-icon bx bx-info-circle icon-warning'></i>
-                        <a id="solicitudTitulo" data-toggle="collapse" class="collapse collapsed"
+                    <div id="solicitudCarta_{{id}}"
+                        class="solicitud-titulo d-flex justify-content-start align-items-center">
+                        <i id="estado_{{id}}" class='custom-icon bx bx-info-circle icon-warning'></i>
+                        <a id="solicitudLink_{{id}}" data-toggle="collapse" class="collapse collapsed"
                             href="#solcitud_id_{{id}}" aria-expanded="false">
                             Paciente: <span class="text-secondary">{{apellido}} {{nombre}} </span> <br>
                             DNI: <span class="text-secondary"> {{dni}} </span><br>
@@ -111,6 +112,8 @@
                                                 data-dismiss="modal">Cancelar</button>
                                             <button id="confirmar_{{id}}" type="button"
                                                 class="btn btn-success btn-event-control">Confirmar</button>
+                                            <button id="hiddenButton_{{id}}" style="display: none;"
+                                                data-dismiss="modal"></button>
                                         </div>
                                     </div>
                                 </div>
