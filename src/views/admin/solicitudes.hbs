@@ -2,85 +2,123 @@
     <div class="container">
 
         <div class="section-title">
-            <h2>Preguntas frecuentes</h2>
-            <p>Antes de hacer una consulta, revisá ésta sección si tenés alguna duda en particular, es posible que
-                esté respondida acá abajo.</p>
+            <h2>Ultimas Solicitudes de Turnos</h2>
+        </div>
+
+        <div class="referencia">
+            <div class="d-flex justify-content-around align-items-center w-auto">
+                <i class='custom-icon bx bx-check-circle icon-help icon-check'></i>
+                <p class="refer-text check" style="margin: 0 0 0 5px">Confirmado</p>
+            </div>
+            <div class="d-flex justify-content-around align-items-center w-auto">
+                <i class='custom-icon bx bx-x-circle icon-help icon-x'></i>
+                <p class="refer-text rechazado" style="margin: 0 0 0 5px">Rechazado</p>
+            </div>
+            <div class="d-flex justify-content-around align-items-center w-auto">
+                <i class='custom-icon bx bx-info-circle icon-warning'></i>
+                <p class="refer-text pendiente" style="margin: 0 0 0 5px">Pendientes de Aprobación</p>
+            </div>
         </div>
 
         <div class="faq-list">
             <ul>
+                {{#each solicitudes}}
                 <li data-aos="fade-up">
-                    <i class="bx bx-help-circle icon-help"></i> <a data-toggle="collapse" class="collapse collapsed"
-                        href="#faq-list-1" aria-expanded="false">¿Qué consideraciones deben tener los pacientes antes de
-                        solicitar un turno? <i class="bx bx-chevron-down icon-show"></i><i
-                            class="bx bx-chevron-up icon-close"></i></a>
-                    <div id="faq-list-1" class="collapse" data-parent=".faq-list" style="">
-                        <p>
-                            En primer lugar, que su problema sea urgente, en caso contrario se puede postergar para una
-                            fecha futura.<br>
-                            En segundo lugar, no tener síntomas de COVID-19 (tener más de 37.5° de temperatura corporal,
-                            sensación de falta de aire,
-                            tos, dolor de garganta, diarrea, alteración del gusto y/u olfato).
-                        </p>
+                    <div class="solicitud-titulo d-flex justify-content-start align-items-center">
+                        <i class='custom-icon bx bx-info-circle icon-warning'></i>
+                        <a id="solicitudTitulo" data-toggle="collapse" class="collapse collapsed"
+                            href="#solcitud_id_{{id}}" aria-expanded="false">
+                            Paciente: <span class="text-secondary">{{apellido}} {{nombre}} </span> <br>
+                            DNI: <span class="text-secondary"> {{dni}} </span><br>
+                            Solicitado el: <span class="text-secondary">{{fecha_solicitud}} </span>
+                            <i class="bx bx-chevron-down icon-show"></i>
+                            <i class="bx bx-chevron-up icon-close"></i>
+                        </a>
                     </div>
-                </li>
+                    <div id="solcitud_id_{{id}}" class="collapse" data-parent=".faq-list" style="">
+                        <p class="refer-text">Telefono: {{telefono}}</p>
+                        <p class="refer-text">E-mail: {{email}}</p>
+                        <p class="refer-text">Horario de Preferencia: {{hora_inicio}} - {{hora_fin}}</p>
+                        <p class="refer-text">Dia de Preferencia: {{nombre_dia}}</p>
+                        <p class="refer-text">Imagen ilustrativa: "aca va la imagen"</p>
+                        {{#if mensaje_solicitud}}
+                        <p class="refer-text">Mensaje del solicitante: {{mensaje_solicitud}}</p>
+                        {{else}}
+                        <p class="refer-text">Mensaje del solicitante: -vacio-</p>
+                        {{/if}}
 
-                <li data-aos="fade-up" data-aos-delay="100">
-                    <i class="bx bx-help-circle icon-help"></i> <a data-toggle="collapse" href="#faq-list-2"
-                        class="collapsed">¿Cuándo se retoma la actividad normal en el consultorio? <i
-                            class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                    <div id="faq-list-2" class="collapse" data-parent=".faq-list">
-                        <p>
-                            Cuando las condiciones estén dadas y garantizadas por el Gobierno, en conjunto con el
-                            Ministerio
-                            de Salud, y no se corra más riesgo de contraer COVID-19, tanto para los pacientes como el
-                            personal del
-                            consultorio.
-                        </p>
-                    </div>
-                </li>
+                        <div class="d-flex justify-content-between align-items-center p-4">
+                            <button class="btn btn-primary" data-toggle="modal"
+                                data-target="#exampleModalCenter{{id}}">Programar Turno</button>
+                            <button id="rechazar_{{id}}" class="btn btn-danger btn-event-control">Rechazar
+                                Solicitud</button>
+                            {{!-- <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#exampleModalCenter">
+                                Launch demo modal
+                            </button> --}}
 
-                <li data-aos="fade-up" data-aos-delay="200">
-                    <i class="bx bx-help-circle icon-help"></i> <a data-toggle="collapse" href="#faq-list-3"
-                        class="collapsed">¿Qué servicios están disponibles? <i
-                            class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                    <div id="faq-list-3" class="collapse" data-parent=".faq-list">
-                        <p>
-                            Se está dando turnos solamente a los pacientes con urgencias. El resto de servicios que
-                            normalmente el consultorio
-                            ofrece, se encuentran suspendidos hasta que se retome la actividad normal.
-                        </p>
-                    </div>
-                </li>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModalCenter{{id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div style="background-color: var(--light);" class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Programar Turno</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="modal-title">A continuación indique la fecha, el horario y la
+                                                prestación a realizar. <br>
+                                                El paciente sera notificado via e-mail.
+                                            </p>
+                                            <div class="pt-3 pb-1">
+                                                <div class="form-group">
+                                                    <label for="fecha">Fecha del Turno:</label>
+                                                    <input class="form-control" type="date" name="fecha"
+                                                        id="fecha_{{id}}" required>
+                                                    <div id="error_{{id}}" class="d-none text-danger p-2">
+                                                        Debe especificar la fecha del turno
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="horario">Horario del Turno:</label>
 
-                <li data-aos="fade-up" data-aos-delay="300">
-                    <i class="bx bx-help-circle icon-help"></i> <a data-toggle="collapse" href="#faq-list-4"
-                        class="collapsed">¿Qué medidas de seguridad preventivas debo tomar para concurrir al
-                        consultorio? <i class="bx bx-chevron-down icon-show"></i><i
-                            class="bx bx-chevron-up icon-close"></i></a>
-                    <div id="faq-list-4" class="collapse" data-parent=".faq-list">
-                        <p>
-                            El uso de barbijo es obligatorio y sin excepción.<br>
-                            No haber tenido contacto estrecho con alguna persona que viajó al exterior o al menos a
-                            alguna de las
-                            zonas de transmisión comunitaria en los últimos 14 días.<br>
-                            No haber tenido contacto estrecho con algún paciente con COVID-19 confirmado (conviviente o
-                            compañero/a de trabajo).
-                        </p>
-                    </div>
-                </li>
+                                                    <select class="form-control" name="horario" id="horario_{{id}}">
+                                                        {{#each ../horarios}}
+                                                        <option value={{id}}> {{hora_inicio}} - {{hora_fin}}
+                                                        </option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="prestacion">Prestacion a Realizar:</label>
 
-                <li data-aos="fade-up" data-aos-delay="400">
-                    <i class="bx bx-help-circle icon-help"></i> <a data-toggle="collapse" href="#faq-list-5"
-                        class="collapsed">¿En qué horarios se asignan los turnos? <i
-                            class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                    <div id="faq-list-5" class="collapse" data-parent=".faq-list">
-                        <p>
-                            Hasta que se retome la actividad normal, se asignan dos turnos por día. Uno por la mañana y
-                            otro por la tarde.
-                        </p>
+                                                    <select class="form-control" name="prestacion"
+                                                        id="prestacion_{{id}}">
+                                                        {{#each ../prestaciones}}
+                                                        <option value={{id}}> {{nombre}}
+                                                        </option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cancelar</button>
+                                            <button id="confirmar_{{id}}" type="button"
+                                                class="btn btn-success btn-event-control">Confirmar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </li>
+                {{/each}}
 
             </ul>
         </div>

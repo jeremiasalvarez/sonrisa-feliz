@@ -1805,7 +1805,7 @@ input[type="number"] {
 
 /* SOLICITUDES */
 
-.solicitudes-container {
+/* .solicitudes-container {
     width: 95% !important;
     padding: 1.5rem !important;
 }
@@ -1813,11 +1813,11 @@ input[type="number"] {
 .accordion {
     display: grid;
     grid-template-columns: 1fr;
-}
+} */
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
     .solicitudes-container {
-        /* width: 75% !important; */
+        width: 75% !important;
         padding: 3rem !important;
     }
 
@@ -1831,4 +1831,77 @@ input[type="number"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
+} */
+
+.referencia {
+    width: max-content;
+    margin: 0 auto 2rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.referencia > div {
+    padding: 0.3rem 0;
+}
+
+@media (min-width: 768px) {
+    .referencia {
+        flex-direction: column;
+    }
+}
+
+.referencia .refer-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.referencia .refer-text.check {
+    color: var(--success);
+}
+
+.referencia .refer-text.rechazado {
+    color: var(--danger);
+}
+
+.referencia .refer-text.pendiente {
+    color: var(--warning);
+}
+
+.custom-icon {
+    font-size: 1.5em;
+    font-weight: 900;
+}
+
+.custom-icon.icon-check {
+    color: var(--success);
+}
+
+.custom-icon.icon-warning {
+    color: var(--warning);
+}
+
+.custom-icon.icon-x {
+    color: var(--danger);
+}
+
+.faq-list li {
+    min-width: 85%;
+    max-width: 85%;
+    width: fit-content !important;
+    margin: 0 auto;
+    padding: 10px 20px !important;
+    background-color: rgb(226, 226, 226) !important;
+}
+
+@media (min-width: 768px) {
+    .faq-list li {
+        width: 50%;
+        min-width: 440px;
+    }
+}
+
+.solicitud-titulo {
+    margin: 0 auto;
 }

@@ -28,7 +28,7 @@ helpers.getObrasSociales = async () => {
 }
 
 helpers.getPrestaciones = async () => {
-  const result = await pool.query("SELECT nombre, descripcion FROM prestaciones");
+  const result = await pool.query("SELECT id, nombre, descripcion FROM prestaciones");
 
   const json = toJson(result);
 
@@ -123,14 +123,30 @@ helpers.getPaciente = async (id) => {
 
 helpers.getSolicitudes = async () => {
 
-  const solicitudes = await pool.query("SELECT solicitudes_turno.id, solicitudes_id_usuario, solicitudes_turno.id_horario, solicitudes_turno.id_dia, solicitudes_turno.fecha_solicitud, solicitudes_turno.mensaje_solicitud, usuario.email FROM solicitudes_turno INNER JOIN usuario ON solicitudes_turno.id_usuario=usuario.id");
+  const solicitudes = await pool.query("SELECT solicitudes_turno.id, solicitudes_turno.id_usuario, solicitudes_turno.id_horario, solicitudes_turno.id_dia, solicitudes_turno.fecha_solicitud, solicitudes_turno.mensaje_solicitud, usuario.email, ficha_paciente.dni, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono, ficha_paciente.fecha_nacimiento, turnos_horarios.hora_inicio, turnos_horarios.hora_fin, turnos_dias.nombre_dia FROM solicitudes_turno INNER JOIN usuario ON solicitudes_turno.id_usuario=usuario.id INNER JOIN ficha_paciente ON solicitudes_turno.id_usuario=ficha_paciente.id_usuario INNER JOIN turnos_horarios ON solicitudes_turno.id_horario=turnos_horarios.id INNER JOIN turnos_dias ON solicitudes_turno.id_dia=turnos_dias.id_dia ORDER BY solicitudes_turno.fecha_solicitud ASC");
 
   return toJson(solicitudes);
 
 }
 
 helpers.eliminarSolicitud = async (id) => {
-  
+
+  const result = {}
+
+   try {
+
+      const query = await pool.query("DELETE FROM solicitudes_turno WHERE id = ?", [id]);
+
+      result.affectedRows = query.affectedRows;
+      result.success = true;
+      
+      return result;
+
+   } catch(e) {
+
+      result.success = false;
+      result.error = e;
+   }
 }
 
 
