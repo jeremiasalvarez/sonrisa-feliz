@@ -53,6 +53,9 @@ router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
         //  console.log(data);
         
         res.render("admin/solicitudes", data);
+    } else {
+
+        res.redirect("/perfil");
     }
 
 })
