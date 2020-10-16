@@ -84,9 +84,9 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cancelar</button>
-                                            <button id="rechazar_{{id}}" type="button"
+                                            <button id="cerrarModalRechazar_{{id}}" type="button"
+                                                class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button style="min-width: 100px;" id="rechazar_{{id}}" type="button"
                                                 class="btn btn-danger btn-event-control">Confirmar</button>
                                             <button id="hiddenButtonRechazar_{{id}}" style="display: none;"
                                                 data-dismiss="modal"></button>
@@ -145,10 +145,12 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
+                                            <button id="cerrarModalProgramar_{{id}}" style="min-width: 100px;"
+                                                type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Cancelar</button>
-                                            <button id="confirmar_{{id}}" type="button"
-                                                class="btn btn-success btn-event-control">Confirmar</button>
+                                            <button style="min-width: 100px;" id="confirmar_{{id}}" type="button"
+                                                class="btn btn-success btn-event-control">Confirmar
+                                            </button>
                                             <button id="hiddenButton_{{id}}" style="display: none;"
                                                 data-dismiss="modal"></button>
                                         </div>

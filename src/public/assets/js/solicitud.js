@@ -1,10 +1,12 @@
 const solicitud = document.querySelector("#solicitudTurno");
 // const user_id = document.querySelector("#userId").value;
-const dia_id = document.querySelector("#dia").value;
-const horario_id = document.querySelector("#horario").value;
-const msg = document.querySelector("#msg").value;
 
 solicitud.addEventListener("submit", async (e) => {
+
+    
+    const dia_id = document.querySelector("#dia").value;
+    const horario_id = document.querySelector("#horario").value;
+    const msg = document.querySelector("#msg").value;
 
     e.preventDefault();
 

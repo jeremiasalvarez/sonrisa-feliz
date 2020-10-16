@@ -4,6 +4,8 @@ const iconoRechazadoClass = "custom-icon bx bx-x-circle icon-x";
 
 const iconoAceptadoClass = "custom-icon bx bx-check-circle icon-check";
 
+const spinner =  '<i class="fas fa-spin fa-spinner"></i>';
+
 
                         
 const listaSolicitudes = document.querySelector("#contenedorSolicitudes");
@@ -13,7 +15,7 @@ let nombreProcesado;
 
 buttons.forEach(button => button.addEventListener("click", procesarAccion));
 
-function procesarAccion(e) {
+async function procesarAccion(e) {
 
     // console.log("PRESIONADO:\n")
     // console.log(e.target);
@@ -32,15 +34,32 @@ function procesarAccion(e) {
     switch (accion) {
 
         case 'rechazar':
-             rechazarSolicitud(idSolicitud)
+            const botonesRechazar = [document.querySelector(`#rechazar_${idSolicitud}`), document.querySelector(`#cerrarModalRechazar_${idSolicitud}`)];
+             desactivarBotones(botonesRechazar);
+             agregarSpinner(document.querySelector(`#rechazar_${idSolicitud}`));
+             await rechazarSolicitud(idSolicitud)
+            
+            quitarSpinner(document.querySelector(`#rechazar_${idSolicitud}`), "Confirmar");
+            activarBotones(botonesRechazar);
             break;
         case 'confirmar': 
-             confirmarSolicitud(idSolicitud);
+            const botonesProgramar = [document.querySelector(`#confirmar_${idSolicitud}`), document.querySelector(`#cerrarModalProgramar_${idSolicitud}`)];
+            desactivarBotones(botonesProgramar);
+            agregarSpinner(document.querySelector(`#confirmar_${idSolicitud}`));
+            await confirmarSolicitud(idSolicitud);
+            quitarSpinner(document.querySelector(`#confirmar_${idSolicitud}`), "Confirmar");
+            activarBotones(botonesProgramar);
             break;
         default:
             return;    
     }
+}
 
+async function delayPrueba() {
+
+    return new Promise((res, rej) => {
+        res();
+    })
 }
 
 async function rechazarSolicitud(id){
@@ -79,6 +98,7 @@ async function confirmarSolicitud(id) {
     const id_usuario = document.querySelector(`#id_usuario_${id}`).value.split("_")[2];
     
     const data = {
+        id,
         usuario_id: id_usuario,
         fecha: document.querySelector(`#fecha_${id}`).value,
         horario_id: document.querySelector(`#horario_${id}`).value,
@@ -101,9 +121,13 @@ async function confirmarSolicitud(id) {
         body: JSON.stringify(data)
     })
 
-    const json = await result.json();
+    const {success, msg} = await result.json();
 
-    if (json.success) {
+    console.log(success, msg);
+
+
+
+    if (success) {
 
         document.querySelector(`#hiddenButton_${id}`).click();
 
@@ -170,12 +194,6 @@ function desactivarCarta(id) {
 
 function agregarAlerta(exito, texto) {
 
-    const alertTemplate = `<div class="alert alert-warning alert-dismissible fade show"         role="alert">
-<strong>Holy guacamole!</strong> You should check in on some of those fields below.
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-</button>
-                        </div>`;
     const alertaDiv = document.createElement("div");
 
     const botonCerrar = document.createElement("button");
@@ -201,5 +219,29 @@ function agregarAlerta(exito, texto) {
 
     listaSolicitudes.prepend(alertaDiv);
 
+}
+
+function agregarSpinner(boton) {
+
+    console.log(boton);
+
+    boton.innerHTML = spinner;
+}
+
+function quitarSpinner(boton, texto) {
+
+    boton.innerHTML = texto;
 
 }
+
+function desactivarBotones(botones){
+
+    botones.forEach(boton => boton.style.pointerEvents = "none")
+
+}
+
+function activarBotones(botones) {
+
+    botones.forEach(boton => boton.style.pointerEvents = "all")
+}
+

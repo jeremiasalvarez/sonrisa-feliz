@@ -64,7 +64,7 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
         return res.json({success: false, message: "No selecciono una fecha"});
     }
 
-    const { usuario_id, horario_id, fecha, prestacion_id, nombre, email } = req.body;
+    const { id, usuario_id, horario_id, fecha, prestacion_id, nombre, email } = req.body;
 
     const data = {
         usuario_id,
@@ -76,6 +76,8 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
     const result = await guardarTurno(req.body);
 
     if (result.success) {
+
+        await eliminarSolicitud(id);
 
         const { hora_inicio , hora_fin } = await getHorario(horario_id);
 
