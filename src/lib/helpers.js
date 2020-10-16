@@ -201,6 +201,32 @@ helpers.eliminarSolicitud = async (id) => {
    }
 }
 
+const fechaOcupada = async (data) => {
+
+  try {
+
+    const rows = await pool.query("SELECT fecha FROM turno_paciente WHERE fecha = ? AND id_horario = ?", [data.fecha, data.id_horario]);
+
+    if (rows.length === 0) {
+      return {
+        ocupado: false
+      }
+    } else {
+      return {
+        ocupado: true,
+        msg: "La fecha y los horarios seleccionados no estan disponibles porque ya existe un turno programado con la combinacion seleccionada. Intente con una nueva combinacion de fecha y horario"
+      }
+    }
+
+  } catch (error) {
+      return {
+        ocupado: true,
+        msg: "HUBO UN ERROR: " + error
+      }
+  }
+
+}
+
 helpers.guardarTurno = async (data) => {
 
   const result = {}
@@ -212,6 +238,16 @@ helpers.guardarTurno = async (data) => {
       id_horario: data.horario_id,
       id_prestacion: data.prestacion_id,
       fecha: data.fecha
+    }
+
+    const restriccion = await fechaOcupada({fecha: nuevoTurno.fecha, id_horario:nuevoTurno.id_horario});
+
+    if (restriccion.ocupado) {
+      return {
+        success: false,
+        ocupado: true,
+        msg: restriccion.msg
+      }
     }
 
     const query = await pool.query("INSERT INTO turno_paciente SET ?", [nuevoTurno]);

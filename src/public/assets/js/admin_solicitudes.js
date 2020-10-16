@@ -121,9 +121,9 @@ async function confirmarSolicitud(id) {
         body: JSON.stringify(data)
     })
 
-    const {success, msg} = await result.json();
+    const { success, msg, ocupado } = await result.json();
 
-    console.log(success, msg);
+    //console.log(success, msg);
 
 
 
@@ -139,7 +139,21 @@ async function confirmarSolicitud(id) {
 
     } else {
 
-        console.log(json);
+        if (ocupado) {
+            swal({
+                title: "No Disponible",
+                text: msg,
+                icon: "error",
+                button: {
+                    text: "Entendido",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary btn-xl js-scroll-trigger",
+                    closeModal: true,
+                },
+            });
+        }
+
         document.querySelector(`#hiddenButton_${id}`).click();
         agregarAlerta(false, "Algo salio mal. El turno no fue programado correctamente");
     }

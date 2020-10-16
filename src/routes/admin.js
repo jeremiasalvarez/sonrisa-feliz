@@ -73,6 +73,7 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
         prestacion_id
     }
 
+
     const result = await guardarTurno(req.body);
 
     if (result.success) {
