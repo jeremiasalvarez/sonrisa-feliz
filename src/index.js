@@ -18,6 +18,10 @@ app.set("port", process.env.PORT || 4000);
 //ruta de la carpeta views
 app.set("views", path.join(__dirname, "views"));
 
+//Archivos Publicos (codigo que el navegador puede acceder)
+app.use(express.static(path.join(__dirname, "/public")));
+
+
 app.engine(
   ".hbs",
   expresshbs({
@@ -63,9 +67,6 @@ app.use(require("./routes/index.js"));
 app.use(require("./routes/authentication.js"));
 app.use(require("./routes/controlTurnos"));
 app.use(require("./routes/admin"));
-
-//Archivos Publicos (codigo que el navegador puede acceder)
-app.use(express.static(path.join(__dirname, "/public")));
 
 //Inicialización del servidor
 app.listen(app.get("port"), () => {
