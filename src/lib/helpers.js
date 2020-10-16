@@ -78,6 +78,32 @@ helpers.getHorario = async (id) => {
 
 }
 
+const solicitudYaExiste = async (idUsuario) => {
+
+  const result = {}
+
+  try {
+
+    const rows = await pool.query("SELECT fecha_solicitud FROM solicitudes_turno WHERE id_usuario = ? ORDER BY fecha_solicitud ASC", [idUsuario]);
+
+    if (rows.length > 0) {
+      result.yaExiste = true;
+      result.fechaPendiente = toJson(rows[0]).fecha_solicitud;
+      console.log(result.fechaPendiente);
+    } else {
+      result.yaExiste = false;
+    }
+
+    return result;
+
+  } catch (error) {
+
+    return { yaExiste: true , success: false, error: true, message: error}
+
+  }
+
+}
+
 helpers.guardarSolicitud = async (data) => {
 
   const result = {}
@@ -92,6 +118,15 @@ helpers.guardarSolicitud = async (data) => {
       mensaje_solicitud: data.msg
     }
 
+    const { yaExiste, fechaPendiente } = await solicitudYaExiste(nuevaSolicitud.id_usuario);
+
+    if (yaExiste) {
+      return {
+        success: false,
+        msg: `Ya realizaste una solicitud el ${fechaPendiente}. No puedes realizar mas solicitudes hasta que se procese tu ultima solicitud`
+      }
+    }
+
     const query = await pool.query("INSERT INTO solicitudes_turno SET ?", [nuevaSolicitud]);
 
     result.insert_id = query.insertId;
@@ -102,7 +137,7 @@ helpers.guardarSolicitud = async (data) => {
   } catch(e){
 
     result.success = false;
-    result.error = e
+    result.msg = e
   };
 
   return result;

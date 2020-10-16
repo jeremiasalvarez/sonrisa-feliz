@@ -121,4 +121,8 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
 
 })
 
+router.get("/turnos", isLoggedIn, isAdmin, (req, res) => {
+    res.render("admin/turnos");
+})
+
 module.exports = router;

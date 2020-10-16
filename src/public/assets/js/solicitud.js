@@ -1,9 +1,13 @@
+
 const solicitud = document.querySelector("#solicitudTurno");
 // const user_id = document.querySelector("#userId").value;
+const botonSubmit = document.querySelector("#submit");
 
 solicitud.addEventListener("submit", async (e) => {
 
-    
+    desactivarBotones([botonSubmit]);
+    agregarSpinner(botonSubmit);
+
     const dia_id = document.querySelector("#dia").value;
     const horario_id = document.querySelector("#horario").value;
     const msg = document.querySelector("#msg").value;
@@ -29,7 +33,7 @@ solicitud.addEventListener("submit", async (e) => {
 
     const resultJson = await result.json();
 
-    const { success, redirectAdress } = resultJson;
+    const { success, redirectAdress, msg: messageError } = resultJson;
 
     if (success) {
         await swal({
@@ -51,7 +55,7 @@ solicitud.addEventListener("submit", async (e) => {
         swal({
             title: "Error",
             text:
-                "Lo sentimos, ocurrio un error y tu solicitud no se envio correctamente",
+                `${messageError ? messageError : "Lo sentimos, ocurrio un error y tu solicitud no se envio correctamente"}`,
             icon: "error",
             button: {
                 text: "Entendido",
@@ -61,6 +65,8 @@ solicitud.addEventListener("submit", async (e) => {
                 closeModal: true,
             },
         });
+        activarBotones([botonSubmit]);
+        quitarSpinner(botonSubmit, "Solicitar Turno");
     }
     
 

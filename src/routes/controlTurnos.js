@@ -36,6 +36,8 @@ router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
   console.log(data);
 
   const result = await guardarSolicitud(data);
+
+  console.log(result)
   
   // // console.log(result);
 
@@ -45,7 +47,7 @@ router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
 
   } else {
     
-    res.status(500).json(result);
+    res.status(400).json(result);
   
   }
 
