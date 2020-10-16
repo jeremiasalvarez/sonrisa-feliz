@@ -1,7 +1,7 @@
 const express = require("express");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const helpers = require("../lib/helpers");
-const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud } = require("../lib/helpers");
+const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario } = require("../lib/helpers");
 
 const router = express.Router();
 
@@ -40,9 +40,7 @@ router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
         const prestaciones = await getPrestaciones();
 
-        console.log(horarios);
-        console.log("..........")
-        console.log(prestaciones)
+        console.log(solicitudes);
 
         const data = {
             solicitudes: solicitudes,
@@ -60,17 +58,62 @@ router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
 })
 
+router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
+    
+    if (!req.body.fecha){
+        return res.json({success: false, message: "No selecciono una fecha"});
+    }
+
+    const { usuario_id, horario_id, fecha, prestacion_id, nombre, email } = req.body;
+
+    const data = {
+        usuario_id,
+        horario_id,
+        fecha,
+        prestacion_id
+    }
+
+    const result = await guardarTurno(req.body);
+
+    if (result.success) {
+
+        const { hora_inicio , hora_fin } = await getHorario(horario_id);
+
+        await enviarMail({
+            receptor: email,
+            asunto: "Sonrisa Feliz - Turno Confirmado",
+            cuerpo: `Hola ${nombre}, tu turno fue confirmado<br> 
+            Fecha: ${fecha} <br> 
+            Horario: De ${hora_inicio} a ${hora_fin}
+            <br>
+            <i>Sonrisa Feliz</i>` 
+        });
+
+    }
+
+    return res.json(result);
+})
+
 router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
 
-    // console.log(req.query.id);
-   
-    const id = req.query.id;
+    const { id, motivo, email, nombre } = req.body;
+
 
     if (!id) {
         return res.json({success: false, message: "No ID"});
     }
     
     const result = await eliminarSolicitud(id);
+
+    if (result.success) {
+        await enviarMail({
+            receptor: email,
+            asunto: "Sonrisa Feliz - Solcitud Rechazada",
+            cuerpo: `Hola ${nombre}, lamentamos informarte que tu ultima solicitud de turno para el consultorio "Sonrisa Feliz" fue rechazada <br> 
+            Motivo: ${motivo} <br> <br>
+            <i>Sonrisa Feliz</i>` 
+        });
+    }
 
     return res.json(result);
 

@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const helpers = {};
 const pool = require("../datebase");
+const nodemailer = require("nodemailer");
+//const { transporter } = require("../lib/mailer");
 
 helpers.encryptPassword = async (password) => {
   //Generamos un patron
@@ -59,6 +61,21 @@ helpers.getHorarios = async () => {
   const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turnos_horarios ORDER BY hora_inicio ASC");
 
   return toJson(result);
+}
+
+helpers.getHorario = async (id) => {
+
+  try {
+
+  const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turnos_horarios WHERE id = ?", [id]);
+
+  
+  return toJson(result[0]);
+
+  } catch (e){
+    return toJson({error: e});
+  }
+
 }
 
 helpers.guardarSolicitud = async (data) => {
@@ -147,6 +164,66 @@ helpers.eliminarSolicitud = async (id) => {
       result.success = false;
       result.error = e;
    }
+}
+
+helpers.guardarTurno = async (data) => {
+
+  const result = {}
+
+  try {
+
+    const nuevoTurno = {
+      id_usuario: data.usuario_id,
+      id_horario: data.horario_id,
+      id_prestacion: data.prestacion_id,
+      fecha: data.fecha
+    }
+
+    const query = await pool.query("INSERT INTO turno_paciente SET ?", [nuevoTurno]);
+
+    result.insert_id = query.insertId;
+    result.success = true;
+    result.msg = "Turno Insertado";
+
+  } catch(e){
+
+    result.success = false;
+    result.error = e
+  };
+
+  return result;
+}
+
+helpers.enviarMail = async (data) => {
+ try {
+    let transporter = nodemailer.createTransport({
+      host: "smtp.elasticemail.com",
+      port: 2525,
+      secure: false, // upgrade later with STARTTLS
+      auth: {
+        user: "lospiratasutn@gmail.com",
+        pass: "656DC89B6C2547A989C6E8377DA12E200DC2"
+      }
+    });
+
+
+    let info = await transporter.sendMail({
+      from: '"Sonrisa Feliz - Doctora Sonrisa" <lospiratasutn@gmail.com>', // sender address
+      to: data.receptor, // list of receivers
+      subject: data.asunto, // Subject line
+      // text: "Hello world?", // plain text body
+      html: data.cuerpo, // html body
+      
+    });
+    
+    console.log("Message sent: %s", info.messageId);
+
+} catch(e) {
+  console.log(e);
+  return;
+}
+
+
 }
 
 

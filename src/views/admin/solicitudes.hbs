@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div class="faq-list">
+        <div class="faq-list" id="contenedorSolicitudes">
             <ul>
                 {{#each solicitudes}}
                 <li data-aos="fade-up">
@@ -37,6 +37,8 @@
                         </a>
                     </div>
                     <div id="solcitud_id_{{id}}" class="collapse" data-parent=".faq-list" style="">
+                        <input id="email_{{id}}" type="hidden" name="email_{{id}}" value={{email}}>
+                        <input id="nombre_{{id}}" type="hidden" name="nombre_{{id}}" value={{nombre}}>
                         <p class="refer-text">Telefono: {{telefono}}</p>
                         <p class="refer-text">E-mail: {{email}}</p>
                         <p class="refer-text">Horario de Preferencia: {{hora_inicio}} - {{hora_fin}}</p>
@@ -50,18 +52,51 @@
 
                         <div class="d-flex justify-content-between align-items-center p-4">
                             <button class="btn btn-primary" data-toggle="modal"
-                                data-target="#exampleModalCenter{{id}}">Programar Turno</button>
-                            <button id="rechazar_{{id}}" class="btn btn-danger btn-event-control">Rechazar
+                                data-target="#modalProgramar{{id}}">Programar Turno</button>
+                            <button data-toggle="modal" data-target="#modalRechazar_{{id}}"
+                                class="btn btn-danger ">Rechazar
                                 Solicitud</button>
-                            {{!-- <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#exampleModalCenter">
-                                Launch demo modal
-                            </button> --}}
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModalCenter{{id}}" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal fade" id="modalRechazar_{{id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="modalRechazarTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div style="background-color: var(--light);" class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Rechazar Solicitud</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="modal-title">A continuación indique el motivo del rechazo de la
+                                                solitud, si asi lo desea.<br>
+                                                El paciente sera notificado via e-mail.
+                                                <br>
+                                            <p class="modal-title text-danger">Esta acción no se puede deshacer.</p>
+                                            </p>
+                                            <div class="pt-3 pb-1">
+                                                <div class="form-group">
+                                                    <label for="motivo">Motivo: <small>(opcional)</small></label>
+                                                    <textarea name="motivo" id="motivo_id{{id}}"
+                                                        class="form-control"></textarea>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cancelar</button>
+                                            <button id="rechazar_{{id}}" type="button"
+                                                class="btn btn-danger btn-event-control">Confirmar</button>
+                                            <button id="hiddenButtonRechazar_{{id}}" style="display: none;"
+                                                data-dismiss="modal"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Programar -->
+                            <div class="modal fade" id="modalProgramar{{id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="modalProgramarTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div style="background-color: var(--light);" class="modal-content">
                                         <div class="modal-header">
@@ -75,6 +110,8 @@
                                                 prestación a realizar. <br>
                                                 El paciente sera notificado via e-mail.
                                             </p>
+                                            <input id="id_usuario_{{id}}" type="hidden"
+                                                value="id_usuario_{{id_usuario}}">
                                             <div class="pt-3 pb-1">
                                                 <div class="form-group">
                                                     <label for="fecha">Fecha del Turno:</label>

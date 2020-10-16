@@ -5,7 +5,11 @@ const iconoRechazadoClass = "custom-icon bx bx-x-circle icon-x";
 const iconoAceptadoClass = "custom-icon bx bx-check-circle icon-check";
 
 
+                        
+const listaSolicitudes = document.querySelector("#contenedorSolicitudes");
 
+let emailProcesado;
+let nombreProcesado;
 
 buttons.forEach(button => button.addEventListener("click", procesarAccion));
 
@@ -18,15 +22,12 @@ function procesarAccion(e) {
     const accion = idPresionado.split("_")[0];
     const idSolicitud = idPresionado.split("_")[1];
 
+    emailProcesado = document.querySelector(`#email_${idSolicitud}`).value;
+    nombreProcesado = document.querySelector(`#nombre_${idSolicitud}`).value;
+
     // console.log(`ID SOLICITUD: ${idSolicitud}`)
     // console.log(`ACCION: ${accion}`)
 
-    const data = {
-        id_solicitud: idSolicitud,
-        fecha: document.querySelector(`#fecha_${idSolicitud}`).value,
-        horario_id: document.querySelector(`#horario_${idSolicitud}`).value,
-        prestacion_id: document.querySelector(`#prestacion_${idSolicitud}`).value
-    }
 
     switch (accion) {
 
@@ -34,7 +35,7 @@ function procesarAccion(e) {
              rechazarSolicitud(idSolicitud)
             break;
         case 'confirmar': 
-             confirmarSolicitud(data);
+             confirmarSolicitud(idSolicitud);
             break;
         default:
             return;    
@@ -44,59 +45,80 @@ function procesarAccion(e) {
 
 async function rechazarSolicitud(id){
 
-    cambiarIconoEstado(id, "del");
-
-    desactivarCarta(id);
-
-    return;
-
-    const confirm = await swal({
-        title: "¿Esta seguro(a)?",
-        text: "Una vez eliminada, ya no podra ver la solicitud",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-                });
     
-    if (!confirm) return;
+    const motivo = document.querySelector(`#motivo_id${id}`).value;
 
-    const result = await fetch(`/solicitudes/rechazar?id=${id}`,
+    console.log(motivo);
+
+    const result = await fetch(`/solicitudes/rechazar`,
     {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
             // 'Content-Type': 'application/x-www-form-urlencoded',
           },
-        body: JSON.stringify({id})
+        body: JSON.stringify({id, motivo, email: emailProcesado, nombre: nombreProcesado})
     }
     );
 
     const { success } = await result.json();
 
     if (success) {
-        const iconoEliminado = document.querySelector(`#estado_${id}`);
-        const pendienteClass = iconoEliminado.classList.values();
 
-        iconoEliminado.className.replace(pendienteClass, iconoRechazadoClass);
+        document.querySelector(`#hiddenButtonRechazar_${id}`).click();
 
-    }
+        cambiarIconoEstado(id, "del");         
+        desactivarCarta(id);
+        agregarAlerta(success, "La solicitud fue rechazada correctamente");
+     }
 
 }
 
-function confirmarSolicitud(data) {
+async function confirmarSolicitud(id) {
 
-    const { id_solicitud: id, fecha } = data;
-
-    if (!fecha) {
+    const id_usuario = document.querySelector(`#id_usuario_${id}`).value.split("_")[2];
+    
+    const data = {
+        usuario_id: id_usuario,
+        fecha: document.querySelector(`#fecha_${id}`).value,
+        horario_id: document.querySelector(`#horario_${id}`).value,
+        prestacion_id: document.querySelector(`#prestacion_${id}`).value,
+        nombre: nombreProcesado,
+        email: emailProcesado
+    }
+    
+    if (!data.fecha) {
         mostrarError(id);
         return;
     }
 
-    document.querySelector(`#hiddenButton_${id}`).click();
+    const result = await fetch("/solicitudes/aceptar", {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        body: JSON.stringify(data)
+    })
 
-    cambiarIconoEstado(id, "acc");
+    const json = await result.json();
 
-    desactivarCarta(id);
+    if (json.success) {
+
+        document.querySelector(`#hiddenButton_${id}`).click();
+
+        cambiarIconoEstado(id, "acc");
+
+        desactivarCarta(id);
+
+        agregarAlerta(success, "Turno programado correctamente!");
+
+    } else {
+
+        console.log(json);
+        document.querySelector(`#hiddenButton_${id}`).click();
+        agregarAlerta(false, "Algo salio mal. El turno no fue programado correctamente");
+    }
 
 }
 
@@ -144,6 +166,40 @@ function desactivarCarta(id) {
     link.click();
 
     const carta = document.querySelector(`#solicitudCarta_${id}`);
+}
+
+function agregarAlerta(exito, texto) {
+
+    const alertTemplate = `<div class="alert alert-warning alert-dismissible fade show"         role="alert">
+<strong>Holy guacamole!</strong> You should check in on some of those fields below.
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+                        </div>`;
+    const alertaDiv = document.createElement("div");
+
+    const botonCerrar = document.createElement("button");
+    botonCerrar.classList.add("close");
+    botonCerrar.setAttribute("data-dismiss", "alert");
+    botonCerrar.setAttribute("aria-label", "Close");
+    botonCerrar.innerHTML = `<span aria-hidden="true">&times;</span>`;
+
+    
+    const tipo = exito ? "alert-success" : "alert-danger";
+
+    "alert alert-dismissible fade show".split(" ").forEach(className => {
+        alertaDiv.classList.add(className);
+    })
+
+    alertaDiv.classList.add(`${tipo}`);
+
+    alertaDiv.innerHTML = `<strong>${texto}</strong>`;
+
+    alertaDiv.setAttribute("role", "alert");
+
+    alertaDiv.appendChild(botonCerrar);
+
+    listaSolicitudes.prepend(alertaDiv);
 
 
 }
