@@ -19,3 +19,13 @@
     padding: 1rem;
     color: #fe005c;
 }
+
+.textarea-form {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .textarea-form {
+        width: 80%;
+    }
+}

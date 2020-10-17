@@ -42,7 +42,7 @@
 
             <div class="form-row">
                 <div class="col-md-4 form-group">
-                    <label for="dia">Dias Disponibles:</label>
+                    <label for="dia">Dia de Preferencia:</label>
                     <select class="form-control" name="dia" id="dia">
                         {{#each dias}}
                         <option value={{id_dia}}> {{nombre_dia}}</option>
@@ -50,7 +50,7 @@
                     </select>
                 </div>
                 <div class="col-md-4 form-group">
-                    <label for="dia">Horarios Disponibles:</label>
+                    <label for="dia">Horario de Preferencia:</label>
                     <select class="form-control" name="horario" id="horario">
                         {{#each horarios}}
                         <option value={{id}}> {{hora_inicio}} - {{hora_fin}}
@@ -78,7 +78,8 @@
             </div>
 
             <div class="form-group">
-                <textarea id="msg" class="form-control" name="msg" rows="5" placeholder="Mensaje (opcional)"></textarea>
+                <textarea style="resize: none;" id="msg" class="form-control textarea-form" name="msg" rows="5"
+                    placeholder="Mensaje (opcional)"></textarea>
                 <div class="validate"></div>
             </div>
             <!-- <div class="mb-3">

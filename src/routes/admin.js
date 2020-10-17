@@ -1,7 +1,7 @@
 const express = require("express");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const helpers = require("../lib/helpers");
-const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario } = require("../lib/helpers");
+const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos } = require("../lib/helpers");
 
 const router = express.Router();
 
@@ -40,15 +40,11 @@ router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
         const prestaciones = await getPrestaciones();
 
-        console.log(solicitudes);
-
         const data = {
             solicitudes: solicitudes,
             horarios: horarios,
             prestaciones: prestaciones
-        }
-        
-        //  console.log(data);
+        } 
         
         res.render("admin/solicitudes", data);
     } else {
@@ -73,25 +69,34 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
         prestacion_id
     }
 
+    
+   const { dia, fecha: fechaFormateada } = formatearFecha(fecha, "DF");
 
     const result = await guardarTurno(req.body);
 
     if (result.success) {
 
+        res.status(200);
+
         await eliminarSolicitud(id);
 
         const { hora_inicio , hora_fin } = await getHorario(horario_id);
+        
 
         await enviarMail({
             receptor: email,
             asunto: "Sonrisa Feliz - Turno Confirmado",
             cuerpo: `Hola ${nombre}, tu turno fue confirmado<br> 
-            Fecha: ${fecha} <br> 
-            Horario: De ${hora_inicio} a ${hora_fin}
+            Fecha: ${dia}, ${fechaFormateada}. <br> 
+            Horario: De ${hora_inicio}hs a ${hora_fin}hs.
             <br>
+            Saludos <br>
+
             <i>Sonrisa Feliz</i>` 
         });
 
+    } else {
+        res.status(400);
     }
 
     return res.json(result);
@@ -124,6 +129,14 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
 
 router.get("/turnos", isLoggedIn, isAdmin, (req, res) => {
     res.render("admin/turnos");
+});
+
+router.get("/api/turnos", isLoggedIn, isAdmin, async (req, res) => {
+
+    const turnos = await getTurnos();
+
+    return res.json(turnos);
+
 })
 
 module.exports = router;

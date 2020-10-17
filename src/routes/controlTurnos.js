@@ -33,11 +33,7 @@ router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
     msg: req.body.msg
   }
 
-  console.log(data);
-
   const result = await guardarSolicitud(data);
-
-  console.log(result)
   
   // // console.log(result);
 

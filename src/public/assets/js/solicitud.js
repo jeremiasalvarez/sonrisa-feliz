@@ -53,7 +53,7 @@ solicitud.addEventListener("submit", async (e) => {
 
     } else {
         swal({
-            title: "Error",
+            title: "No Disponible",
             text:
                 `${messageError ? messageError : "Lo sentimos, ocurrio un error y tu solicitud no se envio correctamente"}`,
             icon: "error",

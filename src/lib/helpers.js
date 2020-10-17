@@ -2,7 +2,10 @@ const bcrypt = require("bcryptjs");
 const helpers = {};
 const pool = require("../datebase");
 const nodemailer = require("nodemailer");
+const moment = require("moment");
 //const { transporter } = require("../lib/mailer");
+
+moment.locale("es-mx");
 
 helpers.encryptPassword = async (password) => {
   //Generamos un patron
@@ -60,6 +63,16 @@ helpers.getHorarios = async () => {
 
   const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turnos_horarios ORDER BY hora_inicio ASC");
 
+  
+  result.forEach(horario => {
+
+    const { hora_inicio, hora_fin } = horario;
+
+    horario.hora_inicio = formatearHorario(hora_inicio);
+    horario.hora_fin = formatearHorario(hora_fin);
+    
+  })
+
   return toJson(result);
 }
 
@@ -68,8 +81,16 @@ helpers.getHorario = async (id) => {
   try {
 
   const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turnos_horarios WHERE id = ?", [id]);
-
   
+  result.forEach(horario => {
+
+    const { hora_inicio, hora_fin } = horario;
+
+    horario.hora_inicio = formatearHorario(hora_inicio);
+    horario.hora_fin = formatearHorario(hora_fin);
+
+  })
+
   return toJson(result[0]);
 
   } catch (e){
@@ -89,7 +110,6 @@ const solicitudYaExiste = async (idUsuario) => {
     if (rows.length > 0) {
       result.yaExiste = true;
       result.fechaPendiente = toJson(rows[0]).fecha_solicitud;
-      console.log(result.fechaPendiente);
     } else {
       result.yaExiste = false;
     }
@@ -114,16 +134,18 @@ helpers.guardarSolicitud = async (data) => {
       id_usuario: data.user_id,
       id_horario: data.horario_id,
       id_dia: data.dia_id,
-      fecha_solicitud: new Date().toISOString(),
+      fecha_solicitud: moment().toISOString(true),
       mensaje_solicitud: data.msg
     }
 
     const { yaExiste, fechaPendiente } = await solicitudYaExiste(nuevaSolicitud.id_usuario);
 
     if (yaExiste) {
+
+      const { fecha, hora } = formatearFecha(fechaPendiente, "FH");
       return {
         success: false,
-        msg: `Ya realizaste una solicitud el ${fechaPendiente}. No puedes realizar mas solicitudes hasta que se procese tu ultima solicitud`
+        msg: `Ya realizaste una solicitud el ${fecha} a las ${hora}. No puedes realizar mas solicitudes hasta que se procese tu ultima solicitud`
       }
     }
 
@@ -173,9 +195,44 @@ helpers.getPaciente = async (id) => {
   
 }
 
+helpers.getTurnos = async () => {
+
+  try {
+
+      const rows = await pool.query("SELECT turno_paciente.id AS id_turno, turno_paciente.id_usuario, turno_paciente.id_horario, turno_paciente.id_prestacion, turno_paciente.fecha, ficha_paciente.dni, ficha_paciente.nombre AS nombre_paciente, ficha_paciente.apellido, ficha_paciente.telefono, usuario.email, prestaciones.nombre AS nombre_prestacion, turnos_horarios.hora_inicio, turnos_horarios.hora_fin FROM turno_paciente INNER JOIN usuario ON turno_paciente.id_usuario=usuario.id  INNER JOIN ficha_paciente ON turno_paciente.id_usuario=ficha_paciente.id_usuario INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id INNER JOIN turnos_horarios ON turno_paciente.id_horario=turnos_horarios.id");
+
+      rows.forEach(turno => {
+
+        const { fecha } = turno;
+        
+        turno.fecha = moment(fecha).format('L');
+
+      })
+
+      return toJson(rows);
+
+  } catch (error) {
+
+    return {error: error};
+  }
+
+}
+
 helpers.getSolicitudes = async () => {
 
   const solicitudes = await pool.query("SELECT solicitudes_turno.id, solicitudes_turno.id_usuario, solicitudes_turno.id_horario, solicitudes_turno.id_dia, solicitudes_turno.fecha_solicitud, solicitudes_turno.mensaje_solicitud, usuario.email, ficha_paciente.dni, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono, ficha_paciente.fecha_nacimiento, turnos_horarios.hora_inicio, turnos_horarios.hora_fin, turnos_dias.nombre_dia FROM solicitudes_turno INNER JOIN usuario ON solicitudes_turno.id_usuario=usuario.id INNER JOIN ficha_paciente ON solicitudes_turno.id_usuario=ficha_paciente.id_usuario INNER JOIN turnos_horarios ON solicitudes_turno.id_horario=turnos_horarios.id INNER JOIN turnos_dias ON solicitudes_turno.id_dia=turnos_dias.id_dia ORDER BY solicitudes_turno.fecha_solicitud ASC");
+
+  solicitudes.forEach(sol => {
+    
+    const { fecha_solicitud, hora_inicio, hora_fin } = sol; 
+
+    sol.hora_inicio = formatearHorario(hora_inicio);
+    sol.hora_fin = formatearHorario(hora_fin);
+
+    const { fecha, hora } = formatearFecha(fecha_solicitud, "FH");
+
+    sol.fecha_solicitud = `${fecha} a las ${hora}`
+  })
 
   return toJson(solicitudes);
 
@@ -305,6 +362,45 @@ function toJson(data) {
   const json = JSON.parse(string);
  
   return json;
+}
+
+helpers.formatearFecha = formatearFecha;
+
+function formatearFecha(fechaInicial, formato) {
+
+  //* DF = DIA FECHA 
+  //* FH = FECHA Y HORA
+
+  const res = {}
+
+  switch (formato) {
+
+    case 'DF':
+
+      res.dia = moment(fechaInicial).format('dddd');
+      res.fecha = moment(fechaInicial).format('LL');
+      return res;
+
+      break;
+
+    case 'FH':
+
+      res.fecha = moment(fechaInicial).format('LL');
+      res.hora = moment(fechaInicial).format('LT');
+      return res;
+      break;
+
+  }
+
+}
+
+function formatearHorario(horario) {
+
+  const hora = horario.split(":")[0];
+  const minuto = horario.split(":")[1];
+
+  return [hora, minuto].join(":");
+
 }
 
 module.exports = helpers;

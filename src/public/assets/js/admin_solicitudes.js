@@ -135,7 +135,20 @@ async function confirmarSolicitud(id) {
 
         desactivarCarta(id);
 
-        agregarAlerta(success, "Turno programado correctamente!");
+        swal({
+            title: "Turno Programado!",
+            text: "El turno fue programado correctamente",
+            icon: "success",
+            button: {
+                text: "Entendido",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-xl js-scroll-trigger",
+                closeModal: true,
+            },
+        });
+
+        //agregarAlerta(success, "Turno programado correctamente!");
 
     } else {
 
@@ -152,10 +165,22 @@ async function confirmarSolicitud(id) {
                     closeModal: true,
                 },
             });
+        } else{ 
+            swal({
+                title: "Error",
+                text: "Algo salio mal, el turno no se guardo correctamente",
+                icon: "error",
+                button: {
+                    text: "Entendido",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary btn-xl js-scroll-trigger",
+                    closeModal: true,
+                },
+            });
         }
 
-        document.querySelector(`#hiddenButton_${id}`).click();
-        agregarAlerta(false, "Algo salio mal. El turno no fue programado correctamente");
+        //document.querySelector(`#hiddenButton_${id}`).click();
     }
 
 }
