@@ -13,13 +13,15 @@ const { database } = require("./keys");
 const app = express();
 require("./lib/passport");
 
+
+//Archivos Publicos (codigo que el navegador puede acceder)
+app.use(express.static(path.join(__dirname, "/public")));
+
 //Configuraciones
 app.set("port", process.env.PORT || 4000);
 //ruta de la carpeta views
 app.set("views", path.join(__dirname, "views"));
 
-//Archivos Publicos (codigo que el navegador puede acceder)
-app.use(express.static(path.join(__dirname, "/public")));
 
 
 app.engine(
