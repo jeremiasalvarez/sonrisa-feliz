@@ -1,8 +1,18 @@
-const obtenerTurnos = async () => {
 
-    const result = await fetch("/api/turnos");
 
-    const turnos = await result.json();
+const initEventos = () => {
 
-    return turnos;
+    console.log("cargado")
+
+    const celdas = document.querySelectorAll(".fc-day");
+
+    celdas.forEach(celda => celda.addEventListener("click", abrirModal));
+
+
+}
+
+
+function abrirModal(e) {
+
+    console.log(e.target);
 }

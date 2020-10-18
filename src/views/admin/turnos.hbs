@@ -1,12 +1,176 @@
 <section class="section-bg">
-    <div class="container" id='wrap'>
 
-        <div class="section-title">
-            <h2>Proximos Turnos</h2>
-        </div>
-
-        <div id='calendar'></div>
-
-        <div style='clear:both'></div>
+    <div class="section-title">
+        <h2>Proximos Turnos</h2>
     </div>
+
+    <div class="container calendario-container">
+
+        <aside id="turnosDia" class="turnos-dia">
+
+            <div class="title">
+                <h3>Turnos del Dia</h3>
+            </div>
+            <div class="ri-separator"></div>
+
+            <div id="faq" class="faq section-bg">
+                <div class="faq-list p-0" id="contenedorSolicitudes">
+                    <ul class="turnos-lista">
+                        <li class="turno" data-aos="fade-up">
+                            <div id="solicitudCarta_{{id}}"
+                                class="turno-titulo d-flex justify-content-start align-items-center">
+                                <i id="estado_{{id}}" class='custom-icon bx bx-info-circle icon-warning'></i>
+                                <a data-toggle="collapse" class="collapse collapsed" href="#turno_id_{{id}}">
+                                    <div class="turno-info-titulo">
+
+                                        <p> <strong>Paciente:</strong> SDSdS SDSDs </p>
+                                        <p> Paciente:</strong> SDSdS SDSDs </p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div id="turno_id_{{id}}" class="collapse" data-parent=".faq-list" style="">
+                                <input id="email_{{id}}" type="hidden" name="email_{{id}}" value={{email}}>
+                                <input id="nombre_{{id}}" type="hidden" name="nombre_{{id}}" value={{nombre}}>
+                                <p class="refer-text">Telefono: {{telefono}}</p>
+                                <p class="refer-text">E-mail: {{email}}</p>
+                                <p class="refer-text">Horario de Preferencia: {{hora_inicio}} - {{hora_fin}}</p>
+                                <p class="refer-text">Dia de Preferencia: {{nombre_dia}}</p>
+                                <p class="refer-text">Imagen ilustrativa: "aca va la imagen"</p>
+                                {{#if mensaje_solicitud}}
+                                <p class="refer-text">Mensaje del solicitante: {{mensaje_solicitud}}</p>
+                                {{else}}
+                                <p class="refer-text">Mensaje del solicitante: -vacio-</p>
+                                {{/if}}
+
+                                <div class="d-flex justify-content-between align-items-center flex-res">
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                        data-target="#modalProgramar{{id}}">Programar Turno</button>
+                                    <button data-toggle="modal" data-target="#modalRechazar_{{id}}"
+                                        class="btn btn-danger ">Rechazar
+                                        Solicitud</button>
+
+                                    <div class="modal fade" id="modalRechazar_{{id}}" tabindex="-1" role="dialog"
+                                        aria-labelledby="modalRechazarTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div style="background-color: var(--light);" class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Rechazar
+                                                        Solicitud</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="modal-title">A continuación indique el motivo del
+                                                        rechazo
+                                                        de la
+                                                        solitud, si asi lo desea.<br>
+                                                        El paciente sera notificado via e-mail.
+                                                        <br>
+                                                    <p class="modal-title text-danger">Esta acción no se puede
+                                                        deshacer.
+                                                    </p>
+                                                    </p>
+                                                    <div class="pt-3 pb-1">
+                                                        <div class="form-group">
+                                                            <label for="motivo">Motivo:
+                                                                <small>(opcional)</small></label>
+                                                            <textarea name="motivo" id="motivo_id{{id}}"
+                                                                class="form-control"></textarea>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button id="cerrarModalRechazar_{{id}}" type="button"
+                                                        class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                    <button style="min-width: 100px;" id="rechazar_{{id}}" type="button"
+                                                        class="btn btn-danger btn-event-control">Confirmar</button>
+                                                    <button id="hiddenButtonRechazar_{{id}}" style="display: none;"
+                                                        data-dismiss="modal"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal Programar -->
+                                    <div class="modal fade" id="modalProgramar{{id}}" tabindex="-1" role="dialog"
+                                        aria-labelledby="modalProgramarTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div style="background-color: var(--light);" class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Programar
+                                                        Turno
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="modal-title">A continuación indique la fecha, el
+                                                        horario y
+                                                        la
+                                                        prestación a realizar. <br>
+                                                        El paciente sera notificado via e-mail.
+                                                    </p>
+                                                    <input id="id_usuario_{{id}}" type="hidden"
+                                                        value="id_usuario_{{id_usuario}}">
+                                                    <div class="pt-3 pb-1">
+                                                        <div class="form-group">
+                                                            <label for="fecha">Fecha del Turno:</label>
+                                                            <input class="form-control" type="date" name="fecha"
+                                                                id="fecha_{{id}}" required>
+                                                            <div id="error_{{id}}" class="d-none text-danger p-2">
+                                                                Debe especificar la fecha del turno
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="horario">Horario del Turno:</label>
+
+                                                            <select class="form-control" name="horario"
+                                                                id="horario_{{id}}">
+                                                                <option value={{id}}> {{hora_inicio}} - {{hora_fin}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="prestacion">Prestacion a Realizar:</label>
+
+                                                            <select class="form-control" name="prestacion"
+                                                                id="prestacion_{{id}}">
+                                                                <option value={{id}}> {{nombre}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button id="cerrarModalProgramar_{{id}}" style="min-width: 100px;"
+                                                        type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Cancelar</button>
+                                                    <button style="min-width: 100px;" id="confirmar_{{id}}"
+                                                        type="button"
+                                                        class="btn btn-success btn-event-control">Confirmar
+                                                    </button>
+                                                    <button id="hiddenButton_{{id}}" style="display: none;"
+                                                        data-dismiss="modal"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        <div class="calendario" id='wrap'>
+            <div id='calendar'></div>
+
+            <div style='clear:both'></div>
+        </div>
+    </div>
+
 </section>

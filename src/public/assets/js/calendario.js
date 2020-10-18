@@ -18,8 +18,21 @@
  * For event drag & drop, requires jQuery UI draggable.
  * For event resizing, requires jQuery UI resizable.
  */
-(function($, undefined) {
+const obtenerTurnos = async () => {
 
+    const result = await fetch("/api/turnos");
+
+    const turnos = await result.json();
+
+    return turnos;
+}
+
+let turnos;
+
+
+
+
+(function($, undefined) {
 
 var defaults = {
 
@@ -2322,7 +2335,10 @@ function BasicView(element, calendar, viewName) {
 		var col;
 		var date;
 
-		html += "<tbody>";
+
+        html += "<tbody>";
+        
+
 
 		for (row=0; row<rowCnt; row++) {
 
@@ -2379,8 +2395,11 @@ function BasicView(element, calendar, viewName) {
 			classNames.push('fc-future');
         }
         
-        //const fechaConTurnos = turnos.find(turno => turno.fecha === formatDate())
-        
+        const fechaConTurnos = turnos.find(turno => turno.fecha === formatDate(date, 'dd/MM/yyyy'));
+
+        if (fechaConTurnos)
+             console.log(`Turno en la fecha ${formatDate(date, 'dd/MM/yyyy')}`);
+
 		html +=
 			"<td" +
 			" class='" + classNames.join(' ') + "'" +
@@ -6091,7 +6110,10 @@ function HorizontalPositionCache(getElement) {
 })(jQuery);
 
 
-	$(document).ready(function() {
+$(document).ready(async function() {
+
+        turnos = await obtenerTurnos();
+
 	    var date = new Date();
 		var d = date.getDate();
 		var m = date.getMonth();
@@ -6197,6 +6219,7 @@ function HorizontalPositionCache(getElement) {
 			// },
 			
 		});
+        
+        initEventos();
 		
-		
-	});
+});

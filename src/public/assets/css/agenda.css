@@ -707,3 +707,95 @@ table.fc-header {
 .fc-event .ui-resizable-handle {
     display: none !important;
 }
+
+/* HEADER */
+
+.fc-header tr {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.fc-header-left,
+.fc-header-right {
+    width: unset;
+}
+/* 
+.fc-header tr {
+    width: 100%;
+} */
+
+@media (min-width: 768px) {
+    .fc-header tr {
+        width: 100%;
+        flex-direction: row;
+    }
+}
+
+/* CONTAINER */
+
+.calendario-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+}
+
+@media (min-width: 768px) {
+    .calendario-container {
+        flex-direction: row;
+        align-items: initial;
+    }
+}
+
+/* CALENDARIO */
+
+.calendario {
+    width: 60%;
+}
+
+/* ASIDE */
+
+.turnos-dia {
+    margin-top: 2.5rem;
+    width: 40%;
+}
+
+@media (min-width: 768px) {
+    .turnos-dia {
+        margin-top: 0;
+    }
+}
+
+.turnos-lista {
+    padding: 2rem;
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.turno {
+    width: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.turno-titulo {
+    width: 100%;
+}
+
+.turno-titulo a {
+    padding: 0;
+}
+
+.turno-info-titulo {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
