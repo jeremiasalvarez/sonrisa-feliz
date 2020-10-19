@@ -9420,6 +9420,10 @@ input[type="number"] {
     color: var(--danger);
 }
 
+.custom-icon.icon-watch {
+    color: var(--primary);
+}
+
 .faq-list li {
     min-width: 85%;
     max-width: 85%;

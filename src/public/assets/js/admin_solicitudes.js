@@ -4,6 +4,8 @@ const iconoRechazadoClass = "custom-icon bx bx-x-circle icon-x";
 
 const iconoAceptadoClass = "custom-icon bx bx-check-circle icon-check";
 
+const iconoReprogramadoClass = "custom-icon bx bx-stopwatch icon-watch"
+
 const spinner =  '<i class="fas fa-spin fa-spinner"></i>';
 
 

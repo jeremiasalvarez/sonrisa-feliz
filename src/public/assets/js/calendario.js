@@ -28,7 +28,7 @@ const obtenerTurnos = async () => {
 }
 
 let turnos;
-
+let horarios;
 
 
 
@@ -818,7 +818,7 @@ function Header(calendar, options) {
 										"</span>" :
 										text
 										) +
-								"</span>"
+								 "</span>"
 								)
 								.click(function() {
 									if (!button.hasClass(tm + '-state-disabled')) {
@@ -2366,8 +2366,7 @@ function BasicView(element, calendar, viewName) {
 
 		return html;
 	}
-
-
+	
 	function buildCellHTML(date) {
 		var contentClass = tm + "-widget-content";
 		var month = t.start.getMonth();
@@ -6112,7 +6111,11 @@ function HorizontalPositionCache(getElement) {
 
 $(document).ready(async function() {
 
-        turnos = await obtenerTurnos();
+        const res = await obtenerTurnos();
+
+		turnos = res.turnos;
+		horarios = res.horarios;
+
 
 	    var date = new Date();
 		var d = date.getDate();
@@ -6220,6 +6223,7 @@ $(document).ready(async function() {
 			
 		});
         
-        initEventos();
+		initEventos();
+		diaDefault();
 		
 });

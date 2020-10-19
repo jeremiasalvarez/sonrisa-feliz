@@ -2,7 +2,13 @@
 td.fc-day {
     background: #fff !important;
     font-family: "Roboto", sans-serif;
+    transition: background-color 0.5s ease;
 }
+
+td.fc-day:hover {
+    cursor: pointer;
+}
+
 td.fc-today {
     background: #fff !important;
     position: relative;
@@ -10,7 +16,7 @@ td.fc-today {
 
 .fc-first th {
     font-family: "Roboto", sans-serif;
-    background: #9675ce !important;
+    background: #007bff !important;
     color: #fff;
     font-size: 14px !important;
     font-weight: 500 !important;
@@ -661,11 +667,15 @@ table.fc-header {
     color: #b8b8b8;
 }
 
+.fc-week .fc-day:hover {
+    background-color: #e1e1e1 !important;
+}
+
 .fc-week .fc-day:hover .fc-day-number {
     background-color: #b8b8b8;
     border-radius: 50%;
     color: #ffffff;
-    transition: background-color 0.2s;
+    transition: background-color 0.5s;
 }
 .fc-week .fc-day.fc-state-highlight:hover .fc-day-number {
     background-color: #ff3b30;
@@ -738,7 +748,7 @@ table.fc-header {
 
 .calendario-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     flex-direction: column-reverse;
 }
@@ -753,36 +763,41 @@ table.fc-header {
 /* CALENDARIO */
 
 .calendario {
-    width: 60%;
+    width: 80%;
 }
 
 /* ASIDE */
 
 .turnos-dia {
     margin-top: 2.5rem;
-    width: 40%;
+    width: 80%;
 }
 
 @media (min-width: 768px) {
     .turnos-dia {
+        width: 30%;
         margin-top: 0;
     }
+    .calendario {
+        width: 60%;
+    }
 }
-
+/* 
 .turnos-lista {
     padding: 2rem;
     width: 100% !important;
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} */
 
 .turno {
-    width: 85%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1.3rem;
+    margin-left: 0;
+}
+
+.turno:first-of-type {
 }
 
 .turno-titulo {
@@ -798,4 +813,14 @@ table.fc-header {
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
+}
+
+.btn-rechazar {
+    margin-bottom: 1rem !important;
+}
+
+@media (min-width: 768px) {
+    .btn-rechazar {
+        margin-bottom: 0;
+    }
 }

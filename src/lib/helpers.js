@@ -195,6 +195,35 @@ helpers.getPaciente = async (id) => {
   
 }
 
+helpers.reprogramarTurno = async (data) => {
+
+    try {
+
+        const { id_turno, fecha, id_horario } = data;
+
+        const query = await pool.query("UPDATE turno_paciente SET fecha = ?, id_horario = ? WHERE id = ?", [fecha, id_horario, id_turno]);
+
+        if (query.affectedRows === 1){ 
+          return {
+            success: true,
+            msg: "El turno fue actualizado correctamente",
+            nueva_fecha: formatearFecha(fecha, "DF").fecha,
+            fecha_calendario: moment(fecha).format('L')
+          }
+        } else {
+          return {success: false, msg: "Algo salio mal. El turno no fue reprogramado correctamente"}
+        }
+
+
+    } catch (error) {
+        
+        return {
+          success: false,
+          msg: error
+        }
+    }
+} 
+
 helpers.getTurnos = async () => {
 
   try {
@@ -203,10 +232,16 @@ helpers.getTurnos = async () => {
 
       rows.forEach(turno => {
 
-        const { fecha } = turno;
+        const { fecha, hora_inicio, hora_fin } = turno;
+
+        const { dia, fecha: fechaNombre } = formatearFecha(fecha, "DF");
+
         
         turno.fecha = moment(fecha).format('L');
-
+        turno.hora_fin = formatearHorario(hora_fin);
+        turno.hora_inicio = formatearHorario(hora_inicio);
+        turno.dia = `${dia[0].toLocaleUpperCase()}${dia.slice(1)}`
+        turno.fechaNombre = fechaNombre;
       })
 
       return toJson(rows);

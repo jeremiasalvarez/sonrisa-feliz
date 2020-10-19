@@ -1,7 +1,7 @@
 const express = require("express");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const helpers = require("../lib/helpers");
-const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos } = require("../lib/helpers");
+const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno } = require("../lib/helpers");
 
 const router = express.Router();
 
@@ -128,15 +128,34 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
 })
 
 router.get("/turnos", isLoggedIn, isAdmin, (req, res) => {
-    res.render("admin/turnos");
+
+    if (!req.admin) {
+        return res.redirect("/perfil")
+    }
+    
+    return res.render("admin/turnos");
 });
 
 router.get("/api/turnos", isLoggedIn, isAdmin, async (req, res) => {
 
     const turnos = await getTurnos();
 
-    return res.json(turnos);
+    const horarios = await getHorarios();
 
+    return res.json({turnos, horarios});
+
+});
+
+router.post("/api/turnos/reprogramar", isLoggedIn, isAdmin, async (req, res) => {
+
+    const data = req.body;
+
+    const result = await reprogramarTurno(data);
+
+    // console.log(result);
+
+    return res.json(result);
+    
 })
 
 module.exports = router;
