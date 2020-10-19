@@ -1,5 +1,7 @@
 //rutas relacionadas con el loggeo
 const express = require("express");
+const path = require("path");
+const fs = require("fs");
 const router = express.Router();
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getUserData, getHorarios, getDias, guardarSolicitud }  = require("../lib/helpers");
@@ -7,7 +9,29 @@ const { getUserData, getHorarios, getDias, guardarSolicitud }  = require("../lib
 
 const multer = require("multer");
 
-const upload = multer({ dest: 'uploads/' })
+const storageSolicitudes = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'src/public/assets/img/solicitudes/')
+  },
+  filename: function (req, file, cb) {
+    /*Appending extension with original name*/
+    cb(null, "solicitud_"+ req.user.email + path.extname(file.originalname)) 
+  }
+})
+
+const storageTurnos = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    /*Appending extension with original name*/
+    cb(null, "turno_"+ req.user.email + path.extname(file.originalname)) 
+  }
+})
+
+const uploadSolicitudes = multer({ storage: storageSolicitudes });
+const uploadTurnos = multer({ storage: storageSolicitudes });
+
 
 
 router.get("/pedirTurno", isLoggedIn, async (req, res) => {
@@ -28,9 +52,18 @@ router.get("/pedirTurno", isLoggedIn, async (req, res) => {
   res.render("turnos/solicitarTurno", data);
 });
 
-router.post("/upload-img", isLoggedIn, upload.single('imagen'), (req, res) => {
+router.post("/upload-img", uploadSolicitudes.single('imagen'), (req, res) => {
 
-  res.json({success: false});
+  return res.json({success: false, path: `solicitud_${req.user.email}`});
+
+
+  // req.file.filename = "IMAGEN";
+  // setTimeout(() => {
+    
+  //   fs.unlink("uploads/1 butacas.jpg.jpg",() =>{
+      
+  //   });
+  // },2000)
 
 })
 

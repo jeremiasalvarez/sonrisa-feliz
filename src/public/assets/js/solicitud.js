@@ -6,17 +6,15 @@ const botonSubmit = document.querySelector("#submit");
 const enviarImagen = async () => {
 
     const img = document.querySelector("#imagen");
+    const email = document.querySelector("#from_email").value;
 
     const formData = new FormData();
     formData.append('imagen', img.files[0]);
+    formData.append('email', email);
     try {
         const result = await fetch('/upload-img', {
 
             method: 'post',
-            headers: {
-                'Content-Type': 'multipart/form-data'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-              },
             body: formData
     
         });
