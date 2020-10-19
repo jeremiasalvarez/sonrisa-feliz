@@ -34,12 +34,12 @@ const enviarImagen = async () => {
 
 solicitud.addEventListener("submit", async (e) => {
 
-    const imgSubida = await enviarImagen();
+    // const imgSubida = await enviarImagen();
 
-    if (!imgSubida) {
-        console.log("ISDMSMDSDSDSDSDSDSD");
-        return;
-    }
+    // if (!imgSubida) {
+    //     console.log("ISDMSMDSDSDSDSDSDSD");
+    //     return;
+    // }
 
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
