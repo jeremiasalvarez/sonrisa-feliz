@@ -152,6 +152,11 @@ router.post("/api/turnos/reprogramar", isLoggedIn, isAdmin, async (req, res) => 
 
     const result = await reprogramarTurno(data);
 
+    if (result.success) {
+        const { hora_inicio, hora_fin } = await getHorario(data.id_horario);
+        result.nuevaHoraInicio = hora_inicio;
+        result.nuevaHoraFin = hora_fin;
+    }
     // console.log(result);
 
     return res.json(result);

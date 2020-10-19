@@ -2,7 +2,10 @@
 td.fc-day {
     background: #fff !important;
     font-family: "Roboto", sans-serif;
-    transition: background-color 0.5s ease;
+}
+
+td.selected {
+    background: #e1e1e1 !important;
 }
 
 td.fc-day:hover {
@@ -675,7 +678,6 @@ table.fc-header {
     background-color: #b8b8b8;
     border-radius: 50%;
     color: #ffffff;
-    transition: background-color 0.5s;
 }
 .fc-week .fc-day.fc-state-highlight:hover .fc-day-number {
     background-color: #ff3b30;

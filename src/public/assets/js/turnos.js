@@ -298,8 +298,17 @@ function horariosHtml(id) {
 
 function turnosDelDia(e) {
 
-    console.log(e.target);
+    // console.log(e.target);
+
+    const prev = document.querySelector(".selected");
+
+    if (prev) {
+        prev.classList.remove("selected");
+    }
+
     const id = e.target.id;
+
+    e.target.classList.add("selected");
 
     if (seleccionado === id) return;
 
@@ -486,18 +495,35 @@ async function reprogramarTurno(id) {
     console.log(result);
 
     if (result.success) {  
+
         cartaReprogramada(id, result.nueva_fecha);
-        console.log("LA ID ES: " + id);
+        // console.log("LA ID ES: " + id);
         turnos.map(turno => {
             if (turno.id_turno == id){ 
                 turno.fecha = result.fecha_calendario;
-                console.log(`turno actualizado: ${turno.fecha}, id:${turno.id_turno}`)
+                turno.hora_inicio = result.nuevaHoraInicio;
+                turno.hora_fin = result.nuevaHoraFin;
+                // console.log(`turno actualizado: ${turno.fecha}, id:${turno.id_turno}`)
             }
         });
-        console.log(turnos);
+        // console.log(turnos);
+    } else {
+        
+        swal({
+            title: "No Disponible",
+            text: result.msg,
+            icon: "error",
+            button: {
+                text: "Entendido",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-xl js-scroll-trigger",
+                closeModal: true,
+            },
+        });
     }
 
-    console.log(payload);
+    // console.log(payload);
 
 }
 

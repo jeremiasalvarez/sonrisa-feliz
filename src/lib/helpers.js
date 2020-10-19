@@ -7,6 +7,35 @@ const moment = require("moment");
 
 moment.locale("es-mx");
 
+
+const fechaOcupada = async (data) => {
+
+  try {
+
+    const rows = await pool.query("SELECT fecha FROM turno_paciente WHERE fecha = ? AND id_horario = ?", [data.fecha, data.id_horario]);
+
+    if (rows.length === 0) {
+      return {
+        ocupado: false
+      }
+    } else {
+      return {
+        ocupado: true,
+        msg: "La fecha y los horarios seleccionados no estan disponibles porque ya existe un turno programado con la combinacion seleccionada. Intente con una nueva combinacion de fecha y horario"
+      }
+    }
+
+  } catch (error) {
+      return {
+        ocupado: true,
+        msg: "HUBO UN ERROR: " + error
+      }
+  }
+
+}
+
+const getHorarioConId = helpers.getHorario;
+
 helpers.encryptPassword = async (password) => {
   //Generamos un patron
   const salt = await bcrypt.genSalt(10);
@@ -201,9 +230,20 @@ helpers.reprogramarTurno = async (data) => {
 
         const { id_turno, fecha, id_horario } = data;
 
-        const query = await pool.query("UPDATE turno_paciente SET fecha = ?, id_horario = ? WHERE id = ?", [fecha, id_horario, id_turno]);
+        const { ocupado, msg } = await fechaOcupada({fecha, id_horario});
 
+        if (ocupado) {
+
+          return {
+            success: false,
+            msg
+          }
+        }
+
+        const query = await pool.query("UPDATE turno_paciente SET fecha = ?, id_horario = ? WHERE id = ?", [fecha, id_horario, id_turno]);
+        
         if (query.affectedRows === 1){ 
+
           return {
             success: true,
             msg: "El turno fue actualizado correctamente",
@@ -219,7 +259,7 @@ helpers.reprogramarTurno = async (data) => {
         
         return {
           success: false,
-          msg: error
+          msg: error.message
         }
     }
 } 
@@ -293,31 +333,6 @@ helpers.eliminarSolicitud = async (id) => {
    }
 }
 
-const fechaOcupada = async (data) => {
-
-  try {
-
-    const rows = await pool.query("SELECT fecha FROM turno_paciente WHERE fecha = ? AND id_horario = ?", [data.fecha, data.id_horario]);
-
-    if (rows.length === 0) {
-      return {
-        ocupado: false
-      }
-    } else {
-      return {
-        ocupado: true,
-        msg: "La fecha y los horarios seleccionados no estan disponibles porque ya existe un turno programado con la combinacion seleccionada. Intente con una nueva combinacion de fecha y horario"
-      }
-    }
-
-  } catch (error) {
-      return {
-        ocupado: true,
-        msg: "HUBO UN ERROR: " + error
-      }
-  }
-
-}
 
 helpers.guardarTurno = async (data) => {
 
