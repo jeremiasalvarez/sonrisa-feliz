@@ -3,7 +3,45 @@ const solicitud = document.querySelector("#solicitudTurno");
 // const user_id = document.querySelector("#userId").value;
 const botonSubmit = document.querySelector("#submit");
 
+const enviarImagen = async () => {
+
+    const img = document.querySelector("#imagen");
+
+    const formData = new FormData();
+    formData.append('imagen', img.files[0]);
+    try {
+        const result = await fetch('/upload-img', {
+
+            method: 'post',
+            headers: {
+                'Content-Type': 'multipart/form-data'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            body: formData
+    
+        });
+
+        const {success} = await result.json();
+
+        return success;
+
+    } catch (error) {
+        console.log(error)
+    }
+    
+    
+
+}
+
+
 solicitud.addEventListener("submit", async (e) => {
+
+    const imgSubida = await enviarImagen();
+
+    if (!imgSubida) {
+        console.log("ISDMSMDSDSDSDSDSDSD");
+        return;
+    }
 
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
@@ -11,6 +49,7 @@ solicitud.addEventListener("submit", async (e) => {
     const dia_id = document.querySelector("#dia").value;
     const horario_id = document.querySelector("#horario").value;
     const msg = document.querySelector("#msg").value;
+    const img = document.querySelector("#imagen").value;
 
     e.preventDefault();
 

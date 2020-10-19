@@ -374,7 +374,6 @@ async function validarAccion(e) {
             await reprogramarTurno(id);
             quitarSpinner(boton, "Confirmar");
             activarBotones([boton, boton.previousElementSibling]);
-            document.querySelector(`#hiddenButtonReprogramar_${id}`).click();
         
             break;
         
@@ -604,6 +603,7 @@ async function reprogramarTurno(id) {
                 turno.hora_inicio = result.nuevaHoraInicio;
                 turno.hora_fin = result.nuevaHoraFin;
                 turno.fechaNombre = result.nueva_fecha;
+                turno.id_horario = horarioNuevo;
                 // console.log(`turno actualizado: ${turno.fecha}, id:${turno.id_turno}`)
             }
         });
@@ -620,6 +620,8 @@ async function reprogramarTurno(id) {
                 closeModal: true,
             },
         });
+        document.querySelector(`#hiddenButtonReprogramar_${id}`).click();
+
         // console.log(turnos);
     } else {
         

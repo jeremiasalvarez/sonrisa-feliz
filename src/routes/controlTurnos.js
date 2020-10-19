@@ -1,8 +1,13 @@
 //rutas relacionadas con el loggeo
 const express = require("express");
 const router = express.Router();
-const { isLoggedIn } = require("../lib/auth");
+const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getUserData, getHorarios, getDias, guardarSolicitud }  = require("../lib/helpers");
+
+
+const multer = require("multer");
+
+const upload = multer({ dest: 'uploads/' })
 
 
 router.get("/pedirTurno", isLoggedIn, async (req, res) => {
@@ -22,6 +27,12 @@ router.get("/pedirTurno", isLoggedIn, async (req, res) => {
 
   res.render("turnos/solicitarTurno", data);
 });
+
+router.post("/upload-img", isLoggedIn, upload.single('imagen'), (req, res) => {
+
+  res.json({success: false});
+
+})
 
 
 router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
