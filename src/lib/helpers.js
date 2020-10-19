@@ -224,6 +224,30 @@ helpers.getPaciente = async (id) => {
   
 }
 
+helpers.cancelarTurno = async (id) => {
+
+  try {
+
+    const query = await pool.query("DELETE FROM turno_paciente WHERE id = ?", [id]);
+    
+    const result = {
+      success: query.affectedRows == 1,
+      msg: query.affectedRows == 1 ? "El turno fue cancelado correctamente" : "El turno no fue cancelado correctamente"
+    }
+
+    return result;
+    
+  } catch (error) {
+
+      return {
+        success: false,
+        msg: "Algo salio mal"
+      }
+  }
+
+
+}  
+
 helpers.reprogramarTurno = async (data) => {
 
     try {
@@ -244,10 +268,13 @@ helpers.reprogramarTurno = async (data) => {
         
         if (query.affectedRows === 1){ 
 
+          const { fecha: nueva_fecha, dia: nuevo_dia } = formatearFecha(fecha, "DF");
+
           return {
             success: true,
             msg: "El turno fue actualizado correctamente",
-            nueva_fecha: formatearFecha(fecha, "DF").fecha,
+            nueva_fecha,
+            nuevo_dia,
             fecha_calendario: moment(fecha).format('L')
           }
         } else {

@@ -3,6 +3,11 @@ let seleccionado;
 let botonConfirmarReprogramar;
 let botonConfirmarCancelar;
 
+const ordenarTurnos = (turns) => {
+
+    return turns.sort((a, b) => a.id_horario - b.id_horario);
+}
+
 const clearEventos = () => {
 
     document.querySelectorAll(".fc-day div").forEach(n => {
@@ -90,7 +95,8 @@ const appendAside = (fecha) => {
 
     divInicial.classList.add("p-0");
 
-    const turnosEnFecha = turnos.filter(turno => turno.fecha === fecha);
+    let turnosEnFecha = turnos.filter(turno => turno.fecha === fecha);
+    turnosEnFecha = ordenarTurnos(turnosEnFecha);
 
     // console.log(turnosEnFecha)
 
@@ -150,8 +156,12 @@ const appendAside = (fecha) => {
 					<div class="card">
 						<div class="card-body">
                             <p class="font-italic mb-0 ">
+                            <input type="hidden" id="diaAnterior_${id_turno}" value="${dia}">
+                            <input type="hidden" id="fechaAnterior_${id_turno}" value="${fechaNombre}">
+                            <input type="hidden" id="inicioAnterior_${id_turno}" value="${hora_inicio}">
+                            <input type="hidden" id="finAnterior_${id_turno}" value="${hora_fin}">
                             <input id="emailUsuario_${id_turno}" type="hidden" name="emailUsuario_${id_turno}" value=${email}>
-                            <input id="nombre_${id_turno}" type="hidden" name="nombre_${id_turno}" value=[${nombre_paciente}]>
+                            <input id="nombreUsuario_${id_turno}" type="hidden" name="nombre_${id_turno}" value=${nombre_paciente}>
                             <p class="refer-text">Telefono: ${telefono}</p>
                             <p class="refer-text">E-mail: ${email} </p>
                             <p class="refer-text">Prestacion a realizar: ${nombre_prestacion}</p>
@@ -184,7 +194,7 @@ const appendAside = (fecha) => {
                                             <div class="pt-3 pb-1">
                                                 <div class="form-group">
                                                     <label for="motivo">Motivo: <small>(opcional)</small></label>
-                                                    <textarea name="motivo" id="motivo_id${id_turno}"
+                                                    <textarea name="motivo" id="motivoCancelar_${id_turno}"
                                                         class="form-control"></textarea>
                                                 </div>
 
@@ -219,6 +229,7 @@ const appendAside = (fecha) => {
                                             </p>
                                             <div class="pt-3 pb-1">
                                                 <div class="form-group">
+                                                    
                                                     <label for="fecha">Nueva Fecha del Turno:</label>
                                                     <input class="form-control" type="date" name="fecha"
                                                         id="fechaTurnoNueva_${id_turno}" value=${fecha} required>
@@ -332,13 +343,15 @@ function actualizarEventos() {
     botonesEventos.forEach(boton => boton.addEventListener("click", validarAccion));
 }
 
-function validarAccion(e) {
+async function validarAccion(e) {
 
     // console.log(e.target);
     const split = e.target.id.split("_");
     const boton = e.target;
     const accion = split[0];
     const id = split[1];
+
+    console.log(split)
 
     // console.log(`Accion: ${accion}, ID TURNO: ${id}`)
 
@@ -348,38 +361,114 @@ function validarAccion(e) {
 
             desactivarBotones([boton, boton.previousElementSibling]);
             agregarSpinner(boton);
-
-            setTimeout(() => {
+            await cancelarTurno(id);
+            quitarSpinner(boton, "Confirmar");
+            activarBotones([boton, boton.previousElementSibling]);
                 
-                cancelarTurno(id);
-                quitarSpinner(boton, "Confirmar");
-                activarBotones([boton, boton.previousElementSibling]);
-                
-                document.querySelector(`#hiddenButtonCancelar_${id}`).click();
-            },2000)
-
-
+            document.querySelector(`#hiddenButtonCancelar_${id}`).click();
             break;
 
         case 'reprogramar':
             desactivarBotones([boton, boton.previousElementSibling]);
             agregarSpinner(boton);
-            setTimeout(() => {
-                reprogramarTurno(id);
-                quitarSpinner(boton, "Confirmar");
-                activarBotones([boton, boton.previousElementSibling]);
-                document.querySelector(`#hiddenButtonReprogramar_${id}`).click();
-            },2000)
-
-             break;
-
-
+            await reprogramarTurno(id);
+            quitarSpinner(boton, "Confirmar");
+            activarBotones([boton, boton.previousElementSibling]);
+            document.querySelector(`#hiddenButtonReprogramar_${id}`).click();
+        
+            break;
+        
+        default: 
+            break;    
     }
 }
 
-function cancelarTurno(idTurno) {
+async function cancelarTurno(id) {
+
+    const motivo = document.querySelector(`#motivoCancelar_${id}`).value;
+    const inicioAnterior = document.querySelector(`#inicioAnterior_${id}`).value;
+    const finAnterior = document.querySelector(`#finAnterior_${id}`).value;
+    const fechaAnterior = document.querySelector(`#fechaAnterior_${id}`).value;
+    const nombreUsuario = document.querySelector(`#nombreUsuario_${id}`).value;
+    const emailUsuario = document.querySelector(`#emailUsuario_${id}`).value;
+    const diaAnterior = document.querySelector(`#diaAnterior_${id}`).value;
+
+    const payload = {
+        id_turno: id,
+        inicioAnterior,
+        finAnterior,
+        fechaAnterior,
+        nombreUsuario,
+        emailUsuario,
+        diaAnterior,
+        motivo
+    }
+
+    console.log("PAYLOAD:\n", payload);
+
+    const data = await fetch("/api/turnos/cancelar", {
+        
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        body: JSON.stringify(payload)
+    });
+
+    const result = await data.json();
+
+    console.log(result);
     
-    inhabilitarCarta(idTurno);
+    if (result.success) {
+
+        inhabilitarCarta(id);
+
+        console.log("TURNOS ANTES:\n",turnos);
+        let index = turnos.findIndex(turno => turno.id_turno == id);
+
+        console.log("INDEX: ",index);
+
+        turnos.splice(index, 1);
+
+        console.log("TURNOS DESPUES:\n",turnos);
+
+        // turnos = turnos.map(turno => {
+        //     if (turno.id_turno != id){
+        //         return turno;
+        //     }
+        // });
+
+        swal({
+            title: "Turno Cancelado",
+            text: result.msg,
+            icon: "success",
+            button: {
+                text: "Entendido",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-xl js-scroll-trigger",
+                closeModal: true,
+            },
+        });
+    } else {
+
+        swal({
+            title: "Ocurrio un error",
+            text: result.msg,
+            icon: "error",
+            button: {
+                text: "Entendido",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-xl js-scroll-trigger",
+                closeModal: true,
+            },
+        });
+
+    }
+
+    //inhabilitarCarta(id);
     
 }
 
@@ -471,13 +560,24 @@ async function reprogramarTurno(id) {
     const fechaNueva = document.querySelector(`#fechaTurnoNueva_${id}`).value;
     const horarioNuevo = document.querySelector(`#horarioNuevo_${id}`).value;
     const motivo = document.querySelector(`#motivoReprogramar_${id}`).value;
-
+    const inicioAnterior = document.querySelector(`#inicioAnterior_${id}`).value;
+    const finAnterior = document.querySelector(`#finAnterior_${id}`).value;
+    const fechaAnterior = document.querySelector(`#fechaAnterior_${id}`).value;
+    const nombreUsuario = document.querySelector(`#nombreUsuario_${id}`).value;
+    const emailUsuario = document.querySelector(`#emailUsuario_${id}`).value;
+    const diaAnterior = document.querySelector(`#diaAnterior_${id}`).value;
 
     const payload = {
         id_turno: id,
         fecha: fechaNueva,
         id_horario: horarioNuevo,
-        motivo
+        motivo,
+        inicioAnterior,
+        finAnterior,
+        fechaAnterior,
+        emailUsuario,
+        nombreUsuario,
+        diaAnterior
     }
 
     const data = await fetch("/api/turnos/reprogramar", {
@@ -503,8 +603,22 @@ async function reprogramarTurno(id) {
                 turno.fecha = result.fecha_calendario;
                 turno.hora_inicio = result.nuevaHoraInicio;
                 turno.hora_fin = result.nuevaHoraFin;
+                turno.fechaNombre = result.nueva_fecha;
                 // console.log(`turno actualizado: ${turno.fecha}, id:${turno.id_turno}`)
             }
+        });
+        swal({
+            title: "Turno Reprogramado",
+            text: `El turno fue reprogramado correctamente para el ${result.nueva_fecha} de
+                    ${result.nuevaHoraInicio} a ${result.nuevaHoraFin}`,
+            icon: "success",
+            button: {
+                text: "Entendido",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-xl js-scroll-trigger",
+                closeModal: true,
+            },
         });
         // console.log(turnos);
     } else {

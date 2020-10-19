@@ -1,7 +1,7 @@
 const express = require("express");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const helpers = require("../lib/helpers");
-const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno } = require("../lib/helpers");
+const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno } = require("../lib/helpers");
 
 const router = express.Router();
 
@@ -150,17 +150,69 @@ router.post("/api/turnos/reprogramar", isLoggedIn, isAdmin, async (req, res) => 
 
     const data = req.body;
 
+    const { inicioAnterior, finAnterior, fechaAnterior, emailUsuario, nombreUsuario, motivo , diaAnterior } = req.body;
+
     const result = await reprogramarTurno(data);
 
     if (result.success) {
         const { hora_inicio, hora_fin } = await getHorario(data.id_horario);
         result.nuevaHoraInicio = hora_inicio;
         result.nuevaHoraFin = hora_fin;
+
+        await enviarMail({
+            receptor: emailUsuario,
+            asunto: "Sonrisa Feliz - Turno Reprogramado",
+            cuerpo: `Hola ${nombreUsuario}, nos comunicamos para informarte que tu turno fue reprogramado. <br>
+            <strong>Fecha y Horario anterior: </strong> ${diaAnterior}, ${fechaAnterior}, de ${inicioAnterior} a ${finAnterior} <br><br>
+            <strong>Nueva Fecha y Horario: </strong> ${result.nuevo_dia}, ${result.nueva_fecha}, de ${hora_inicio} a ${hora_fin} <br>
+            <strong>Motivo</strong>: ${motivo} <br> <br>
+            <i>Sonrisa Feliz</i>` 
+        });
+        res.status(200);
+    } else {
+        res.status(400);
     }
+
     // console.log(result);
 
     return res.json(result);
     
+})
+
+router.post("/api/turnos/cancelar", isLoggedIn, isAdmin, async (req, res) => {
+
+    const { id_turno,
+        inicioAnterior,
+        finAnterior,
+        fechaAnterior,
+        nombreUsuario,
+        emailUsuario,
+        diaAnterior,
+        motivo } = req.body;
+
+    const result = await cancelarTurno(id_turno);
+
+    console.log(result);
+
+    if (result.success) {
+
+        res.status(200);
+
+        await enviarMail({
+            receptor: emailUsuario,
+            asunto: "Sonrisa Feliz - Turno Cancelado",
+            cuerpo: `Hola ${nombreUsuario}. Lamentamos informarle que su turno para el ${diaAnterior} ${fechaAnterior}, de ${inicioAnterior} a ${finAnterior}, fue <strong>cancelado</strong>. <br>
+            <strong>Motivo: ${motivo}</strong> <br><br>
+            <i>Sonrisa Feliz</i>` 
+        });
+
+
+    } else {
+        res.status(400);
+    }
+
+    return res.json(result);
+
 })
 
 module.exports = router;
