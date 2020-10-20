@@ -61,6 +61,14 @@ app.use((req, res, next) => {
   app.locals.success = req.flash("success");
   app.locals.message = req.flash("message");
   app.locals.user = req.user;
+  if(req.user){
+    if(req.user.rol=='admin'){
+      app.locals.admin = req.user;
+    }else{
+      app.locals.paciente = req.user
+    }
+  }
+  
   next();
 });
 
