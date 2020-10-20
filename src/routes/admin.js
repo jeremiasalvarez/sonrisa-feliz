@@ -1,4 +1,5 @@
 const express = require("express");
+const fs  = require("fs");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno } = require("../lib/helpers");
 
@@ -56,25 +57,39 @@ router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
 router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
     
+    console.log(req.body)
+
     if (!req.body.fecha){
         return res.json({success: false, message: "No selecciono una fecha"});
     }
 
-    const { id, usuario_id, horario_id, fecha, prestacion_id, nombre, email } = req.body;
+    const { id, usuario_id, horario_id, fecha, prestacion_id, nombre, email, imgPath } = req.body;
 
     const data = {
         usuario_id,
         horario_id,
         fecha,
-        prestacion_id
+        prestacion_id,
+        imgPath
     }
 
     
-   const { dia, fecha: fechaFormateada } = formatearFecha(fecha, "DF");
+
+    const { dia, fecha: fechaFormateada } = formatearFecha(fecha, "DF");
 
     const result = await guardarTurno(req.body);
 
     if (result.success) {
+
+        if (!result.noImg) {
+            
+            const oldPath = `src/public/assets/img/solicitudes/${imgPath}`;
+            const newPath = `src/public/assets/img/turnos/${result.newPath}`;
+
+            fs.rename(oldPath, newPath, (err) => {
+
+            })
+        }
 
         res.status(200);
 

@@ -37,16 +37,26 @@
                         </a>
                     </div>
                     <div id="solcitud_id_{{id}}" class="collapse" data-parent=".faq-list" style="">
+                        <input type="hidden" name="ruta" id="ruta_{{id}}" value="{{img_ruta}}">
                         <input id="email_{{id}}" type="hidden" name="email_{{id}}" value={{email}}>
                         <input id="nombre_{{id}}" type="hidden" name="nombre_{{id}}" value={{nombre}}>
                         <p class="refer-text">Telefono: {{telefono}}</p>
                         <p class="refer-text">E-mail: {{email}}</p>
                         <p class="refer-text">Horario de Preferencia: {{hora_inicio}} - {{hora_fin}}</p>
                         <p class="refer-text">Dia de Preferencia: {{nombre_dia}}</p>
-                        <div class="d-flex justify-content-around align-items-baseline">
-                            <p class="refer-text">Imagen ilustrativa: </p>
-                            <img class="testimonial-img" src="assets/img/solicitudes/{{img_ruta}}"
-                                alt="IMAGEN SOLICITUD">
+                        <div class="p-t-10 d-flex justify-content-start align-items-center">
+                            <p class="refer-text p-0">Imagen ilustrativa: </p>
+                            {{#if img_ruta}}
+                            <a class="btn btn-primary m-l-10" href="assets/img/solicitudes/{{img_ruta}}"
+                                data-lightbox="{{img_ruta}}" data-title="Imagen enviada por el solicitante">Ver
+                                Imagen</a>
+                            {{else}}
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                title="Este usuario no proveyó una imagen">
+                                <button class="m-l-10 btn btn-primary" style="pointer-events: none;" type="button"
+                                    disabled>Sin Imagen</button>
+                            </span>
+                            {{/if}}
                         </div>
                         {{#if mensaje_solicitud}}
                         <p class="refer-text">Mensaje del solicitante: {{mensaje_solicitud}}</p>
