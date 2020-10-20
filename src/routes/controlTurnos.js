@@ -14,17 +14,7 @@ const storageSolicitudes = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     /*Appending extension with original name*/
-    cb(null, "solicitud_"+ req.user.email + path.extname(file.originalname)) 
-  }
-})
-
-const storageTurnos = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    /*Appending extension with original name*/
-    cb(null, "turno_"+ req.user.email + path.extname(file.originalname)) 
+    cb(null, "solicitud_"+ req.user.email + path.extname(file.originalname).toLocaleLowerCase()) 
   }
 })
 
@@ -41,10 +31,6 @@ const uploadSolicitudes = multer({
                                       req.newImgPathExt = path.extname(file.originalname) 
                                     }
                                     }})
-
-
-const uploadTurnos = multer({ storage: storageSolicitudes });
-
 
 
 router.get("/pedirTurno", isLoggedIn, async (req, res) => {
@@ -67,6 +53,13 @@ router.get("/pedirTurno", isLoggedIn, async (req, res) => {
 
 router.post("/upload-img", uploadSolicitudes.single('imagen'), (req, res) => {
 
+  if (!req.files && req.files.length == 0) {
+      console.log("no imagen");
+      return res.json({success: true, msg: "sin imagen"})
+  } else {
+    console.log("hay imagen");
+  }
+
   if (req.fileValidationError) {
     return res.json({msg : "No es un archivo valido", success: false})
   } 
@@ -87,9 +80,12 @@ router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
 
   const result = await guardarSolicitud(data);
   
+
   // // console.log(result);
 
   if (result.success) {
+
+    
 
     res.status(200).json(result);
 

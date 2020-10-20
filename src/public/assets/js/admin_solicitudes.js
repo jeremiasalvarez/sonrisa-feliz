@@ -106,7 +106,8 @@ async function confirmarSolicitud(id) {
         horario_id: document.querySelector(`#horario_${id}`).value,
         prestacion_id: document.querySelector(`#prestacion_${id}`).value,
         nombre: nombreProcesado,
-        email: emailProcesado
+        email: emailProcesado,
+        imgPath: document.querySelector(`#ruta_${id}`).value
     }
     
     if (!data.fecha) {

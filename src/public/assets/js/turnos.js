@@ -3,6 +3,8 @@ let seleccionado;
 let botonConfirmarReprogramar;
 let botonConfirmarCancelar;
 
+
+
 const ordenarTurnos = (turns) => {
 
     return turns.sort((a, b) => a.id_horario - b.id_horario);
@@ -131,7 +133,8 @@ const appendAside = (fecha) => {
                 dia,
                 fechaNombre,
                 email,
-                dni} = turno;
+                dni,
+                img_ruta} = turno;
 
 
         const row = document.createElement("div");
@@ -165,7 +168,24 @@ const appendAside = (fecha) => {
                             <p class="refer-text">Telefono: ${telefono}</p>
                             <p class="refer-text">E-mail: ${email} </p>
                             <p class="refer-text">Prestacion a realizar: ${nombre_prestacion}</p>
-							</p>
+                            </p>
+                            
+                            ${img_ruta ? `
+                            <div class="p-t-10 d-flex justify-content-start align-items-center">
+                                <p class="refer-text p-0">Imagen ilustrativa: </p>
+                                <a class="btn btn-primary m-l-10" href="assets/img/turnos/${img_ruta}"
+                                    data-lightbox="${img_ruta}" data-title="Imagen enviada por el solicitante">Ver
+                                    Imagen</a>
+                            </div>` :    
+                            `
+                            <div class="p-t-10 d-flex justify-content-start align-items-center">
+                                <p class="refer-text p-0">Imagen ilustrativa: </p>
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Este usuario no proveyó una imagen">
+                                 <button class="m-l-10 btn btn-primary" style="pointer-events: none;" type="button" disabled>Sin Imagen</button>
+                                </span>
+                            </div>`}
+                            
+
                         </div>
                         
                         <div class="d-flex justify-content-between align-items-center flex-res">
@@ -275,6 +295,10 @@ const appendAside = (fecha) => {
 
     });
 
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    }())
+    
     aside.appendChild(divInicial);
     $(".collapse").collapse('hide');
 
