@@ -8,6 +8,7 @@ const activarAside = () => {
 
     document.querySelector("#spinnerContainer").remove();
     document.querySelector("aside").style.display = "block";
+    document.querySelector("section").style.height = "unset";
 }
 
 const ordenarTurnos = (turns) => {
