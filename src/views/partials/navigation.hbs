@@ -13,7 +13,8 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <div class="nav-menu d-lg-block ml-auto" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    {{#if user}}
+
+                    {{#if paciente}}
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/perfil">Mi Perfil</a>
                     </li>
@@ -21,12 +22,29 @@
                         <a class="nav-link text-white" href="/logout">Cerrar Sesión</a>
                     </li>
                     {{else}}
-                    {{!-- <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/signup">Registrarse</a>
-                </li> --}}
+
+                    {{#if admin}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Secciones
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/pacientes">Ver lista de pacientes </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/solicitudes">Ver solicitudes de turnos</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/turnos">Ver proximos turnos</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/logout">Cerrar Sesión</a>
+                    </li>
+                    {{/if}}
+
+
+
+
                     {{/if}}
                 </ul>
             </div>
