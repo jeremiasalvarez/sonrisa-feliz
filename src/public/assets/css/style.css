@@ -31,6 +31,10 @@ h6 {
     font-family: "Raleway", sans-serif;
 }
 
+section {
+    height: 100%;
+}
+
 /*[ FONT SIZE ]
 ///////////////////////////////////////////////////////////
 */
