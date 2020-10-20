@@ -165,6 +165,7 @@ const appendAside = (fecha) => {
 					<div class="card">
 						<div class="card-body">
                             <p class="font-italic mb-0 ">
+                            <input type="hidden" id="imgRuta_${id_turno}" value="${img_ruta}">
                             <input type="hidden" id="diaAnterior_${id_turno}" value="${dia}">
                             <input type="hidden" id="fechaAnterior_${id_turno}" value="${fechaNombre}">
                             <input type="hidden" id="inicioAnterior_${id_turno}" value="${hora_inicio}">
@@ -421,6 +422,7 @@ async function cancelarTurno(id) {
     const nombreUsuario = document.querySelector(`#nombreUsuario_${id}`).value;
     const emailUsuario = document.querySelector(`#emailUsuario_${id}`).value;
     const diaAnterior = document.querySelector(`#diaAnterior_${id}`).value;
+    const imgPath = document.querySelector(`#imgRuta_${id}`).value;
 
     const payload = {
         id_turno: id,
@@ -430,7 +432,8 @@ async function cancelarTurno(id) {
         nombreUsuario,
         emailUsuario,
         diaAnterior,
-        motivo
+        motivo,
+        imgPath
     }
 
     console.log("PAYLOAD:\n", payload);

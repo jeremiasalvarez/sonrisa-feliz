@@ -78,7 +78,9 @@ async function rechazarSolicitud(id){
             'Content-Type': 'application/json'
             // 'Content-Type': 'application/x-www-form-urlencoded',
           },
-        body: JSON.stringify({id, motivo, email: emailProcesado, nombre: nombreProcesado})
+        body: JSON.stringify({id, motivo, email: emailProcesado, nombre: nombreProcesado, imgPath: document.querySelector(`#ruta_${id}`).value
+        })
+        
     }
     );
 
