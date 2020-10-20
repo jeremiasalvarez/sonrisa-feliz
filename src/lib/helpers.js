@@ -401,12 +401,12 @@ helpers.guardarTurno = async (data) => {
 
       const turnoString = string.slice(0, indexPunto);
       const ext = string.slice(indexPunto);
-
-      await pool.query("UPDATE turno_paciente SET img_ruta = ? WHERE id = ?",[path, result.insert_id]);
       const partialPath = [turnoString, result.insert_id].join("_");
       const path = [partialPath, ext].join("");
-      result.newPath = path;
+      await pool.query("UPDATE turno_paciente SET img_ruta = ? WHERE id = ?",[path, result.insert_id]);
       
+      result.newPath = path;
+
     }
     
 

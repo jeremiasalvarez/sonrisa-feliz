@@ -40,13 +40,12 @@ solicitud.addEventListener("submit", async (e) => {
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
 
-    const {success: imgSubida, path: imgPath} = await enviarImagen();
+    const {success: imgSubida, path: imgPath, msg: msgError} = await enviarImagen();
 
     if (!imgSubida) {
         swal({
             title: "Operacion Invalida",
-            text:
-                `La imagen proporcionada no es un formato valido. Formatos aceptados: '.jpg', '.jpeg', '.png'`,
+            text: msgError,
             icon: "error",
             button: {
                 text: "Entendido",

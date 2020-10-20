@@ -21,16 +21,22 @@ const storageSolicitudes = multer.diskStorage({
 const uploadSolicitudes = multer({ 
                                   storage: storageSolicitudes,
                                   fileFilter: function (req, file, cb) {
+                                    
+                                    
                                     let ext = path.extname(file.originalname).toLowerCase();
-                                    if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
-                                        req.fileValidationError = true;
-                                        cb(null, false);
-                                    }  else {
-                              
-                                      cb(null, true);
+
+                                    if(ext == '.png' || ext == '.jpg' || ext == '.jpeg') {  
+                                      req.mensaje = "La imagen es valida";
                                       req.newImgPathExt = path.extname(file.originalname) 
+                                      cb(null, true);
+
+                                    }  else {
+                                      req.fileValidationError = true;
+                                      req.mensaje = "La imagen es invalida o no existe"
+                                      cb(null, false);
                                     }
-                                    }})
+                                          
+                                  }})
 
 
 router.get("/pedirTurno", isLoggedIn, async (req, res) => {
@@ -53,15 +59,17 @@ router.get("/pedirTurno", isLoggedIn, async (req, res) => {
 
 router.post("/upload-img", uploadSolicitudes.single('imagen'), (req, res) => {
 
-  if (!req.files && req.files.length == 0) {
+  // console.log(req.mensaje);
+
+  if (!req.file) {
       console.log("no imagen");
-      return res.json({success: true, msg: "sin imagen"})
+      return res.json({success: false, msg: "Debe proprorcionar una imagen"})
   } else {
     console.log("hay imagen");
   }
 
   if (req.fileValidationError) {
-    return res.json({msg : "No es un archivo valido", success: false})
+    return res.json({msg : "La imagen proporcionada no es un formato valido. Formatos aceptados: '.jpg', '.jpeg', '.png'", success: false})
   } 
   return res.json({success: true, msg: "imagen insertada", path: `solicitud_${req.user.email}${req.newImgPathExt.toUpperCase()}`});
 
