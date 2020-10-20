@@ -75,7 +75,7 @@ solicitud.addEventListener("submit", async (e) => {
 
     //console.log(user_id, horario_id, dia_id)
 
-    const result = await fetch("http://localhost:4000/pedirTurno", {
+    const result = await fetch("/pedirTurno", {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ solicitud.addEventListener("submit", async (e) => {
                 closeModal: true,
             },
         });
-        document.location.href = `http://localhost:4000${redirectAdress}`
+        document.location.href = `${redirectAdress}`
 
     } else {
         swal({
