@@ -6,7 +6,7 @@ const passport = require("passport");
 const session = require("express-session");
 const mysqlStore = require("express-mysql-session");
 const flash = require("connect-flash");
-
+require('dotenv').config();
 const { database } = require("./keys");
 
 //Inicializaciones
@@ -21,7 +21,6 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.set("port", process.env.PORT || 4000);
 //ruta de la carpeta views
 app.set("views", path.join(__dirname, "views"));
-
 
 
 app.engine(
