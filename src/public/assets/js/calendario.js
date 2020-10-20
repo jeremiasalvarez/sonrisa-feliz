@@ -6222,7 +6222,8 @@ $(document).ready(async function() {
 			// },
 			
 		});
-        
+		
+		activarAside();
 		initEventos();
 		diaDefault();
 		

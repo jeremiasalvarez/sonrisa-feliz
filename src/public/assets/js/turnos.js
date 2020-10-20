@@ -4,6 +4,11 @@ let botonConfirmarReprogramar;
 let botonConfirmarCancelar;
 
 
+const activarAside = () => {
+
+    document.querySelector("#spinnerContainer").remove();
+    document.querySelector("aside").style.display = "block";
+}
 
 const ordenarTurnos = (turns) => {
 
