@@ -119,7 +119,7 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
 
 router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
 
-    const { id, motivo, email, nombre } = req.body;
+    const { id, motivo, email, nombre, imgPath } = req.body;
 
 
     if (!id) {
@@ -129,6 +129,11 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
     const result = await eliminarSolicitud(id);
 
     if (result.success) {
+
+        const path = `src/public/assets/img/solicitudes/${imgPath}`;
+
+        fs.unlinkSync(path);
+
         await enviarMail({
             receptor: email,
             asunto: "Sonrisa Feliz - Solcitud Rechazada",
@@ -203,13 +208,18 @@ router.post("/api/turnos/cancelar", isLoggedIn, isAdmin, async (req, res) => {
         nombreUsuario,
         emailUsuario,
         diaAnterior,
-        motivo } = req.body;
+        motivo,
+        imgPath } = req.body;
 
     const result = await cancelarTurno(id_turno);
 
     console.log(result);
 
     if (result.success) {
+
+        const path = `src/public/assets/img/turnos/${imgPath}`;
+
+        fs.unlinkSync(path);
 
         res.status(200);
 
