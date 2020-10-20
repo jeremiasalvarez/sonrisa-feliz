@@ -1,4 +1,4 @@
-<section id="faq" class="faq section-bg">
+<section style="height: unset;" id="faq" class="faq section-bg">
     <div class="container">
 
         <div class="section-title">
@@ -43,7 +43,11 @@
                         <p class="refer-text">E-mail: {{email}}</p>
                         <p class="refer-text">Horario de Preferencia: {{hora_inicio}} - {{hora_fin}}</p>
                         <p class="refer-text">Dia de Preferencia: {{nombre_dia}}</p>
-                        <p class="refer-text">Imagen ilustrativa: "aca va la imagen"</p>
+                        <div class="d-flex justify-content-around align-items-baseline">
+                            <p class="refer-text">Imagen ilustrativa: </p>
+                            <img class="testimonial-img" src="assets/img/solicitudes/{{img_ruta}}"
+                                alt="IMAGEN SOLICITUD">
+                        </div>
                         {{#if mensaje_solicitud}}
                         <p class="refer-text">Mensaje del solicitante: {{mensaje_solicitud}}</p>
                         {{else}}

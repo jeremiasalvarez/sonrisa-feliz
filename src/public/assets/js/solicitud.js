@@ -19,9 +19,11 @@ const enviarImagen = async () => {
     
         });
 
-        const {success} = await result.json();
+        const data = await result.json();
 
-        return success;
+        // console.log(data);
+        
+        return data;
 
     } catch (error) {
         console.log(error)
@@ -33,28 +35,43 @@ const enviarImagen = async () => {
 
 
 solicitud.addEventListener("submit", async (e) => {
-
-    // const imgSubida = await enviarImagen();
-
-    // if (!imgSubida) {
-    //     console.log("ISDMSMDSDSDSDSDSDSD");
-    //     return;
-    // }
+    e.preventDefault();
 
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
 
+    const {success: imgSubida, path: imgPath} = await enviarImagen();
+
+    if (!imgSubida) {
+        swal({
+            title: "Operacion Invalida",
+            text:
+                `La imagen proporcionada no es un formato valido. Formatos aceptados: '.jpg', '.jpeg', '.png'`,
+            icon: "error",
+            button: {
+                text: "Entendido",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-xl js-scroll-trigger",
+                closeModal: true,
+            },
+        })
+        activarBotones([botonSubmit]);
+        quitarSpinner(botonSubmit, "Solicitar Turno");
+        return;
+    }
+
+
     const dia_id = document.querySelector("#dia").value;
     const horario_id = document.querySelector("#horario").value;
     const msg = document.querySelector("#msg").value;
-    const img = document.querySelector("#imagen").value;
 
-    e.preventDefault();
 
     const data = {
         dia_id,
         horario_id,
-        msg
+        msg,
+        imgPath
     }
 
     //console.log(user_id, horario_id, dia_id)

@@ -1,7 +1,6 @@
 //rutas relacionadas con el loggeo
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 const router = express.Router();
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getUserData, getHorarios, getDias, guardarSolicitud }  = require("../lib/helpers");
@@ -29,7 +28,21 @@ const storageTurnos = multer.diskStorage({
   }
 })
 
-const uploadSolicitudes = multer({ storage: storageSolicitudes });
+const uploadSolicitudes = multer({ 
+                                  storage: storageSolicitudes,
+                                  fileFilter: function (req, file, cb) {
+                                    let ext = path.extname(file.originalname).toLowerCase();
+                                    if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
+                                        req.fileValidationError = true;
+                                        cb(null, false);
+                                    }  else {
+                              
+                                      cb(null, true);
+                                      req.newImgPathExt = path.extname(file.originalname) 
+                                    }
+                                    }})
+
+
 const uploadTurnos = multer({ storage: storageSolicitudes });
 
 
@@ -54,16 +67,10 @@ router.get("/pedirTurno", isLoggedIn, async (req, res) => {
 
 router.post("/upload-img", uploadSolicitudes.single('imagen'), (req, res) => {
 
-  return res.json({success: false, path: `solicitud_${req.user.email}`});
-
-
-  // req.file.filename = "IMAGEN";
-  // setTimeout(() => {
-    
-  //   fs.unlink("uploads/1 butacas.jpg.jpg",() =>{
-      
-  //   });
-  // },2000)
+  if (req.fileValidationError) {
+    return res.json({msg : "No es un archivo valido", success: false})
+  } 
+  return res.json({success: true, msg: "imagen insertada", path: `solicitud_${req.user.email}${req.newImgPathExt.toUpperCase()}`});
 
 })
 
@@ -74,7 +81,8 @@ router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
     user_id: req.user.id,
     horario_id: req.body.horario_id,
     dia_id: req.body.dia_id,
-    msg: req.body.msg
+    msg: req.body.msg,
+    imgPath: req.body.imgPath
   }
 
   const result = await guardarSolicitud(data);
