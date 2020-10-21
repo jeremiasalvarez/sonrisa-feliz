@@ -13,7 +13,7 @@ aws.config.region = 'sa-east-1';
 function getExt(fileName) {
 
   let indexPunto = fileName.lastIndexOf(".");
-  const ext = string.slice(indexPunto);
+  const ext = fileName.slice(indexPunto);
   return ext;
 }
 
