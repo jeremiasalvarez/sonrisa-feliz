@@ -81,15 +81,15 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
 
     if (result.success) {
 
-        if (!result.noImg) {
+        // if (!result.noImg) {
             
-            const oldPath = `src/public/assets/img/solicitudes/${imgPath}`;
-            const newPath = `src/public/assets/img/turnos/${result.newPath}`;
+        //     const oldPath = `src/public/assets/img/solicitudes/${imgPath}`;
+        //     const newPath = `src/public/assets/img/turnos/${result.newPath}`;
 
-            fs.rename(oldPath, newPath, (err) => {
+        //     fs.rename(oldPath, newPath, (err) => {
 
-            })
-        }
+        //     })
+        // }
 
         res.status(200);
 
