@@ -8,20 +8,17 @@ const mysqlStore = require("express-mysql-session");
 const flash = require("connect-flash");
 require('dotenv').config();
 const { database } = require("./keys");
-const aws = require('aws-sdk')
 
 //Inicializaciones
 const app = express();
 require("./lib/passport");
-
 
 //Archivos Publicos (codigo que el navegador puede acceder)
 app.use(express.static(path.join(__dirname, "/public")));
 
 //Configuraciones
 app.set("port", process.env.PORT || 4000);
-const S3_BUCKET = process.env.S3_BUCKET;
-aws.config.region = '	sa-east-1';
+
 //ruta de la carpeta views
 app.set("views", path.join(__dirname, "views"));
 

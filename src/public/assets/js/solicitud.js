@@ -5,33 +5,91 @@ const botonSubmit = document.querySelector("#submit");
 
 const enviarImagen = async () => {
 
-    const img = document.querySelector("#imagen");
-    const email = document.querySelector("#from_email").value;
+    // const img = document.querySelector("#imagen");
+    // const email = document.querySelector("#from_email").value;
+    const file = document.querySelector("#imagen").files[0];
 
-    const formData = new FormData();
-    formData.append('imagen', img.files[0]);
-    formData.append('email', email);
-    try {
-        const result = await fetch('/upload-img', {
-
-            method: 'post',
-            body: formData
-    
-        });
-
-        const data = await result.json();
-
-        // console.log(data);
+    if (!file) {
         
-        return data;
-
-    } catch (error) {
-        console.log(error)
+        swal({
+            title: "No selecciono una imagen",
+            text: "Debe seleccionar una imagen representativa para solicitar un turno",
+            icon: "error",
+            button: {
+                text: "Entendido",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-xl js-scroll-trigger",
+                closeModal: true,
+            },
+        })
     }
+
+    getSignedRequest(file);
+
+
+    // const formData = new FormData();
+    // // formData.append('imagen', img.files[0]);
+    // // formData.append('email', email);
+    // try {
+    //     // const result = await fetch('/upload-img', {
+
+    //     //     method: 'post',
+    //     //     body: formData
+    
+    //     // });
+
+    //     // const data = await result.json();
+
+    //     // // console.log(data);
+        
+    //     // return data;
+
+    // } catch (error) {
+
+    //     // console.log(error)
+    // }
     
     
 
 }
+
+function getSignedRequest(file){
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`, true);
+    xhr.onreadystatechange = () => {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+          const response = JSON.parse(xhr.responseText);
+          uploadFile(file, response.signedRequest, response.url);
+        }
+        else{
+          alert('Could not get signed URL.');
+        }
+      }
+    };
+    xhr.send();
+}
+
+function uploadFile(file, signedRequest, url){
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', signedRequest, true);
+    xhr.onreadystatechange = () => {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+            console.log(url);
+        }
+        else{
+          alert('Could not upload file.');
+        }
+      }
+    };
+    xhr.send(file);
+
+}
+  
+  
 
 
 solicitud.addEventListener("submit", async (e) => {
@@ -40,7 +98,8 @@ solicitud.addEventListener("submit", async (e) => {
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
 
-    const {success: imgSubida, path: imgPath, msg: msgError} = await enviarImagen();
+    await enviarImagen();
+    return;
 
     if (!imgSubida) {
         swal({
