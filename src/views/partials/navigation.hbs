@@ -14,7 +14,7 @@
             <div class="nav-menu d-lg-block ml-auto" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
 
-                    {{#if paciente}}
+                    {{#if user}}
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/perfil">Mi Perfil</a>
                     </li>
@@ -22,8 +22,8 @@
                         <a class="nav-link text-white" href="/logout">Cerrar Sesión</a>
                     </li>
                     {{else}}
-
                     {{#if admin}}
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -41,10 +41,6 @@
                         <a class="nav-link text-white" href="/logout">Cerrar Sesión</a>
                     </li>
                     {{/if}}
-
-
-
-
                     {{/if}}
                 </ul>
             </div>
