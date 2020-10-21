@@ -7,7 +7,6 @@ const moment = require("moment");
 
 moment.locale("es-mx");
 
-
 const fechaOcupada = async (data) => {
 
   try {

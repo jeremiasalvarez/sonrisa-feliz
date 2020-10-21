@@ -128,9 +128,7 @@ async function confirmarSolicitud(id) {
 
     const { success, msg, ocupado } = await result.json();
 
-    //console.log(success, msg);
-
-
+    console.log(success, msg);
 
     if (success) {
 
@@ -173,7 +171,7 @@ async function confirmarSolicitud(id) {
         } else{ 
             swal({
                 title: "Error",
-                text: "Algo salio mal, el turno no se guardo correctamente",
+                text: msg ? msg : "Algo salio mal, el turno no se guardo correctamente",
                 icon: "error",
                 button: {
                     text: "Entendido",

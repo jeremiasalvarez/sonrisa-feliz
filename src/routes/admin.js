@@ -4,6 +4,7 @@ const fs  = require("fs");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno } = require("../lib/helpers");
 
+const moment = require("moment");
 
 const router = express.Router();
 
@@ -58,11 +59,21 @@ router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
 router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
     
-    console.log(req.body)
+    // console.log(req.body)
 
     if (!req.body.fecha){
-        return res.json({success: false, message: "No selecciono una fecha"});
+        return res.json({success: false, msg: "No selecciono una fecha"});
     }
+
+    console.log("COMPARACION")
+
+    const fechaHorarioValido = await fechaHorarioValidos(req.body.horario_id, req.body.fecha);
+
+    if (!fechaHorarioValido) {
+        return res.json({success: false, msg: "La fecha y el horario seleccionado no son validos. Debe seleccionar una fecha posterior a la actual"})
+    }   
+    // console.log(fechaHorarioValido);
+
 
     const { id, usuario_id, horario_id, fecha, prestacion_id, nombre, email, imgPath } = req.body;
 
@@ -172,6 +183,12 @@ router.post("/api/turnos/reprogramar", isLoggedIn, isAdmin, async (req, res) => 
 
     const data = req.body;
 
+    const fechaHorarioValido = await fechaHorarioValidos(data.id_horario, data.fecha);
+
+    if (!fechaHorarioValido){
+        return res.json({success: false, msg: "La fecha y el horario seleccionado no son validos. Debe seleccionar una fecha posterior a la actual"})
+    }
+
     const { inicioAnterior, finAnterior, fechaAnterior, emailUsuario, nombreUsuario, motivo , diaAnterior } = req.body;
 
     const result = await reprogramarTurno(data);
@@ -237,5 +254,43 @@ router.post("/api/turnos/cancelar", isLoggedIn, isAdmin, async (req, res) => {
     return res.json(result);
 
 })
+
+async function fechaHorarioValidos(idHorario, fecha) {
+
+    // console.log("COMPARAR fecHAS:");
+    // console.log(`${moment(fecha)} vs ${moment()}`)
+
+    if (moment(fecha).isAfter(moment())) {
+        // console.log("FECHA VALIDA")
+        return true;
+    } else if (moment(fecha).format("L") === moment().format("L")) {
+
+        const horario = await getHorario(idHorario);
+
+        const horaActual = moment().format("LT").split(":")[0];
+
+        const horarioTurno = horario.hora_inicio.split(":")[0];
+
+        // console.log("COMPARAR horarios:");
+        // console.log(`${horaActual} vs ${horarioTurno}`);
+
+        if (horarioTurno <= horaActual) {
+            // console.log("HORARIO INVALIDO");
+            return false;
+        } else {
+            // console.log("HORARIO VALIDO");
+            return true;
+        }
+    } else if (moment(fecha).dayOfYear() < moment().dayOfYear()) {
+        return false;
+    }
+
+    console.log("NO SE COMPARO NADA")
+    return true;
+    
+
+
+}   
+
 
 module.exports = router;

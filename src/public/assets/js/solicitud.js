@@ -6,15 +6,12 @@ const botonSubmit = document.querySelector("#submit");
 let imgUrl;
 
 
-function forceSubmit() {
-    document.querySelector("#hiddenSubmit").click();
-}
+// function forceSubmit() {
+//     document.querySelector("#hiddenSubmit").click();
+// }
 
 function enviarImagen() {
 
-    // const img = document.querySelector("#imagen");
-    // const email = document.querySelector("#from_email").value;  
-   
     const file = document.querySelector("#imagen").files[0];
 
     if (!file) {
@@ -63,7 +60,7 @@ function uploadFile(file, signedRequest, url){
         if(xhr.status === 200){
             // console.log(url);
             imgUrl = url;
-            forceSubmit();
+            // forceSubmit();
         }
         else{
           alert('Could not upload file.');
@@ -85,7 +82,7 @@ solicitud.addEventListener("submit", async (e) => {
     agregarSpinner(botonSubmit);
 
     enviarImagen();
-    
+
     setTimeout(() => {
 
     }, 4000)
