@@ -5,11 +5,6 @@ const botonSubmit = document.querySelector("#submit");
 
 let imgUrl;
 
-botonSubmit.addEventListener("click", () => {
-    enviarImagen();
-})
-
-
 
 function forceSubmit() {
     document.querySelector("#hiddenSubmit").click();
@@ -19,9 +14,7 @@ function enviarImagen() {
 
     // const img = document.querySelector("#imagen");
     // const email = document.querySelector("#from_email").value;  
-    desactivarBotones([botonSubmit]);
-    agregarSpinner(botonSubmit);
-
+   
     const file = document.querySelector("#imagen").files[0];
 
     if (!file) {
@@ -39,9 +32,6 @@ function enviarImagen() {
             },
         })
     }
-
-    activarBotones([botonSubmit]);
-    quitarSpinner(botonSubmit, "Solicitar Turno");
 
     return getSignedRequest(file);
         
@@ -88,12 +78,21 @@ function uploadFile(file, signedRequest, url){
 
 
 solicitud.addEventListener("submit", async (e) => {
+
+    desactivarBotones([botonSubmit]);
+    agregarSpinner(botonSubmit);
+
+    (function() {
+        setTimeout(() => {
+
+        }, 4000)
+    })
+
     e.preventDefault();
 
     const dia_id = document.querySelector("#dia").value;
     const horario_id = document.querySelector("#horario").value;
     const msg = document.querySelector("#msg").value;
-
 
     const data = {
         dia_id,
