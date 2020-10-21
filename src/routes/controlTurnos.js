@@ -17,6 +17,16 @@ function getExt(fileName) {
   return ext;
 }
 
+function deleteSpecialChars(fileName) {
+
+  let arr = fileName.split(":");
+  arr = arr.join("");
+  arr = arr.split("+");
+  arr = arr.join("");
+
+  return arr;
+}
+
 router.get('/sign-s3', (req, res) => {
 
   const s3 = new aws.S3();
@@ -24,7 +34,9 @@ router.get('/sign-s3', (req, res) => {
   const fileType = req.query.file_type;
   const fileExt = getExt(queryName);
 
-  const fileName = `solicitud_turno_${req.user.id}_${moment().toNow()}${fileExt}`;
+  let fileName = `solicitud_turno_${req.user.id}_${moment()}${fileExt}`;
+
+  fileName = deleteSpecialChars(fileName);
 
   const s3Params = {
     Bucket: S3_BUCKET,
