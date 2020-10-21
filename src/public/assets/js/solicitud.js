@@ -3,10 +3,18 @@ const solicitud = document.querySelector("#solicitudTurno");
 // const user_id = document.querySelector("#userId").value;
 const botonSubmit = document.querySelector("#submit");
 
-const enviarImagen = async () => {
+let imgUrl;
+
+
+function forceSubmit() {
+    document.querySelector("#hiddenSubmit").click();
+}
+
+function enviarImagen() {
 
     // const img = document.querySelector("#imagen");
-    // const email = document.querySelector("#from_email").value;
+    // const email = document.querySelector("#from_email").value;  
+   
     const file = document.querySelector("#imagen").files[0];
 
     if (!file) {
@@ -25,39 +33,14 @@ const enviarImagen = async () => {
         })
     }
 
-    getSignedRequest(file);
-
-
-    // const formData = new FormData();
-    // // formData.append('imagen', img.files[0]);
-    // // formData.append('email', email);
-    // try {
-    //     // const result = await fetch('/upload-img', {
-
-    //     //     method: 'post',
-    //     //     body: formData
-    
-    //     // });
-
-    //     // const data = await result.json();
-
-    //     // // console.log(data);
+    return getSignedRequest(file);
         
-    //     // return data;
-
-    // } catch (error) {
-
-    //     // console.log(error)
-    // }
-    
-    
-
 }
 
 function getSignedRequest(file){
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`, true);
+    xhr.open('GET', `/sign-s3?file_name=${file.name}&file_type=${file.type}`, false);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
@@ -74,11 +57,13 @@ function getSignedRequest(file){
 
 function uploadFile(file, signedRequest, url){
     const xhr = new XMLHttpRequest();
-    xhr.open('PUT', signedRequest, true);
+    xhr.open('PUT', signedRequest, false);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
-            console.log(url);
+            // console.log(url);
+            imgUrl = url;
+            forceSubmit();
         }
         else{
           alert('Could not upload file.');
@@ -93,46 +78,29 @@ function uploadFile(file, signedRequest, url){
 
 
 solicitud.addEventListener("submit", async (e) => {
-    e.preventDefault();
 
+    
+    e.preventDefault();
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
 
-    await enviarImagen();
-    return;
+    enviarImagen();
+    setTimeout(() => {
 
-    if (!imgSubida) {
-        swal({
-            title: "Operacion Invalida",
-            text: msgError,
-            icon: "error",
-            button: {
-                text: "Entendido",
-                value: true,
-                visible: true,
-                className: "btn btn-primary btn-xl js-scroll-trigger",
-                closeModal: true,
-            },
-        })
-        activarBotones([botonSubmit]);
-        quitarSpinner(botonSubmit, "Solicitar Turno");
-        return;
-    }
+    }, 4000)
+    
 
 
     const dia_id = document.querySelector("#dia").value;
     const horario_id = document.querySelector("#horario").value;
     const msg = document.querySelector("#msg").value;
 
-
     const data = {
         dia_id,
         horario_id,
         msg,
-        imgPath
+        imgPath: imgUrl
     }
-
-    //console.log(user_id, horario_id, dia_id)
 
     const result = await fetch("/pedirTurno", {
         method: 'post',

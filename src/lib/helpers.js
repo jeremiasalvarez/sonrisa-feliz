@@ -372,7 +372,8 @@ helpers.guardarTurno = async (data) => {
       id_usuario: data.usuario_id,
       id_horario: data.horario_id,
       id_prestacion: data.prestacion_id,
-      fecha: data.fecha
+      fecha: data.fecha,
+      img_ruta: data.imgPath
     }
 
     const restriccion = await fechaOcupada({fecha: nuevoTurno.fecha, id_horario:nuevoTurno.id_horario});
@@ -390,24 +391,24 @@ helpers.guardarTurno = async (data) => {
     result.insert_id = query.insertId;
     result.success = true;
 
-    if (data.imgPath == "") {
-      result.noImg = true;
-    } else {
-      const split = data.imgPath.split("_");
+    // if (data.imgPath == "") {
+    //   result.noImg = true;
+    // } else {
+    //   const split = data.imgPath.split("_");
 
-      const string = ["turno", split[1]].join("_");
+    //   const string = ["turno", split[1]].join("_");
 
-      let indexPunto = string.lastIndexOf(".");
+    //   let indexPunto = string.lastIndexOf(".");
 
-      const turnoString = string.slice(0, indexPunto);
-      const ext = string.slice(indexPunto);
-      const partialPath = [turnoString, result.insert_id].join("_");
-      const path = [partialPath, ext].join("");
-      await pool.query("UPDATE turno_paciente SET img_ruta = ? WHERE id = ?",[path, result.insert_id]);
+    //   const turnoString = string.slice(0, indexPunto);
+    //   const ext = string.slice(indexPunto);
+    //   const partialPath = [turnoString, result.insert_id].join("_");
+    //   const path = [partialPath, ext].join("");
+    //   await pool.query("UPDATE turno_paciente SET img_ruta = ? WHERE id = ?",[path, result.insert_id]);
       
-      result.newPath = path;
+    //   result.newPath = path;
 
-    }
+    // }
     
 
     result.msg = "Turno Insertado";

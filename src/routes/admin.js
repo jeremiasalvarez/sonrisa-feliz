@@ -1,3 +1,4 @@
+const { json } = require("express");
 const express = require("express");
 const fs  = require("fs");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
@@ -81,15 +82,15 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
 
     if (result.success) {
 
-        if (!result.noImg) {
+        // if (!result.noImg) {
             
-            const oldPath = `src/public/assets/img/solicitudes/${imgPath}`;
-            const newPath = `src/public/assets/img/turnos/${result.newPath}`;
+        //     const oldPath = `src/public/assets/img/solicitudes/${imgPath}`;
+        //     const newPath = `src/public/assets/img/turnos/${result.newPath}`;
 
-            fs.rename(oldPath, newPath, (err) => {
+        //     fs.rename(oldPath, newPath, (err) => {
 
-            })
-        }
+        //     })
+        // }
 
         res.status(200);
 
@@ -125,14 +126,10 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
     if (!id) {
         return res.json({success: false, message: "No ID"});
     }
-    
-    const result = await eliminarSolicitud(id);
+    try {
+        const result = await eliminarSolicitud(id);
 
-    if (result.success) {
-
-        const path = `src/public/assets/img/solicitudes/${imgPath}`;
-
-        fs.unlinkSync(path);
+        if (result.success) {
 
         await enviarMail({
             receptor: email,
@@ -141,9 +138,14 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
             Motivo: ${motivo} <br> <br>
             <i>Sonrisa Feliz</i>` 
         });
-    }
+        return res.json(result);
 
-    return res.json(result);
+    }
+    } catch (error) {
+        return res.json(error)
+    }
+    
+
 
 })
 
