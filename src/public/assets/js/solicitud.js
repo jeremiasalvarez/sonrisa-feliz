@@ -3,12 +3,6 @@ const solicitud = document.querySelector("#solicitudTurno");
 // const user_id = document.querySelector("#userId").value;
 const botonSubmit = document.querySelector("#sendBtn");
 
-
-botonSubmit.addEventListener("click", () => {
-    enviarImagen();
-})
-
-
 let imgUrl;
 
 function forceSubmit() {
@@ -46,6 +40,11 @@ const enviarImagen = async () => {
     return getSignedRequest(file);
         
 }
+
+
+botonSubmit.addEventListener("click", () => {
+    enviarImagen();
+})
 
 function getSignedRequest(file){
 
