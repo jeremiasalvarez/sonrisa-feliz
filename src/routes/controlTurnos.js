@@ -20,7 +20,7 @@ function getExt(fileName) {
 router.get('/sign-s3', (req, res) => {
 
   const s3 = new aws.S3();
-  const queryName = req.query['file-name'];
+  const queryName = req.query.file_name;
   const fileType = req.query.file_type;
   const fileExt = getExt(queryName);
 
