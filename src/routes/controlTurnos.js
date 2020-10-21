@@ -34,7 +34,7 @@ router.get('/sign-s3', (req, res) => {
   const fileType = req.query.file_type;
   const fileExt = getExt(queryName);
 
-  let fileName = `solicitud_turno_${req.user.id}_${moment()}${fileExt}`;
+  let fileName = `solicitud_turno_${req.user.id}_${moment().format()}${fileExt}`;
 
   fileName = deleteSpecialChars(fileName);
 
