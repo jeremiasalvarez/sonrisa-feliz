@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #336699;">
     <div class="container d-flex align-items-center">
         <a class="navbar-brand" href="/">
             <img src="assets/img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -14,7 +14,7 @@
             <div class="nav-menu d-lg-block ml-auto" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
 
-                    {{#if user}}
+                    {{#if paciente}}
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/perfil">Mi Perfil</a>
                     </li>
@@ -30,11 +30,11 @@
                             Secciones
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/pacientes">Ver lista de pacientes </a>
+                            <a class="dropdown-item p-2" href="/pacientes">Ver lista de pacientes </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/solicitudes">Ver solicitudes de turnos</a>
+                            <a class="dropdown-item p-2" href="/solicitudes">Ver solicitudes de turnos</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/turnos">Ver proximos turnos</a>
+                            <a class="dropdown-item p-2" href="/turnos">Ver proximos turnos</a>
                         </div>
                     </li>
                     <li class="nav-item">

@@ -62,15 +62,14 @@ app.use((req, res, next) => {
   app.locals.success = req.flash("success");
   app.locals.message = req.flash("message");
 
-  app.locals.user = req.user;
-  
-  // if(req.user && req.user.rol == 'paciente'){
-  //   app.locals.paciente = req.user;
-  // }else{
-  //   if(req.user && req.user.rol == 'admin'){
-  //     app.locals.admin = req.user;
-  //   }
-  // }
+  if(req.user){
+    if(req.user.rol == 'paciente'){
+      res.locals.paciente = req.user
+    }else{
+      res.locals.admin = req.user;
+    }
+  }
+    
   
   next();
 });

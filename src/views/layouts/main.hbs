@@ -43,17 +43,14 @@
 
     {{!--Codigo que se va a copartir entre todas las páginas--}}
 
+
     {{> navigation}}
 
-    {{> message}}
+    <div class="container-fluid" style="background-color: #f1f7fd;">
+        {{> message}}
 
-    {{{ body }}}
-
-
-
-
-
-
+        {{{ body }}}
+    </div>
 
     <footer id="footer">
         <div class="container d-md-flex py-4">
@@ -70,6 +67,18 @@
             </div>
         </div>
     </footer>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     {{!--Scripts--}}
@@ -107,10 +116,10 @@
     <script src="assets/js/admin_solicitudes.js"></script>
     <script src="assets/js/solicitud.js"></script>
 
-         <form method="POST">
-  <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
-data-preference-id="173454924-ca589487-6ca0-451a-abad-e1a705e0fedb">
-</script>
+    {{!-- <form method="POST">
+        <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
+            data-preference-id="173454924-ca589487-6ca0-451a-abad-e1a705e0fedb">
+            </script> --}}
 
 </body>
 
