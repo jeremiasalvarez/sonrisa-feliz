@@ -8,6 +8,7 @@ const mysqlStore = require("express-mysql-session");
 const flash = require("connect-flash");
 require('dotenv').config();
 const { database } = require("./keys");
+const mercadopago = require('mercadopago')
 
 //Inicializaciones
 const app = express();
@@ -19,6 +20,28 @@ app.use(express.static(path.join(__dirname, "/public")));
 //Configuraciones
 app.set("port", process.env.PORT || 4000);
 
+mercadopago.configure({
+  access_token: 'APP_USR-8212519828945233-032023-74a9ede2f9da37c1991c1519021a1d8e-173454924'
+});
+
+// Crea un objeto de preferencia
+let preference = {
+  items: [
+    {
+      title: 'Mi producto',
+      unit_price: 100,
+      quantity: 1,
+    }
+  ]
+};
+
+mercadopago.preferences.create(preference)
+.then(function(response){
+// Este valor reemplazará el string "<%= global.id %>" en tu HTML
+  global.id = response.body.id;
+}).catch(function(error){
+  console.log(error);
+});
 //ruta de la carpeta views
 app.set("views", path.join(__dirname, "views"));
 
