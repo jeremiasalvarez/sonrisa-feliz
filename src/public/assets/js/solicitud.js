@@ -84,11 +84,11 @@ solicitud.addEventListener("submit", async (e) => {
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
 
-    (function() {
-        setTimeout(() => {
+    enviarImagen();
+    setTimeout(() => {
 
-        }, 4000)
-    })
+    }, 4000)
+    
 
 
     const dia_id = document.querySelector("#dia").value;

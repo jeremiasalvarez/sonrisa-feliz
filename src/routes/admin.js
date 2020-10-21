@@ -1,3 +1,4 @@
+const { json } = require("express");
 const express = require("express");
 const fs  = require("fs");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
@@ -125,10 +126,10 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
     if (!id) {
         return res.json({success: false, message: "No ID"});
     }
-    
-    const result = await eliminarSolicitud(id);
+    try {
+        const result = await eliminarSolicitud(id);
 
-    if (result.success) {
+        if (result.success) {
 
         const path = `src/public/assets/img/solicitudes/${imgPath}`;
 
@@ -141,9 +142,14 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
             Motivo: ${motivo} <br> <br>
             <i>Sonrisa Feliz</i>` 
         });
-    }
+        return res.json(result);
 
-    return res.json(result);
+    }
+    } catch (error) {
+        return res.json(error)
+    }
+    
+
 
 })
 
