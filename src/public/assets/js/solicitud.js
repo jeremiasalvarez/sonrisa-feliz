@@ -25,59 +25,14 @@ const enviarImagen = async () => {
         })
     }
 
-    const link = `/sign-s3?file-name=${file.name}&file-type=${file.type}`;
-
-    const response = await makeRequest("GET", link);
-
-    const upload = await makeRequest("PUT", response.signedRequest, file)
-
-    console.log(response.url);
-
-    return response.url;
+    return getSignedRequest(file);
         
 }
-
-// async function doAjaxThings() {
-//     // await code here
-//     let result = await makeRequest("GET", url);
-//     // code below here will only execute when await makeRequest() finished loading
-//     console.log(result);
-// }
-
-function makeRequest(method, url, file) {
-    return new Promise(function (resolve, reject) {
-        let xhr = new XMLHttpRequest();
-        xhr.open(method, url);
-        xhr.onload = function () {
-            if (this.status === 200) {
-                resolve(JSON.parse(xhr.responseText));
-            } else {
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
-            }
-        };
-        xhr.onerror = function () {
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
-        };
-
-        if (file) {
-            xhr.send(file)
-        } else {
-            xhr.send();
-        }
-    });
-}
-
 
 function getSignedRequest(file){
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file_name=${file.name}&file_type=${file.type}`);
+    xhr.open('GET', `/sign-s3?file_name=${file.name}&file_type=${file.type}`, true);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
@@ -94,7 +49,7 @@ function getSignedRequest(file){
 
 function uploadFile(file, signedRequest, url){
     const xhr = new XMLHttpRequest();
-    xhr.open('PUT', signedRequest);
+    xhr.open('PUT', signedRequest, true);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
@@ -119,25 +74,24 @@ solicitud.addEventListener("submit", async (e) => {
     agregarSpinner(botonSubmit);
 
     await enviarImagen();
-    return;
 
-    if (!imgSubida) {
-        swal({
-            title: "Operacion Invalida",
-            text: msgError,
-            icon: "error",
-            button: {
-                text: "Entendido",
-                value: true,
-                visible: true,
-                className: "btn btn-primary btn-xl js-scroll-trigger",
-                closeModal: true,
-            },
-        })
-        activarBotones([botonSubmit]);
-        quitarSpinner(botonSubmit, "Solicitar Turno");
-        return;
-    }
+    // if (!imgSubida) {
+    //     swal({
+    //         title: "Operacion Invalida",
+    //         text: msgError,
+    //         icon: "error",
+    //         button: {
+    //             text: "Entendido",
+    //             value: true,
+    //             visible: true,
+    //             className: "btn btn-primary btn-xl js-scroll-trigger",
+    //             closeModal: true,
+    //         },
+    //     })
+    //     activarBotones([botonSubmit]);
+    //     quitarSpinner(botonSubmit, "Solicitar Turno");
+    //     return;
+    // }
 
 
     const dia_id = document.querySelector("#dia").value;
