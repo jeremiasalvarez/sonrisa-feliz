@@ -219,10 +219,6 @@ router.post("/api/turnos/cancelar", isLoggedIn, isAdmin, async (req, res) => {
 
     if (result.success) {
 
-        const path = `src/public/assets/img/turnos/${imgPath}`;
-
-        fs.unlinkSync(path);
-
         res.status(200);
 
         await enviarMail({
