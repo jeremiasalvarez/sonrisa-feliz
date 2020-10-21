@@ -25,3 +25,12 @@
         width: 80%;
     }
 }
+
+.boton-submit {
+    background: #1977cc;
+    border: 0;
+    padding: 10px 35px;
+    color: #fff;
+    transition: 0.4s;
+    border-radius: 50px;
+}

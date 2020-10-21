@@ -180,7 +180,7 @@ const appendAside = (fecha) => {
                             ${img_ruta ? `
                             <div class="p-t-10 d-flex justify-content-start align-items-center">
                                 <p class="refer-text p-0">Imagen ilustrativa: </p>
-                                <a class="btn btn-primary m-l-10" href="assets/img/turnos/${img_ruta}"
+                                <a class="btn btn-primary m-l-10" href="${img_ruta}"
                                     data-lightbox="${img_ruta}" data-title="Imagen enviada por el solicitante">Ver
                                     Imagen</a>
                             </div>` :    

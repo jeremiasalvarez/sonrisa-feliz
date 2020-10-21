@@ -1,7 +1,7 @@
 
 const solicitud = document.querySelector("#solicitudTurno");
 // const user_id = document.querySelector("#userId").value;
-const botonSubmit = document.querySelector("#submit");
+const botonSubmit = document.querySelector("#sendBtn");
 
 
 botonSubmit.addEventListener("click", () => {
@@ -21,7 +21,7 @@ const enviarImagen = async () => {
     // const email = document.querySelector("#from_email").value;  
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
-
+    console.log("ENVIANDO IMAGEN")
     const file = document.querySelector("#imagen").files[0];
 
     if (!file) {
@@ -94,7 +94,7 @@ solicitud.addEventListener("submit", async (e) => {
     const horario_id = document.querySelector("#horario").value;
     const msg = document.querySelector("#msg").value;
 
-
+    console.log("ENVIANDO FORM")
     const data = {
         dia_id,
         horario_id,
