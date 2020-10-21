@@ -85,6 +85,7 @@ solicitud.addEventListener("submit", async (e) => {
     agregarSpinner(botonSubmit);
 
     enviarImagen();
+    
     setTimeout(() => {
 
     }, 4000)
