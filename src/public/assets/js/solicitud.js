@@ -25,39 +25,59 @@ const enviarImagen = async () => {
         })
     }
 
-    getSignedRequest(file);
+    const link = `/sign-s3?file-name=${file.name}&file-type=${file.type}`;
 
+    const response = await makeRequest("GET", link);
 
-    // const formData = new FormData();
-    // // formData.append('imagen', img.files[0]);
-    // // formData.append('email', email);
-    // try {
-    //     // const result = await fetch('/upload-img', {
+    const upload = await makeRequest("PUT", response.signedRequest, file)
 
-    //     //     method: 'post',
-    //     //     body: formData
-    
-    //     // });
+    console.log(response.url);
 
-    //     // const data = await result.json();
-
-    //     // // console.log(data);
+    return response.url;
         
-    //     // return data;
-
-    // } catch (error) {
-
-    //     // console.log(error)
-    // }
-    
-    
-
 }
+
+// async function doAjaxThings() {
+//     // await code here
+//     let result = await makeRequest("GET", url);
+//     // code below here will only execute when await makeRequest() finished loading
+//     console.log(result);
+// }
+
+function makeRequest(method, url, file) {
+    return new Promise(function (resolve, reject) {
+        let xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.onload = function () {
+            if (this.status === 200) {
+                resolve(JSON.parse(xhr.responseText));
+            } else {
+                reject({
+                    status: this.status,
+                    statusText: xhr.statusText
+                });
+            }
+        };
+        xhr.onerror = function () {
+            reject({
+                status: this.status,
+                statusText: xhr.statusText
+            });
+        };
+
+        if (file) {
+            xhr.send(file)
+        } else {
+            xhr.send();
+        }
+    });
+}
+
 
 function getSignedRequest(file){
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`, true);
+    xhr.open('GET', `/sign-s3?file_name=${file.name}&file_type=${file.type}`);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){
@@ -74,7 +94,7 @@ function getSignedRequest(file){
 
 function uploadFile(file, signedRequest, url){
     const xhr = new XMLHttpRequest();
-    xhr.open('PUT', signedRequest, true);
+    xhr.open('PUT', signedRequest);
     xhr.onreadystatechange = () => {
       if(xhr.readyState === 4){
         if(xhr.status === 200){

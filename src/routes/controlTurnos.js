@@ -1,6 +1,7 @@
 //rutas relacionadas con el loggeo
 const express = require("express");
 // const path = require("path");
+const moment = require("moment");
 const aws = require('aws-sdk');
 const router = express.Router();
 const { isLoggedIn } = require("../lib/auth");
@@ -9,48 +10,13 @@ const { getUserData, getHorarios, getDias, guardarSolicitud }  = require("../lib
 const S3_BUCKET = process.env.S3_BUCKET_NAME;
 aws.config.region = 'sa-east-1';
 
-// const multer = require("multer");
-
-// const storageSolicitudes = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'src/public/assets/img/solicitudes/')
-//   },
-//   filename: function (req, file, cb) {
-//     /*Appending extension with original name*/
-//     cb(null, "solicitud_"+ req.user.email + path.extname(file.originalname).toLocaleLowerCase()) 
-//   }
-// })
-
-// const uploadSolicitudes = multer({ 
-//                                   storage: storageSolicitudes,
-//                                   fileFilter: function (req, file, cb) {
-                                    
-                                    
-//                                     let ext = path.extname(file.originalname).toLowerCase();
-
-//                                     if(ext == '.png' || ext == '.jpg' || ext == '.jpeg') {  
-//                                       req.mensaje = "La imagen es valida";
-//                                       req.newImgPathExt = path.extname(file.originalname) 
-//                                       cb(null, true);
-
-//                                     }  else {
-//                                       req.fileValidationError = true;
-//                                       req.mensaje = "La imagen es invalida o no existe"
-//                                       cb(null, false);
-//                                     }
-                                          
-//                                   }})
-
-
 router.get('/sign-s3', (req, res) => {
 
   const s3 = new aws.S3();
-  const fileName = req.query['file-name'];
-  const fileType = req.query['file-type'];
+  // const queryName = req.query['file-name'];
+  const fileType = req.query.file_type;
 
-  console.log(fileName);
-  console.log(".................");
-  console.log(fileType);
+  const fileName = `solicitud_turno_${req.user.id}_${moment().format()}`;
 
   const s3Params = {
     Bucket: S3_BUCKET,
@@ -63,7 +29,7 @@ router.get('/sign-s3', (req, res) => {
   s3.getSignedUrl('putObject', s3Params, (err, data) => {
     if(err){
       console.log(err);
-      return res.end();
+      return res.json({success: false, msg: err});
     }
     const returnData = {
       signedRequest: data,
