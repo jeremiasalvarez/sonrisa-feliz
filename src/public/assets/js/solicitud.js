@@ -54,6 +54,7 @@ function uploadFile(file, signedRequest, url){
       if(xhr.readyState === 4){
         if(xhr.status === 200){
             console.log(url);
+            console.log(xhr.responseText)
         }
         else{
           alert('Could not upload file.');

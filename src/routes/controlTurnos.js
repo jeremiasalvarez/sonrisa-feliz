@@ -24,7 +24,7 @@ router.get('/sign-s3', (req, res) => {
   const fileType = req.query.file_type;
   const fileExt = getExt(queryName);
 
-  const fileName = `solicitud_turno_${req.user.id}_${moment().format()}${fileExt}`;
+  const fileName = `solicitud_turno_${req.user.id}_${moment().toNow()}${fileExt}`;
 
   const s3Params = {
     Bucket: S3_BUCKET,
