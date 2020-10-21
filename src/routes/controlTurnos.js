@@ -10,13 +10,21 @@ const { getUserData, getHorarios, getDias, guardarSolicitud }  = require("../lib
 const S3_BUCKET = process.env.S3_BUCKET_NAME;
 aws.config.region = 'sa-east-1';
 
+function getExt(fileName) {
+
+  let indexPunto = fileName.lastIndexOf(".");
+  const ext = string.slice(indexPunto);
+  return ext;
+}
+
 router.get('/sign-s3', (req, res) => {
 
   const s3 = new aws.S3();
-  // const queryName = req.query['file-name'];
+  const queryName = req.query['file-name'];
   const fileType = req.query.file_type;
+  const fileExt = getExt(queryName);
 
-  const fileName = `solicitud_turno_${req.user.id}_${moment().format()}`;
+  const fileName = `solicitud_turno_${req.user.id}_${moment().format()}${fileExt}`;
 
   const s3Params = {
     Bucket: S3_BUCKET,
