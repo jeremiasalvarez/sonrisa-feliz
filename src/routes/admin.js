@@ -131,10 +131,6 @@ router.post("/solicitudes/rechazar", isLoggedIn, async (req, res) => {
 
         if (result.success) {
 
-        const path = `src/public/assets/img/solicitudes/${imgPath}`;
-
-        fs.unlinkSync(path);
-
         await enviarMail({
             receptor: email,
             asunto: "Sonrisa Feliz - Solcitud Rechazada",
