@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/Federico-Benitez/Pagina-Dentista-Parte2#readme",
   "dependencies": {
+    "aws-sdk": "^2.775.0",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "express-mysql-session": "^2.1.4",
