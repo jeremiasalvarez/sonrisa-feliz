@@ -79,6 +79,8 @@ function uploadFile(file, signedRequest, url){
 
 solicitud.addEventListener("submit", async (e) => {
 
+    
+    e.preventDefault();
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
 
@@ -88,7 +90,6 @@ solicitud.addEventListener("submit", async (e) => {
         }, 4000)
     })
 
-    e.preventDefault();
 
     const dia_id = document.querySelector("#dia").value;
     const horario_id = document.querySelector("#horario").value;
