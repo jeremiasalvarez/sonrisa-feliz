@@ -8,44 +8,89 @@
                 <div class="card-body">
                     <form action="/signup" method="POST">
 
+
                         <div class="form-group">
-                            <input type="email" name="email" placeholder="Tu Email" class="form-control" autofocus
-                                required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>
+                                </div>
+                                <input name="email" class="form-control border" placeholder="Su email" type="email"
+                                    required autofocus>
+                            </div> <!-- input-group.// -->
                         </div>
                         <div class="form-group">
-                            <input type="text" name="nombre" placeholder="Tu Nombre" class="form-control" autofocus
-                                required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-user"></i> </span>
+                                </div>
+                                <input type="text" name="nombre" placeholder="Su nombre" class="form-control border"
+                                    autofocus required>
+                            </div>
+
                         </div>
                         <div class="form-group">
-                            <input type="text" name="apellido" placeholder="Tu Apellido" class="form-control" autofocus
-                                required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-user"></i> </span>
+                                </div>
+                                <input type="text" name="apellido" placeholder="Su apellido" class="form-control border"
+                                    autofocus required>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <input type="tel" name="telefono" placeholder="Tu Telefono de contacto" class="form-control"
-                                min="0" autofocus required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-phone-alt"></i> </span>
+                                </div>
+                                <input type="tel" name="telefono" placeholder="Su Telefono de contacto"
+                                    class="form-control border" min="0" autofocus required>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <input type="number" name="dni" placeholder="Tu DNI" class="form-control" min="0"
-                                max="100000000" autofocus required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-id-card"></i> </span>
+                                </div>
+                                <input type="number" name="dni" placeholder="Su DNI" class="form-control border" min="0"
+                                    max="100000000" autofocus required>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="nacimiento">Selecciona tu Fecha de Nacimiento</label>
-                            <input type="date" name="nacimiento" placeholder="" class="form-control" autofocus required>
+                            <label for="nacimiento">Seleccione su fecha de nacimiento</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-calendar-alt"></i> </span>
+                                </div>
+                                <input type="date" name="nacimiento" placeholder="" class="form-control border"
+                                    autofocus required>
+                            </div>
+
                         </div>
                         <div class="form-group">
 
                             <label>Seleccionar Obra Social</label>
-                            <select name="obra" id="obra">
-                                {{#each obrasJson}}
-                                <option value={{nombre}}>{{nombre}}</option>
-                                {{/each}}
-                            </select>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-briefcase-medical"></i> </span>
+                                </div>
+                                <select class="form-control border" name="obra" id="obra">
+                                    {{#each obrasJson}}
+                                    <option value={{nombre}}>{{nombre}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
                         </div>
 
 
                         <div class="form-group">
-                            <input type="password" name="password" placeholder="Contraseña" class="form-control"
-                                required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-key"></i> </span>
+                                </div>
+                                <input type="password" name="password" placeholder="Contraseña"
+                                    class="form-control border" required>
+                            </div>
+
                         </div>
                         {{!-- <div class="form-group">
                             <input type="password" name="password-two" placeholder="Confirmar contraseña"

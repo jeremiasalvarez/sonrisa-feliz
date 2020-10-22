@@ -2,7 +2,7 @@
     <div class="container">
 
         <div class="section-title">
-            <h2>Proximos Turnos</h2>
+            <h2>Pacientes Registrados</h2>
         </div>
         {{!-- <section class="limiter">
         <div class="container-table100"> --}}
@@ -12,11 +12,11 @@
                     <table>
                         <thead>
                             <tr class="row100 head">
-                                <th class="cell100 column1">Paciente</th>
+                                <th class="cell100 column1">Nombre</th>
                                 <th class="cell100 column1">DNI</th>
-                                <th class="cell100 column2">Fecha</th>
-                                <th class="cell100 column3">Horario</th>
-                                <th class="cell100 column4">Prestacion</th>
+                                <th class="cell100 column2">E-Mail</th>
+                                <th class="cell100 column3">Telefono</th>
+                                <th class="cell100 column4">Edad</th>
                                 <th class="cell100 column5">Opciones</th>
                             </tr>
                         </thead>
@@ -26,23 +26,28 @@
                 <div class="table100-body js-pscroll">
                     <table>
                         <tbody>
+                            {{#each pacientes}}
                             <tr class="row100 body">
-                                <td class="cell100 column1">Like a butterfly</td>
-                                <td class="cell100 column2">Boxing</td>
-                                <td class="cell100 column2">Boxing</td>
-                                <td class="cell100 column3">9:00 AM - 11:00 AM</td>
-                                <td class="cell100 column4">Aaron Chapman</td>
+                                <td class="cell100 column1"> {{apellido}} {{nombre}}</td>
+                                <td class="cell100 column2">{{dni}}</td>
+                                <td class="cell100 column2">{{email}}</td>
+                                <td class="cell100 column3">{{telefono}}</td>
+                                <td class="cell100 column4">{{edad}}</td>
                                 <td class="cell100 column5">
-                                    <div style="width: 70%;" class="d-flex justify-content-between align-items-center">
-                                        <button class="boton-opcion btn-primary">
-                                            <i class='custom-icon icon-white bx bx-x-circle icon-help icon-x'></i>
-                                        </button>
-                                        <button class="boton-opcion btn-danger">
-                                            <i class='custom-icon icon-white bx bx-x-circle icon-help icon-x'></i>
-                                        </button>
+                                    <div style="width: 70%;" class="d-flex justify-content-center align-items-center">
+                                        <a data-toggle="tooltip" data-placement="top" title="Ver Perfil del Paciente"
+                                            href="/paciente?id={{id}}" target="_blank" class="boton-opcion btn-primary">
+                                            <i style="font-size: 2rem;" class="custom-icon fas fa-user"></i>
+                                        </a>
+
+                                        {{!-- <button class="boton-opcion btn-danger">
+                                            <i class="custom-icon fas fa-user-slash"></i>
+                                            
+                                        </button> --}}
                                     </div>
                                 </td>
                             </tr>
+                            {{/each}}
                         </tbody>
                     </table>
                 </div>

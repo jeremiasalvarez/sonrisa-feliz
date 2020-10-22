@@ -212,11 +212,38 @@ helpers.getRol = async (userId) => {
   
 }
 
-helpers.getPacientes = async () => {
-  
-  const pacientes = await pool.query("SELECT usuario.id, usuario.email, ficha_paciente.dni, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono FROM usuario INNER JOIN ficha_paciente ON usuario.id=ficha_paciente.id_usuario");
+function getEdad(nacimiento) {
 
-  return toJson(pacientes);
+    try {
+        
+      let birthday = +new Date(nacimiento);
+      return ~~((Date.now() - birthday) / (31557600000));
+    } catch (error) {
+
+      return 0;
+    }
+}
+
+helpers.getPacientes = async () => {
+
+  try {
+      
+    const pacientes = await pool.query("SELECT usuario.id, usuario.email, usuario.rol, ficha_paciente.dni, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono, ficha_paciente.fecha_nacimiento FROM usuario INNER JOIN ficha_paciente ON usuario.id=ficha_paciente.id_usuario WHERE usuario.rol='paciente'");
+
+    pacientes.forEach(paciente => {
+
+      const { fecha_nacimiento } = paciente;
+
+      paciente.edad = getEdad(fecha_nacimiento);
+      
+    })
+
+    return toJson(pacientes);
+  } catch (error) {
+
+    return {error}
+  }
+  
 
 }
 

@@ -24,9 +24,9 @@ router.get("/pacientes", isLoggedIn, isAdmin, async (req,res) => {
 
         const pacientes = await getPacientes();
         
-        console.log(pacientes);
+        // console.log(pacientes);
 
-        return res.render("admin/pacientes");
+        return res.render("admin/pacientes", {pacientes});
     }
     else {
         return res.render("auth/perfil", {message: req.notAllowedMessage});
