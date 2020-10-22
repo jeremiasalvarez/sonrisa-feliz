@@ -36,7 +36,7 @@ router.get('/sign-s3', (req, res) => {
 
   console.log();
 
-  if (fileExt != '.jpeg' || fileExt != '.jpg' || fileExt != '.png') {
+  if (fileExt != '.jpeg' && fileExt != '.jpg' && fileExt && '.png') {
     return res.json({success: false, msg: "No es un tipo de archivo valido"})
   }
 
