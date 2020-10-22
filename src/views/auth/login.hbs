@@ -1,67 +1,50 @@
-<section class="section-bg">
-    <div class="container p-4">
-        <div class="row">
-            <div class="col-md-6 mx-auto">
-                <div class="card border border-warning shadow-lg">
-                    <div class="card-header bg-light text-dark">
-                        <div class="section-title p-4">
-                            <h3 class="h2 card-title font-weight-bold p-2">Iniciar Sesión</h3>
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card border border-warning shadow-lg">
+                <div class="card-header bg-light text-dark">
+                    <div class="section-title p-4">
+                        <h3 class="h2 card-title font-weight-bold p-2">Iniciar Sesión</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="/login" method="POST">
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                </div>
+                                <input name="email" class="form-control border " placeholder="Ingrese su email"
+                                    type="email" required>
+                            </div> <!-- input-group.// -->
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <form action="/login" method="POST">
 
-                            <div class="container p-4">
-                                <div class="row">
-                                    <div class="col-md-4 mx-auto">
-                                        <div class="card ">
-                                            <div class="card-header">
-                                                <div class="section-title p-4">
-                                                    <h3 class="h2">Iniciar Sesión</h3>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="/login" method="POST">
-
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"> <i
-                                                                        class="fa fa-user"></i> </span>
-                                                            </div>
-                                                            <input name="email" class="form-control border "
-                                                                placeholder="Ingrese su email" type="email" required>
-                                                        </div> <!-- input-group.// -->
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"> <i
-                                                                        class="fa fa-lock"></i> </span>
-                                                            </div>
-                                                            <input type="password" class="form-control border"
-                                                                name="password" placeholder="Ingrese su clave" required>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                            <p class="p-2"></p>
-                                            <div class="form-group ">
-                                                <button class="btn  btn-primary btn-block" type="submit"><i
-                                                        class="fas fa-sign-in-alt"></i>Acceder</button>
-                                            </div>
-                        </form>
-                        <form action="/signup" method="get">
-                            <div class="form-group">
-                                <p class="text-center">No posee una cuenta?</p>
-                                <button class="btn btn-info btn-block" type="submit"><i class="fas fa-user-plus"></i>
-                                    Crear nueva cuenta </button>
-
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                                </div>
+                                <input type="password" class="form-control border" name="password"
+                                    placeholder="Ingrese su clave" required>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <p class="p-4"></p>
+                        <div class="form-group ">
+                            <button class="btn  btn-primary btn-block" type="submit"><i
+                                    class="fas fa-sign-in-alt"></i>Acceder</button>
+                        </div>
+                    </form>
+                    <form action="/signup" method="get">
+                        <div class="form-group">
+                            <p class="text-center">No posee una cuenta?</p>
+                            <button class="btn btn-info btn-block" type="submit"><i class="fas fa-user-plus"></i>
+                                Crear nueva cuenta </button>
+
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-</section>
+    </div>
+</div>
