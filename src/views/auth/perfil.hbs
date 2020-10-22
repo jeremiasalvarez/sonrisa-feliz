@@ -4,17 +4,23 @@
     </div>
     <div class="container p-4">
         <div class="row">
-            <div class="col-md-4 mx-auto">
-                <div class="card text-center">
+            <div class="col-md-6 mx-auto">
+                <div class="card text-center border border-warning shadow-lg p-3 mb-5 bg-white rounded">
                     <div class="card-head">
-                        <h3>Bienvenido {{paciente.email}}</h3>
+                        <h3 class="card-title font-weight-bold mb-2 p-3">
+                            <p>Bienvenido</p>
+                            <p class="font-weight-lighter">{{userData.nombre}} {{userData.apellido}}</p>
+                        </h3>
                     </div>
                     <div class="card-body">
-                        <a href="/pedirTurno" class="btn btn-primary m-4">
-                            Pedir un turno!
+                        <p class="p-4"></p>
+                        <p class="p-4"></p>
+                        <p class="p-4"></p>
+
+                        <a href="/pedirTurno" class="btn btn-primary btn-lg btn-block">
+                            Solicitar un turno
                         </a>
                     </div>
-
                 </div>
             </div>
         </div>

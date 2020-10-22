@@ -52,12 +52,17 @@ router.post("/login", validateLogInForm, (req, res, next) => {
 
 });
 
-router.get("/perfil", isLoggedIn, isAdmin, (req, res) => {
+router.get("/perfil", isLoggedIn, isAdmin, async (req, res) => {
 
   if (req.admin)
     return res.redirect("/admin");
+  
+  const userData = await helpers.getUserData(req.user.id);
+  const data = {
+    userData: userData[0]    
+  }
 
-  return res.render("auth/perfil");
+  return res.render("auth/perfil",data);
 });
 
 router.get("/logout", (req, res) => {
