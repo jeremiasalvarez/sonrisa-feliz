@@ -14,4 +14,9 @@ router.get("/", isLoggedIn, isAdmin, (req, res) => {
   //Si no se inicio sesion redireccionar a /login
 });
 
+
+router.get("/ficha", isLoggedIn, (req,res) =>{
+  return res.render("usuario/ficha")
+})
+
 module.exports = router;
