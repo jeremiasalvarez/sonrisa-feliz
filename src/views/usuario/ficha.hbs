@@ -4,9 +4,10 @@
             <div class="card text-center border border-warning shadow-lg p-3 mb-5 bg-white rounded">
                 <div class="card-head">
                     <h3 class="card-title font-weight-bold mb-2 p-3">
-                        <p>Sus Datos</p>
-                        <p class="font-weight-lighter">{{userData.nombre}} {{userData.apellido}}</p>
+                        <p>Datos</p>
+
                     </h3>
+                    <p class="font-weight-lighter">{{data.userData.nombre}} {{data.userData.apellido}}</p>
                 </div>
                 <div class="card-body">
 
@@ -14,21 +15,75 @@
             </div>
         </div>
     </div>
+    <div class="section-title">
+        <h3>Historia Clinica</h3>
+    </div>
     <div class="row">
         <div class="wrap-table100 mx-auto">
-            <div class="table100 ver1 m-b-110">
+            <div class="table100 ver1 m-b-110 table-historia">
                 <div class="table100-head">
                     <table>
                         <thead>
                             <tr class="row100 head">
-                                <th class="cell100 column1">Nombre</th>
-                                <th class="cell100 column1">DNI</th>
-                                <th class="cell100 column2">E-Mail</th>
-                                <th class="cell100 column3">Telefono</th>
-                                <th class="cell100 column4">Edad</th>
-                                <th class="cell100 column5">Opciones</th>
+                                <th class="cell100 column1">Fecha</th>
+                                <th class="cell100 column1">Horario</th>
+                                <th class="cell100 column2">Prestacion</th>
+                                <th class="cell100 column3">Observaciones</th>
                             </tr>
                         </thead>
+                    </table>
+                </div>
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody>
+                            {{#each data.historia}}
+                            <tr class="row100 body">
+                                <td class="cell100 column1"> {{fecha_formateada}}</td>
+                                <td class="cell100 column2">{{hora_inicio}} - {{hora_fin}}</td>
+                                <td class="cell100 column2">{{nombre_prestacion}}</td>
+                                <td class="cell100 column3">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button style="font-weight: bold; font-size: 1.2rem;" class="btn btn-primary"
+                                            data-toggle="modal" data-target="#modalProgramar">Leer
+                                            <i class="fas fa-book-reader"></i>
+                                        </button>
+                                        <!-- Modal Programar -->
+                                        <div class="modal fade" id="modalProgramar" tabindex="-1" role="dialog"
+                                            aria-labelledby="modalProgramarTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div style="background-color: var(--light);" class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">
+                                                            Observaciones</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="modal-title">
+                                                            {{observaciones}}
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button id="cerrarModalProgramar" style="min-width: 100px;"
+                                                            type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Cancelar</button>
+                                                        <button style="min-width: 100px;" id="confirmar_{{id}}"
+                                                            type="button" class="btn btn-success btn-event-control"
+                                                            data-dismiss="modal">Confirmar
+                                                        </button>
+                                                        <button id="hiddenButton_{{id}}" style="display: none;"
+                                                            data-dismiss="modal"></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
                     </table>
                 </div>
             </div>

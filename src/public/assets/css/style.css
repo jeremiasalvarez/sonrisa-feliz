@@ -9785,6 +9785,21 @@ th.column4 {
     background-color: #cccccc;
 }
 
+.table-historia {
+    width: 100%;
+}
+
+.table-historia .cell100 {
+    width: 25% !important;
+    padding: 1rem 2rem;
+}
+
+.table-historia .cell100:last-of-type {
+    text-align: center;
+    word-wrap: break-word;
+    max-width: 25% !important;
+}
+
 .boton-opcion {
     display: flex;
     justify-content: center;

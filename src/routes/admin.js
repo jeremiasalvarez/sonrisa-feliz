@@ -2,7 +2,9 @@ const { json } = require("express");
 const express = require("express");
 const fs  = require("fs");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
-const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno } = require("../lib/helpers");
+const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno, guardarHistoriaClinica,
+getHistoriaClinica, 
+getUserData} = require("../lib/helpers");
 
 const moment = require("moment");
 
@@ -32,6 +34,29 @@ router.get("/pacientes", isLoggedIn, isAdmin, async (req,res) => {
         return res.render("auth/perfil", {message: req.notAllowedMessage});
     }
 })
+
+router.get("/paciente", isLoggedIn, isAdmin, async (req, res) => {
+
+    if (!req.admin) {
+        return res.redirect("/perfil");
+    }
+
+    const id = req.query.id;
+
+    const historia = await getHistoriaClinica(id);
+    const userData = await getUserData(id);
+
+    const data = {
+        userData: userData[0],
+        historia
+    }
+
+    console.log(data)
+
+    return res.render("usuario/ficha", {data});
+
+})
+
 
 router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
@@ -92,18 +117,13 @@ router.post("/solicitudes/aceptar", isLoggedIn, async (req, res) => {
     const result = await guardarTurno(req.body);
 
     if (result.success) {
-
-        // if (!result.noImg) {
-            
-        //     const oldPath = `src/public/assets/img/solicitudes/${imgPath}`;
-        //     const newPath = `src/public/assets/img/turnos/${result.newPath}`;
-
-        //     fs.rename(oldPath, newPath, (err) => {
-
-        //     })
-        // }
-
+        
         res.status(200);
+        
+        await guardarHistoriaClinica({
+                                      id_usuario: data.usuario_id,
+                                      id_turno: result.insert_id })
+
 
         await eliminarSolicitud(id);
 
