@@ -183,6 +183,10 @@ router.post("/api/turnos/reprogramar", isLoggedIn, isAdmin, async (req, res) => 
 
     const data = req.body;
 
+    if (!req.body.fecha) {
+        return res.json({success: false, msg: "No se selecciono una fecha"})
+    }
+
     const fechaHorarioValido = await fechaHorarioValidos(data.id_horario, data.fecha);
 
     if (!fechaHorarioValido){

@@ -1,10 +1,11 @@
 <section style="height: unset;" id="faq" class="faq section-bg">
-    <div class="container">
+    <div style="min-height: 70vh!important;" class="container">
 
         <div class="section-title">
             <h2>Ultimas Solicitudes de Turnos</h2>
         </div>
 
+        {{#if solicitudes}}
         <div class="referencia">
             <div class="d-flex justify-content-around align-items-center w-auto">
                 <i class='custom-icon bx bx-check-circle icon-help icon-check'></i>
@@ -176,8 +177,17 @@
                 </li>
                 {{/each}}
 
+
             </ul>
         </div>
-
+        {{else}}
+        <div style="pointer-events: none; margin:auto; height: 100%" id="solicitudCarta"
+            class="solicitud-titulo d-flex justify-content-center align-items-center">
+            <i class='custom-icon bx bx-info-circle icon-warning'></i>
+            <a class="text-secondary">
+                Por el momento no tienes ninguna solicitud
+            </a>
+        </div>
+        {{/if}}
     </div>
 </section>

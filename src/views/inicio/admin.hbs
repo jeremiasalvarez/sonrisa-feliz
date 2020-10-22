@@ -1,11 +1,12 @@
 {{!-- Ver proximos turnos --}}
-<section>
-    <div class="container">
-        <div class="container p-4 ">
+<section id="why-us" class="why-us">
+
+    <div class="container-fluid">
+        <div class="">
 
             <div class="row">
                 <div class="col">
-                    <div class="col-md-6 mx-auto">
+                    <div class="col-xl-12 mx-auto">
                         <div class="card text-center border border-warning shadow-lg p-3 mb-5 bg-white rounded">
 
                             <div class="card-header bg-white border-bottom border-warning">
@@ -16,8 +17,66 @@
                             <div class="card-body">
 
                                 <p class="p-4"></p>
-                                <p class="p-4"></p>
-                                <a href="/pacientes" class="btn btn-primary btn-lg btn-block "
+                                <div class="row">
+
+                                    <div class="col-lg-4 d-flex align-items-stretch">
+                                        <div style="padding-top: 10px !important;" class="content">
+
+                                            <div class="title-container">
+                                                <h3>Proximos Turnos</h3>
+                                                <i style="font-size: 6rem;" class="fas fa-calendar-check"></i>
+
+                                            </div>
+                                            <p>
+                                                Vea sus proximos turnos, dia a dia. Puede cancelarlos o
+                                                reprogramarlos
+                                                si asi lo desea.
+                                            </p>
+                                            <div class="text-center">
+                                                <a href="/turnos" class="more-btn">Ir a Turnos <i
+                                                        class="bx bx-chevron-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 d-flex align-items-stretch">
+                                        <div style="padding-top: 10px !important;" class="content">
+
+                                            <div class="title-container">
+                                                <h3>Nuevas Solicitudes</h3>
+                                                <i style="font-size: 6rem;" class="fas fa-bell"></i>
+
+                                            </div>
+                                            <p>
+                                                Vea las ultimas solicitudes de turnos que recibio. Puede optar por
+                                                programarlas o rechazarlas.
+                                            </p>
+                                            <div class="text-center">
+                                                <a href="/solicitudes" class="more-btn">Ir a Solicitudes <i
+                                                        class="bx bx-chevron-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 d-flex align-items-stretch">
+                                        <div style="padding-top: 10px !important;" class="content">
+
+                                            <div class="title-container">
+                                                <h3>Pacientes</h3>
+                                                <i style="font-size: 6rem;" class="fas fa-address-book"></i>
+
+                                            </div>
+                                            <p>
+                                                Vea el perfil y la informacion correspondiente a todos los pacientes
+                                                registrados en el sistema.
+
+                                            </p>
+                                            <div class="text-center">
+                                                <a href="/pacientes" class="more-btn">Ir a Pacientes <i
+                                                        class="bx bx-chevron-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{!-- <a href="/pacientes" class="btn btn-primary btn-lg btn-block "
                                     style="background-color: #1977cc;">
                                     <p class="font-weight-lighter">Ver lista de pacientes</p>
                                 </a>
@@ -32,12 +91,13 @@
                                 <a href="/turnos" class="btn btn-primary btn-lg btn-block "
                                     style="background-color: #1977cc;">
                                     <p class="font-weight-lighter">Ver proximos turnos</p>
-                                </a>
+                                </a> --}}
 
                             </div>
 
                         </div>
                     </div>
+
                 </div>
 
             </div>

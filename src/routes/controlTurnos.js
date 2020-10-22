@@ -34,6 +34,12 @@ router.get('/sign-s3', (req, res) => {
   const fileType = req.query.file_type;
   const fileExt = getExt(queryName);
 
+  console.log();
+
+  if (fileExt != '.jpeg' || fileExt != '.jpg' || fileExt != '.png') {
+    return res.json({success: false, msg: "No es un tipo de archivo valido"})
+  }
+
   let fileName = `solicitud_turno_${req.user.id}_${moment().format()}${fileExt}`;
 
   fileName = deleteSpecialChars(fileName);

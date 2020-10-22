@@ -247,8 +247,9 @@ helpers.getPacientes = async () => {
 
 }
 
-helpers.getPaciente = async (id) => {
-  
+helpers.getFichaMedica = async (idPaciente) => {
+
+
 }
 
 helpers.cancelarTurno = async (id) => {

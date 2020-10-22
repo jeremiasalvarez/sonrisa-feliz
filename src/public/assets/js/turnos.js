@@ -31,7 +31,14 @@ const initEventos = () => {
 
     const celdas = document.querySelectorAll(".fc-day");
 
-    celdas.forEach(celda => celda.addEventListener("click", turnosDelDia));
+    celdas.forEach(celda => {
+        celda.addEventListener("click", turnosDelDia);
+        const indexFecha = turnos.findIndex(turno => turno.fecha == celda.id);
+
+        if (indexFecha != -1) {
+            celda.classList.add("tiene-turnos");
+        } 
+    });
 
     const botonNext = document.querySelector(".fc-button-next");
     const botonPrev = document.querySelector(".fc-button-prev");

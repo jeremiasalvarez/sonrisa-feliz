@@ -89,7 +89,7 @@ var defaults = {
 		next: "<span class='fc-text-arrow'>›</span>",
 		prevYear: "<span class='fc-text-arrow'>«</span>",
 		nextYear: "<span class='fc-text-arrow'>»</span>",
-		today: 'Hoy',
+		today: 'Mes Actual',
 		month: 'Mes',
 		week: 'Semana',
 		day: 'Dia'

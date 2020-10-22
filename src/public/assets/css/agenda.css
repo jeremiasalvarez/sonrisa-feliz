@@ -2,6 +2,7 @@
 td.fc-day {
     background: #fff !important;
     font-family: "Roboto", sans-serif;
+    font-weight: bold;
 }
 
 td.selected {
@@ -93,12 +94,12 @@ html .fc,
 }
 span.fc-button {
     font-family: "Roboto", sans-serif;
-    border-color: #9675ce;
-    color: #9675ce;
+    border-color: #007bff;
+    color: #007bff;
 }
 .fc-state-down,
 .fc-state-active {
-    background-color: #9675ce !important;
+    background-color: #007bff !important;
     color: #fff !important;
 }
 .fc .fc-header-space {
@@ -264,7 +265,7 @@ span.fc-button {
 .fc-state-active,
 .fc-state-disabled {
     color: #333333;
-    background-color: #ffe3e3;
+    background-color: #e1e1e1;
 }
 
 .fc-state-hover {
@@ -824,5 +825,30 @@ table.fc-header {
 @media (min-width: 768px) {
     .btn-rechazar {
         margin-bottom: 0;
+    }
+}
+
+.tiene-turnos {
+    position: relative;
+}
+
+.tiene-turnos:before {
+    content: "\f017";
+    display: inline-block;
+    font-family: FontAwesome;
+    color: var(--warning);
+    font-size: 1em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 100%;
+    bottom: 100%;
+}
+
+@media (min-width: 768px) {
+    .tiene-turnos:before {
+        font-size: 1.5em;
+        top: 35%;
+        left: 40%;
     }
 }
