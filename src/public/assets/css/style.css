@@ -9799,3 +9799,12 @@ th.column4 {
     font-size: 1.8rem;
     color: rgb(223, 221, 221) !important;
 }
+
+.btn-login-form {
+    width: 50%;
+    margin: auto;
+    font-size: 1.2rem;
+}
+
+@media (min-width: 768px) {
+}
