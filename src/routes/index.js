@@ -1,16 +1,23 @@
 const express = require("express");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const router = express.Router();
+const helpers = require("../lib/helpers");
 
 //Ruta inicial de la pagina web
-router.get("/", isLoggedIn, isAdmin, (req, res) => {
+router.get("/", isLoggedIn, isAdmin, async (req, res) => {
   //pagina raiz
   //Si ya se inicio sesion mostrar pagina bienvenida de admin o paciente
   if (req.admin){ 
     return res.render("inicio/admin");
   }
+
+  const userData = await helpers.getUserData(req.user.id);
+  const data = {
+    userData: userData[0]    
+  }
+
   
-  return res.render("auth/perfil");
+  return res.render("auth/perfil",data);
   //Si no se inicio sesion redireccionar a /login
 });
 
