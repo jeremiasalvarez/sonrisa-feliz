@@ -103,7 +103,7 @@ const appendAside = (fecha) => {
     console.log(`Fecha seleccionada: ${fecha}`);
 
     formatDate(fecha) 
-    document.querySelector("#turnosDia .title h4").innerHTML = formatDate(fecha)    
+    document.querySelector("#turnosDia .title h4").innerHTML = formatDate(fecha)  
 
 
     const divInicial = document.createElement("div");
@@ -139,6 +139,7 @@ const appendAside = (fecha) => {
 
     }
 
+    let completado;
     turnosEnFecha.forEach(turno => {
 
         const { id_turno, 
@@ -153,12 +154,19 @@ const appendAside = (fecha) => {
                 fechaNombre,
                 email,
                 dni,
-                img_ruta} = turno;
-
+                img_ruta,
+                finalizado} = turno;
+        
+        completado = finalizado === 1;
 
         const row = document.createElement("div");
 
         row.classList.add("turno", "row");
+
+        if(completado){
+            row.classList.add("completado");
+        }
+
         row.id = `turnoContainer_${id_turno}`
         
         const cardContainer = document.createElement("div");
@@ -323,8 +331,20 @@ const appendAside = (fecha) => {
     $(".collapse").collapse('hide');
 
     actualizarEventos();
-
+    actualizarCompletados();
 }
+
+function actualizarCompletados() {
+
+    const completados = document.querySelectorAll(".completado");
+    console.log(completados)
+    completados.forEach(turnoRow => {
+
+        const id = turnoRow.id;
+        cartaCompletada(id.split("_")[1]);
+    })
+}
+
 
 function horariosHtml(id) {
 
@@ -515,6 +535,41 @@ async function cancelarTurno(id) {
 
     //inhabilitarCarta(id);
     
+}
+
+function cartaCompletada(idTurno) {
+    const divIcono = document.createElement("div");
+
+    divIcono.classList.add("d-flex", "justify-content-start", "align-items-center");
+    divIcono.id = `divIcono_${idTurno}`;
+
+    const p = document.createElement("p");
+
+    p.classList.add("text-uppercase", "text-success");
+    p.style.fontWeight = "600";
+    p.style.marginLeft = "0.5rem";
+    p.textContent = `turno completado`;
+
+    const iconoFinalizado = document.createElement("i");
+
+    iconoAceptadoClass.split(" ").forEach(clase => {
+        iconoFinalizado.classList.add(clase);
+    });
+
+    divIcono.appendChild(iconoFinalizado)
+    divIcono.appendChild(p);
+
+    const divContainer = document.querySelector(`#turnoContainer_${idTurno} div`);
+
+
+    const carta = document.getElementById(`tituloTurno_${idTurno}`);
+
+    divContainer.insertBefore(divIcono, carta);
+    carta.style.backgroundColor = "var(--success)";
+    carta.style.border = "1px solid var(--success)"
+
+    carta.click();
+    carta.style.pointerEvents = "none";
 }
 
 function cartaReprogramada(idTurno, nuevaFecha) {

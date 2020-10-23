@@ -320,6 +320,27 @@ helpers.cancelarTurno = async (id) => {
 
 }  
 
+helpers.finalizarTurno = async (data) => {
+
+  try {
+
+    const queryTurno = await pool.query("UPDATE turno_paciente SET finalizado=1 WHERE id=?",[data.id]);
+    const queryHistoria = await pool.query("UPDATE historia_clinica_paciente SET observaciones=? WHERE id_turno=?", [data.observaciones, data.id]);
+
+    return {
+      success: true,
+      msg: "Se finalizo el turno con exito"
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      msg: error
+    }    
+  }
+
+}
+
 helpers.reprogramarTurno = async (data) => {
 
     try {
@@ -367,7 +388,7 @@ helpers.getTurnos = async () => {
 
   try {
 
-      const rows = await pool.query("SELECT turno_paciente.id AS id_turno, turno_paciente.id_usuario, turno_paciente.id_horario, turno_paciente.id_prestacion, turno_paciente.fecha, turno_paciente.img_ruta, ficha_paciente.dni, ficha_paciente.nombre AS nombre_paciente, ficha_paciente.apellido, ficha_paciente.telefono, usuario.email, prestaciones.nombre AS nombre_prestacion, turnos_horarios.hora_inicio, turnos_horarios.hora_fin FROM turno_paciente INNER JOIN usuario ON turno_paciente.id_usuario=usuario.id  INNER JOIN ficha_paciente ON turno_paciente.id_usuario=ficha_paciente.id_usuario INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id INNER JOIN turnos_horarios ON turno_paciente.id_horario=turnos_horarios.id");
+      const rows = await pool.query("SELECT turno_paciente.id AS id_turno, turno_paciente.id_usuario, turno_paciente.id_horario, turno_paciente.id_prestacion, turno_paciente.fecha, turno_paciente.img_ruta, turno_paciente.finalizado, ficha_paciente.dni, ficha_paciente.nombre AS nombre_paciente, ficha_paciente.apellido, ficha_paciente.telefono, usuario.email, prestaciones.nombre AS nombre_prestacion, turnos_horarios.hora_inicio, turnos_horarios.hora_fin FROM turno_paciente INNER JOIN usuario ON turno_paciente.id_usuario=usuario.id  INNER JOIN ficha_paciente ON turno_paciente.id_usuario=ficha_paciente.id_usuario INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id INNER JOIN turnos_horarios ON turno_paciente.id_horario=turnos_horarios.id");
 
       rows.forEach(turno => {
 

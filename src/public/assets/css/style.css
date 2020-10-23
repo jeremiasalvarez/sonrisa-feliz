@@ -9829,3 +9829,13 @@ th.column4 {
 .title-container + p {
     margin-top: 2rem;
 }
+
+.form-buscar {
+    width: 90%;
+}
+
+@media (min-width: 768px) {
+    .form-buscar {
+        width: 40%;
+    }
+}
