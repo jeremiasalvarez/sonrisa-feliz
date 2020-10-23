@@ -247,8 +247,48 @@ helpers.getPacientes = async () => {
 
 }
 
-helpers.getFichaMedica = async (idPaciente) => {
 
+helpers.getHistoriaClinica = async (id) => {
+
+      const rows = await pool.query("SELECT historia_clinica_paciente.id, historia_clinica_paciente.id_usuario, historia_clinica_paciente.id_turno, historia_clinica_paciente.observaciones, turno_paciente.id_prestacion, turno_paciente.id_horario, turno_paciente.fecha, prestaciones.nombre AS nombre_prestacion, turnos_horarios.hora_inicio, turnos_horarios.hora_fin, ficha_paciente.nombre, ficha_paciente.apellido FROM historia_clinica_paciente INNER JOIN turno_paciente ON historia_clinica_paciente.id_turno=turno_paciente.id INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id INNER JOIN turnos_horarios ON turno_paciente.id_horario=turnos_horarios.id INNER JOIN ficha_paciente ON historia_clinica_paciente.id_usuario=ficha_paciente.id_usuario WHERE historia_clinica_paciente.id_usuario=? ", [id]);
+
+      rows.forEach(row => {
+
+        const { fecha } = row;
+
+        let {fecha: fechaFormateada} = formatearFecha(fecha, "DF");
+        
+        row.fecha_formateada = fechaFormateada;
+      });
+
+      return toJson(rows);
+}
+
+helpers.guardarHistoriaClinica = async (data) => {
+
+  try {
+
+    const nuevaFicha = {
+      id_usuario: data.id_usuario,
+      id_turno: data.id_turno,
+      observaciones: data.observaciones
+    }
+
+    const insert = await pool.query("INSERT INTO historia_clinica_paciente SET ?", nuevaFicha);
+
+    return {
+      success: true,
+      id: insert.insertId,
+      msg: "ficha insertada"
+    }
+
+  } catch (error) {
+    
+    return {
+      success: false,
+      msg: error
+    }
+  }
 
 }
 
@@ -416,28 +456,8 @@ helpers.guardarTurno = async (data) => {
     const query = await pool.query("INSERT INTO turno_paciente SET ?", [nuevoTurno]);
 
     result.insert_id = query.insertId;
+
     result.success = true;
-
-    // if (data.imgPath == "") {
-    //   result.noImg = true;
-    // } else {
-    //   const split = data.imgPath.split("_");
-
-    //   const string = ["turno", split[1]].join("_");
-
-    //   let indexPunto = string.lastIndexOf(".");
-
-    //   const turnoString = string.slice(0, indexPunto);
-    //   const ext = string.slice(indexPunto);
-    //   const partialPath = [turnoString, result.insert_id].join("_");
-    //   const path = [partialPath, ext].join("");
-    //   await pool.query("UPDATE turno_paciente SET img_ruta = ? WHERE id = ?",[path, result.insert_id]);
-      
-    //   result.newPath = path;
-
-    // }
-    
-
     result.msg = "Turno Insertado";
 
   } catch(e){
