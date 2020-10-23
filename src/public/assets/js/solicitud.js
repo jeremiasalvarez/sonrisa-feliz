@@ -12,66 +12,73 @@ let imgUrl;
 
 function enviarImagen() {
 
-    const file = document.querySelector("#imagen").files[0];
 
-    if (!file) {
+    return new Promise((resolve, reject) => {
+
+        const file = document.querySelector("#imagen").files[0];
+
+        if (!file) {
+            
+            swal({
+                title: "No selecciono una imagen",
+                text: "Debe seleccionar una imagen representativa para solicitar un turno",
+                icon: "error",
+                button: {
+                    text: "Entendido",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary btn-xl js-scroll-trigger",
+                    closeModal: true,
+                },
+            })
+        }
+
+        getSignedRequest(file);
+
+        function getSignedRequest(file){
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/sign-s3?file_name=${file.name}&file_type=${file.type}`, false);
+            xhr.onreadystatechange = () => {
+              if(xhr.readyState === 4){
+                if(xhr.status === 200){
+                  const response = JSON.parse(xhr.responseText);
+                  uploadFile(file, response.signedRequest, response.url);
+                }
+                else{
+                    reject(xhr.responseText);
+                }
+              }
+            };
+            xhr.send();
+        }
         
-        swal({
-            title: "No selecciono una imagen",
-            text: "Debe seleccionar una imagen representativa para solicitar un turno",
-            icon: "error",
-            button: {
-                text: "Entendido",
-                value: true,
-                visible: true,
-                className: "btn btn-primary btn-xl js-scroll-trigger",
-                closeModal: true,
-            },
-        })
-    }
+        function uploadFile(file, signedRequest, url){
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', signedRequest, false);
+            xhr.onreadystatechange = () => {
+              if(xhr.readyState === 4){
+                if(xhr.status === 200){
+                    // console.log(url);
+                    imgUrl = url;
+                    resolve(url);
+                }
+                else{
+                    reject(JSON.stringify(xhr.responseText));
+                }
+              }
+            };
+            xhr.send(file);
+        
+        }
 
-    return getSignedRequest(file);
+
+
+    })
         
 }
 
-function getSignedRequest(file){
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file_name=${file.name}&file_type=${file.type}`, false);
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === 4){
-        if(xhr.status === 200){
-          const response = JSON.parse(xhr.responseText);
-          uploadFile(file, response.signedRequest, response.url);
-        }
-        else{
-        //   alert('Could not get signed URL.');
-        }
-      }
-    };
-    xhr.send();
-}
-
-function uploadFile(file, signedRequest, url){
-    const xhr = new XMLHttpRequest();
-    xhr.open('PUT', signedRequest, false);
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === 4){
-        if(xhr.status === 200){
-            // console.log(url);
-            imgUrl = url;
-            // forceSubmit();
-        }
-        else{
-        //   alert('Could not upload file.');
-        }
-      }
-    };
-    xhr.send(file);
-
-}
-  
-  
 
 
 solicitud.addEventListener("submit", async (e) => {
@@ -81,12 +88,34 @@ solicitud.addEventListener("submit", async (e) => {
     desactivarBotones([botonSubmit]);
     agregarSpinner(botonSubmit);
 
-    enviarImagen();
+    try {
+        await enviarImagen();
+    } catch (error) {
+        
+        const err = JSON.parse(error);
+        console.log(error);
+        if (err && err.wrongType){
+            swal({
+                title: "No Disponible",
+                text:
+                    `${err.msg ? err.msg : "Lo sentimos, ocurrio un error y tu solicitud no se envio correctamente"}`,
+                icon: "error",
+                button: {
+                    text: "Entendido",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary btn-xl js-scroll-trigger",
+                    closeModal: true,
+                },
+            })
+            
+            console.log("No se mando nada porque no se pudo subir la imagen");
+            activarBotones([botonSubmit]);
+            quitarSpinner(botonSubmit, "Solicitar Turno");
+            return;
+        }
 
-    setTimeout(() => {
-
-    }, 4000)
-    
+    }
 
 
     const dia_id = document.querySelector("#dia").value;

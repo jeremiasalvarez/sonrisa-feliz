@@ -125,7 +125,13 @@ const appendAside = (fecha) => {
     
     if (turnosEnFecha.length === 0){ 
         
-        divInicial.innerHTML = "<p>Sin turnos</p>"
+        divInicial.innerHTML = `<div style="pointer-events: none; margin:auto; height: 10vw" id="solicitudCarta"
+        class="solicitud-titulo d-flex justify-content-start align-items-center">
+        <i class='custom-icon bx bx-info-circle icon-warning m-r-10'></i>
+        <p class="text-secondary">
+            No hay turnos programados para esta fecha
+        </p>
+    </div>`
 
         aside.appendChild(divInicial);
 

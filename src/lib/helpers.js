@@ -254,11 +254,15 @@ helpers.getHistoriaClinica = async (id) => {
 
       rows.forEach(row => {
 
-        const { fecha } = row;
+        const { fecha, hora_inicio, hora_fin } = row;
 
         let {fecha: fechaFormateada} = formatearFecha(fecha, "DF");
-        
+        let inicioFormateado = formatearHorario(hora_inicio);
+        let finFormateado = formatearHorario(hora_fin);
+
         row.fecha_formateada = fechaFormateada;
+        row.hora_inicio = inicioFormateado;
+        row.hora_fin = finFormateado;
       });
 
       return toJson(rows);

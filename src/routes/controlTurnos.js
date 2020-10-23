@@ -33,11 +33,10 @@ router.get('/sign-s3', (req, res) => {
   const queryName = req.query.file_name;
   const fileType = req.query.file_type;
   const fileExt = getExt(queryName);
+  const tempExt = fileExt.toLowerCase();
 
-  console.log();
-
-  if (fileExt != '.jpeg' && fileExt != '.jpg' && fileExt && '.png') {
-    return res.json({success: false, msg: "No es un tipo de archivo valido"})
+  if (tempExt != '.jpeg' && tempExt != '.jpg' && tempExt != '.png') {
+    return res.status(400).json({wrongType:true, success: false, msg: "No es un tipo de archivo valido. La imagen debe tener un formato '.png' o '.jpeg' o '.jpg'"})
   }
 
   let fileName = `solicitud_turno_${req.user.id}_${moment().format()}${fileExt}`;
