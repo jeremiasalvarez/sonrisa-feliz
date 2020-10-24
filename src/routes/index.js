@@ -22,8 +22,16 @@ router.get("/", isLoggedIn, isAdmin, async (req, res) => {
 });
 
 
-router.get("/ficha", isLoggedIn, (req,res) =>{
-  return res.render("usuario/ficha")
+router.get("/ficha", isLoggedIn, async (req,res) =>{
+
+  const userData = await helpers.getUserData(req.user.id);
+  const fechaFormateada = helpers.formatearFecha(userData[0].fecha_nacimiento,"DF");
+  const data = {
+    userData: userData[0],
+    fechaFormateada   
+  }  
+  
+  return res.render("usuario/ficha",data)
 })
 
 module.exports = router;

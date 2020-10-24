@@ -4,13 +4,57 @@
             <div class="card text-center border border-warning shadow-lg p-3 mb-5 bg-white rounded">
                 <div class="card-head">
                     <h3 class="card-title font-weight-bold mb-2 p-3">
-                        <p>Datos</p>
-
+                        <p>Mis datos</p>
                     </h3>
                     <p class="font-weight-lighter">{{data.userData.nombre}} {{data.userData.apellido}}</p>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3 col-md-2 col-5">
+                            <label style="font-weight:bold;">Nombre Completo</label>
+                        </div>
+                        <div class="col-md-8 col-6">
+                            {{userData.nombre}} {{userData.apellido}}
+                        </div>
+                    </div>
+                    <hr />
 
+                    <div class="row">
+                        <div class="col-sm-3 col-md-2 col-5">
+                            <label style="font-weight:bold;">Fecha Nacimiento</label>
+                        </div>
+                        <div class="col-md-8 col-6">
+                            {{fechaFormateada.fecha}}
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3 col-md-2 col-5">
+                            <label style="font-weight:bold;">DNI</label>
+                        </div>
+                        <div class="col-md-8 col-6">
+                            {{userData.dni}}
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3 col-md-2 col-5">
+                            <label style="font-weight:bold;">Email</label>
+                        </div>
+                        <div class="col-md-8 col-6">
+                            {{userData.email}}
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3 col-md-2 col-5">
+                            <label style="font-weight:bold;">Telefono</label>
+                        </div>
+                        <div class="col-md-8 col-6">
+                            {{userData.telefono}}
+                        </div>
+                    </div>
+                    <hr />
                 </div>
             </div>
         </div>

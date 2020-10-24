@@ -71,7 +71,7 @@ helpers.getPrestaciones = async () => {
 helpers.getUserData = async (id) => {
 
   try {
-    const data = await pool.query("SELECT usuario.id, usuario.email, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono FROM usuario INNER JOIN ficha_paciente ON usuario.id=ficha_paciente.id_usuario WHERE usuario.id=?",[id]);
+    const data = await pool.query("SELECT usuario.id, usuario.email, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono , ficha_paciente.fecha_nacimiento, ficha_paciente.dni FROM usuario INNER JOIN ficha_paciente ON usuario.id=ficha_paciente.id_usuario WHERE usuario.id=?",[id]);
 
     return toJson(data);
     
