@@ -4,7 +4,7 @@ let nuevoHtml;
 
 checkboxes.forEach(checkbox => {
     unCheck(checkbox);
-    checkbox.addEventListener("CheckboxStateChange", edicion);
+    checkbox.addEventListener("change", edicion);
 });
 
 function unCheck(checkbox) {
