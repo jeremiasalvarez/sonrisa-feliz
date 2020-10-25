@@ -296,6 +296,29 @@ helpers.guardarHistoriaClinica = async (data) => {
 
 }
 
+
+helpers.editarObservacion = async (data) => {
+
+  try {
+
+      const query = await pool.query("UPDATE historia_clinica_paciente SET observaciones=? WHERE id=?",[data.observacion, data.id_historia]);
+
+      return {
+        success: query.affectedRows == 1,
+        msg: "La historia clinica fue actualizada correctamente"
+      }
+
+  } catch (error) {
+
+      console.log(error);
+      return {
+        success: false,
+        msg: "Algo salio mal. No se pudo actualizar la historia clinica"
+      }
+  }
+
+}
+
 helpers.cancelarTurno = async (id) => {
 
   try {

@@ -9830,6 +9830,16 @@ th.column4 {
     margin-top: 2rem;
 }
 
+.cartas-inicio {
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .cartas-inicio {
+        margin-top: 0;
+    }
+}
+
 .form-buscar {
     width: 90%;
 }
@@ -9837,5 +9847,25 @@ th.column4 {
 @media (min-width: 768px) {
     .form-buscar {
         width: 40%;
+    }
+}
+
+.container-tabla {
+    overflow-x: scroll;
+}
+
+@media (min-width: 768px) {
+    .container-tabla {
+        overflow-x: unset;
+    }
+}
+
+.fix-table {
+    display: block ruby;
+}
+
+@media (min-width: 768px) {
+    .fix-table {
+        display: table-row-group;
     }
 }

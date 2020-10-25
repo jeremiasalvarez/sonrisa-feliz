@@ -26,9 +26,11 @@ router.get("/ficha", isLoggedIn, async (req,res) =>{
 
   const userData = await helpers.getUserData(req.user.id);
   const fechaFormateada = helpers.formatearFecha(userData[0].fecha_nacimiento,"DF");
+  const historia = await helpers.getHistoriaClinica(req.user.id);
   const data = {
     userData: userData[0],
-    fechaFormateada   
+    fechaFormateada,
+    historia  
   }  
   
   return res.render("usuario/ficha",data)

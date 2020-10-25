@@ -265,8 +265,6 @@ function agregarAlerta(exito, texto) {
 
 function agregarSpinner(boton) {
 
-    console.log(boton);
-
     boton.innerHTML = spinner;
 }
 

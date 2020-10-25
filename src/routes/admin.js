@@ -4,10 +4,11 @@ const fs  = require("fs");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno, guardarHistoriaClinica,
 getHistoriaClinica, 
-getUserData} = require("../lib/helpers");
+getUserData, editarObservacion} = require("../lib/helpers");
 const helpers = require("../lib/helpers")
 
 const moment = require("moment");
+const { Console } = require("console");
 
 const router = express.Router();
 
@@ -46,11 +47,13 @@ router.get("/paciente", isLoggedIn, isAdmin, async (req, res) => {
 
     const historia = await getHistoriaClinica(id);
     const userData = await getUserData(id);
-    const fechaFormateada = helpers.formatearFecha(userData[0].fecha_nacimiento,"DF");
+    const fechaFormateada = helpers.formatearFecha(userData[0].fecha_nacimiento,"DF"); 
+    const admin = true;
     const data = {
         userData: userData[0],
         historia,
-        fechaFormateada   
+        fechaFormateada,
+        admin  
     }
 
     console.log(data)
@@ -279,6 +282,19 @@ router.post("/api/turnos/cancelar", isLoggedIn, isAdmin, async (req, res) => {
 
     return res.json(result);
 
+})
+
+
+router.post("/api/observaciones", isLoggedIn, isAdmin, async (req, res) => {
+
+    if (!req.admin) {
+        return res.json({success: false, msg: "No tienes permisos para ejecutar esta accion"});
+    }
+
+    const result = await editarObservacion(req.body);
+
+    return res.json(result);
+    
 })
 
 async function fechaHorarioValidos(idHorario, fecha) {

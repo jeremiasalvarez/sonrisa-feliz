@@ -1,8 +1,8 @@
-<div class="container p-4">
+<div class="container p-4 container-tabla">
     <div class="row">
         <div class="col-md-10 mx-auto">
             <div class="section-title">
-                <h3>Mis Datos</h3>
+                <h3>Datos</h3>
             </div>
             <div class="card text-center border border-warning shadow-lg p-3 mb-5 bg-white rounded">
 
@@ -61,6 +61,7 @@
         <h3>Historia Clinica</h3>
     </div>
     <div class="row">
+        {{#if historia}}
         <div class="wrap-table100 mx-auto">
             <div class="table100 ver1 m-b-110 table-historia">
                 <div class="table100-head">
@@ -77,21 +78,22 @@
                 </div>
                 <div class="table100-body js-pscroll">
                     <table>
-                        <tbody>
-                            {{#each data.historia}}
+                        <tbody class="fix-table">
+                            {{#each historia}}
                             <tr class="row100 body">
                                 <td class="cell100 column1"> {{fecha_formateada}}</td>
                                 <td class="cell100 column2">{{hora_inicio}} - {{hora_fin}}</td>
                                 <td class="cell100 column2">{{nombre_prestacion}}</td>
                                 <td class="cell100 column3">
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <button style="font-weight: bold; font-size: 1.2rem;" class="btn btn-primary"
-                                            data-toggle="modal" data-target="#modalProgramar">Leer
+                                        <button style="font-weight: bold; font-size: 1.2rem;"
+                                            class="btn btn-primary btn-leer" data-toggle="modal"
+                                            data-target="#modalEditar_{{id}}">Leer
                                             <i class="fas fa-book-reader"></i>
                                         </button>
                                         <!-- Modal Programar -->
-                                        <div class="modal fade" id="modalProgramar" tabindex="-1" role="dialog"
-                                            aria-labelledby="modalProgramarTitle" aria-hidden="true">
+                                        <div class="modal fade" id="modalEditar_{{id}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="modalEditar_{{id}}Title" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div style="background-color: var(--light);" class="modal-content">
                                                     <div class="modal-header">
@@ -103,20 +105,40 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
+
+                                                        {{#if ../admin}}
+                                                        <div
+                                                            class="custom-control custom-checkbox mr-sm-2 d-flex align-items-center">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                id="editar_{{id}}">
+                                                            <label class="custom-control-label"
+                                                                for="editar_{{id}}">Activar Edición</label>
+                                                        </div>
+                                                        {{/if}}
                                                         <p class="modal-title">
+                                                        <div id="observacionContainer_{{id}}">
+                                                            {{#if observaciones}}
                                                             {{observaciones}}
+                                                            {{else}}
+                                                            <i>Este registro no tiene observaciones</i>
+                                                            {{/if}}
+                                                        </div>
+
                                                         </p>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button id="cerrarModalProgramar" style="min-width: 100px;"
+                                                        <button id="cerrarmodalEditar_{{id}}" style="min-width: 100px;"
                                                             type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cancelar</button>
-                                                        <button style="min-width: 100px;" id="confirmar_{{id}}"
-                                                            type="button" class="btn btn-success btn-event-control"
-                                                            data-dismiss="modal">Confirmar
+                                                            data-dismiss="modal">Cerrar</button>
+                                                        {{#if ../admin}}
+                                                        <button style="min-width: 100px; pointer-events: none"
+                                                            id="confirmarEdicion_{{id}}" type="button"
+                                                            class="btn btn-success" disabled> Guardar
+                                                            Cambios
                                                         </button>
-                                                        <button id="hiddenButton_{{id}}" style="display: none;"
+                                                        <button id="hiddenButtonConfirmar_{{id}}" style="display: none;"
                                                             data-dismiss="modal"></button>
+                                                        {{/if}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,5 +152,14 @@
                 </div>
             </div>
         </div>
+        {{else}}
+        <div style="pointer-events: none; margin:auto; height: 100%" id="solicitudCarta"
+            class="solicitud-titulo d-flex justify-content-center align-items-center">
+            <i class='custom-icon bx bx-info-circle icon-warning m-r-10'></i>
+            <a class="text-secondary">
+                Este paciente aun no tiene registros en su historia clinica.
+            </a>
+        </div>
+        {{/if}}
     </div>
 </div>

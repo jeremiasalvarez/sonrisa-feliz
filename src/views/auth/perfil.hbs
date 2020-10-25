@@ -1,34 +1,72 @@
-<section style="height: unset;" id="faq" class="faq section-bg">
+<section id="why-us" class="why-us">
     <div class="section-title">
         <h2>Consultorio Dental <i>Sonrisa Feliz</i> </h2>
     </div>
-    <div class="container p-4">
-        <div class="row">
-            <div class="col-md-6 mx-auto">
-                <div class="card text-center border border-warning shadow-lg p-3 mb-5 bg-white rounded">
-                    <div class="card-head">
-                        <h3 class="card-title font-weight-bold mb-2 p-3">
-                            <p>Bienvenido</p>
-                            <p class="font-weight-lighter">{{userData.nombre}} {{userData.apellido}}</p>
-                        </h3>
+    <div class="container-fluid">
+        <div class="">
+
+            <div class="row">
+                <div class="col">
+                    <div class="col-xl-8 mx-auto">
+                        <div class="card text-center border border-warning shadow-lg p-3 mb-5 bg-white rounded">
+
+                            <div class="card-head">
+                                <h3 class="card-title font-weight-bold mb-2 p-3">
+                                    <p>Bienvenido!</p>
+                                    <p class="font-weight-lighter">{{userData.nombre}} {{userData.apellido}}</p>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+
+                                    <div class="col-lg-6  d-flex align-items-stretch cartas-inicio">
+                                        <div style="padding-top: 10px !important;" class="content">
+
+                                            <div class="title-container">
+                                                <h3>Datos e Historia Clinica</h3>
+                                                <i style="font-size: 6rem;" class="fas fa-address-book"></i>
+
+                                            </div>
+                                            <p>
+                                                Información sobre usted y un listado de sus ultimos turnos en el
+                                                consultorio. Puede observar la prestación realizada y las observaciones
+                                                indicadas por la doctora.
+                                            </p>
+                                            <div class="text-center">
+                                                <a href="/ficha" class="more-btn">Ir a Información <i
+                                                        class="bx bx-chevron-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 d-flex align-items-stretch cartas-inicio">
+                                        <div style="padding-top: 10px !important;" class="content">
+
+                                            <div class="title-container">
+                                                <h3>Solicitar un Nuevo Turno</h3>
+                                                <i style="font-size: 6rem;" class="fas fa-plus"></i>
+
+                                            </div>
+                                            <p>
+                                                Rellene un pequeño formulario para solicitar un nuevo turno con el
+                                                consultorio. Se le informara por e-mail los resultados de su solicitud.
+                                                No debe tener solicitudes pendientes.
+                                            </p>
+                                            <div class="text-center">
+                                                <a href="/pedirTurno" class="more-btn">Solcitar Turno<i
+                                                        class="bx bx-chevron-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="card-body">
-                        <p class="p-4"></p>
-                        <p class="p-4"></p>
-                        <p class="p-4"></p>
-
-                        <a href="/ficha" class="btn btn-primary btn-lg btn-block">
-                            Ver mi ficha
-                        </a>
-
-                        <a href="/pedirTurno" class="btn btn-primary btn-lg btn-block">
-                            Solicitar un turno
-                        </a>
-                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
+            </div>
+
+        </div>
 </section>
