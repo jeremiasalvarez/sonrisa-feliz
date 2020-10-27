@@ -104,8 +104,8 @@ async function confirmarSolicitud(id) {
     const data = {
         id,
         usuario_id: id_usuario,
-        fecha: document.querySelector(`#fecha_${id}`).value,
-        horario_id: document.querySelector(`#horario_${id}`).value,
+        fecha: document.querySelector(`#fechaSolicitada_${id}`).value,
+        horario_id: document.querySelector(`#horarioSolicitado_${id}`).value,
         prestacion_id: document.querySelector(`#prestacion_${id}`).value,
         nombre: nombreProcesado,
         email: emailProcesado,

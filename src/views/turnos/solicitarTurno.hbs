@@ -41,20 +41,20 @@
 
             <div class="form-row">
                 <div class="col-md-4 form-group">
-                    <label for="dia">Dia de Preferencia:</label>
-                    <select class="form-control" name="dia" id="dia">
-                        {{#each dias}}
-                        <option value={{id_dia}}> {{nombre_dia}}</option>
-                        {{/each}}
-                    </select>
+                    <label for="dia">Fecha de Preferencia:</label>
+                    <input type="date" name="dia" id="dia" class="form-control">
                 </div>
                 <div class="col-md-4 form-group">
-                    <label for="dia">Horario de Preferencia:</label>
-                    <select class="form-control" name="horario" id="horario">
-                        {{#each horarios}}
+                    <label for="dia">Horarios Disponibles en la Fecha Seleccionada:</label>
+                    <div id="divErrorHorario" class="text-danger d-none align-items-center"></div>
+                    <div id="spinnerHorario" class="d-flex justify-content-start align-items-center m-l-10">
+                        <i style="font-size: 2rem!important;" class="fas fa-spin fa-spinner"></i>
+                    </div>
+                    <select class="form-control d-none" name="horario" id="horario">
+                        {{!-- {{#each horarios}}
                         <option value={{id}}> {{hora_inicio}} - {{hora_fin}}
                         </option>
-                        {{/each}}
+                        {{/each}} --}}
                     </select>
                 </div>
             </div>

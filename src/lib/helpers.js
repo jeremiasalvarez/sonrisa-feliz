@@ -33,6 +33,36 @@ const fechaOcupada = async (data) => {
 
 }
 
+helpers.fechaHorarioValidos = async (idHorario, fecha) => {
+    if (moment(fecha).isAfter(moment())) {
+      // console.log("FECHA VALIDA")
+      return true;
+    } else if (moment(fecha).format("L") === moment().format("L")) {
+
+      const horario = await getHorario(idHorario);
+
+      const horaActual = moment().format("LT").split(":")[0];
+
+      const horarioTurno = horario.hora_inicio.split(":")[0];
+
+      // console.log("COMPARAR horarios:");
+      // console.log(`${horaActual} vs ${horarioTurno}`);
+
+      if (horarioTurno <= horaActual) {
+          // console.log("HORARIO INVALIDO");
+          return false;
+      } else {
+          // console.log("HORARIO VALIDO");
+          return true;
+      }
+    } else if (moment(fecha).dayOfYear() < moment().dayOfYear()) {
+        return false;
+    }
+
+    console.log("NO SE COMPARO NADA")
+    return true;
+}
+
 const getHorarioConId = helpers.getHorario;
 
 helpers.encryptPassword = async (password) => {
@@ -161,10 +191,10 @@ helpers.guardarSolicitud = async (data) => {
     const nuevaSolicitud = {
       id_usuario: data.user_id,
       id_horario: data.horario_id,
-      id_dia: data.dia_id,
       fecha_solicitud: moment().toISOString(true),
       mensaje_solicitud: data.msg,
-      img_ruta: data.imgPath
+      img_ruta: data.imgPath,
+      fecha_solicitada: data.fecha_solicitada
     }
 
     const { yaExiste, fechaPendiente } = await solicitudYaExiste(nuevaSolicitud.id_usuario);
@@ -319,6 +349,41 @@ helpers.editarObservacion = async (data) => {
 
 }
 
+helpers.horariosDisponibles = async (fecha) => {
+
+  try {
+      const rows = await pool.query(`SELECT turnos_horarios.id, turnos_horarios.hora_inicio,turnos_horarios.hora_fin FROM turnos_horarios WHERE turnos_horarios.id NOT IN (SELECT turno_paciente.id_horario FROM turno_paciente WHERE turno_paciente.fecha = ?)`, [fecha]);
+
+      if (rows.length == 0) {
+        return {
+          success: false,
+          msg: "Ya no quedan horarios disponibles en esa fecha. Por favor seleccione otra."
+        }
+      }
+
+      rows.forEach(horario => {
+        const { hora_inicio, hora_fin } = horario;
+
+        horario.hora_inicio = formatearHorario(hora_inicio);
+        horario.hora_fin = formatearHorario(hora_fin);
+
+      })
+
+      return {
+        success: true,
+        horarios: toJson(rows)
+      }
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      msg: "Algo salio mal"
+    }
+  } 
+  
+}
+
+
 helpers.cancelarTurno = async (id) => {
 
   try {
@@ -438,18 +503,20 @@ helpers.getTurnos = async () => {
 
 helpers.getSolicitudes = async () => {
 
-  const solicitudes = await pool.query("SELECT solicitudes_turno.id, solicitudes_turno.id_usuario, solicitudes_turno.id_horario, solicitudes_turno.id_dia, solicitudes_turno.fecha_solicitud, solicitudes_turno.mensaje_solicitud, solicitudes_turno.img_ruta, usuario.email, ficha_paciente.dni, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono, ficha_paciente.fecha_nacimiento, turnos_horarios.hora_inicio, turnos_horarios.hora_fin, turnos_dias.nombre_dia FROM solicitudes_turno INNER JOIN usuario ON solicitudes_turno.id_usuario=usuario.id INNER JOIN ficha_paciente ON solicitudes_turno.id_usuario=ficha_paciente.id_usuario INNER JOIN turnos_horarios ON solicitudes_turno.id_horario=turnos_horarios.id INNER JOIN turnos_dias ON solicitudes_turno.id_dia=turnos_dias.id_dia ORDER BY solicitudes_turno.fecha_solicitud ASC");
+  const solicitudes = await pool.query("SELECT solicitudes_turno.id, solicitudes_turno.id_usuario, solicitudes_turno.id_horario, solicitudes_turno.fecha_solicitada, solicitudes_turno.fecha_solicitud, solicitudes_turno.mensaje_solicitud, solicitudes_turno.img_ruta, usuario.email, ficha_paciente.dni, ficha_paciente.nombre, ficha_paciente.apellido, ficha_paciente.telefono, ficha_paciente.fecha_nacimiento, turnos_horarios.id AS horario_solcitado_id, turnos_horarios.hora_inicio, turnos_horarios.hora_fin FROM solicitudes_turno INNER JOIN usuario ON solicitudes_turno.id_usuario=usuario.id INNER JOIN ficha_paciente ON solicitudes_turno.id_usuario=ficha_paciente.id_usuario INNER JOIN turnos_horarios ON solicitudes_turno.id_horario=turnos_horarios.id ORDER BY solicitudes_turno.fecha_solicitud ASC");
 
   solicitudes.forEach(sol => {
     
-    const { fecha_solicitud, hora_inicio, hora_fin } = sol; 
+    const { fecha_solicitud, fecha_solicitada, hora_inicio, hora_fin } = sol; 
 
     sol.hora_inicio = formatearHorario(hora_inicio);
     sol.hora_fin = formatearHorario(hora_fin);
 
     const { fecha, hora } = formatearFecha(fecha_solicitud, "FH");
+    const { fecha: fechaSolicitadaFormateada } = formatearFecha(fecha_solicitada, "FH");
 
     sol.fecha_solicitud = `${fecha} a las ${hora}`
+    sol.fechaSolicitadaFormateada = fechaSolicitadaFormateada
   })
 
   return toJson(solicitudes);

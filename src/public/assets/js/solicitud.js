@@ -1,14 +1,91 @@
 
+let fechaSeleccionada;
+
 const solicitud = document.querySelector("#solicitudTurno");
-// const user_id = document.querySelector("#userId").value;
+
 const botonSubmit = document.querySelector("#submit");
 
 let imgUrl;
 
+(() => {
+    Date.prototype.toDateInputValue = (function() {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+    });
+    const diaInput = document.getElementById('dia');
+    diaInput.value = new Date().toDateInputValue();
+    fechaSeleccionada = diaInput.value;
+    diaInput.addEventListener("change", () => {
+        fechaSeleccionada = diaInput.value;
+        cargarHorariosDisponibles();
+    })
+    cargarHorariosDisponibles();
+})()
 
-// function forceSubmit() {
-//     document.querySelector("#hiddenSubmit").click();
-// }
+async function cargarHorariosDisponibles() {
+
+    botonSubmit.style.backgroundColor = "#6c757d";
+    desactivarBotones([botonSubmit])
+
+    document.querySelector("#spinnerHorario i").style.display = "block";
+    document.getElementById("horario").classList.add("d-none");
+
+    document.querySelector("#spinnerHorario").classList.add("m-t-5");
+
+    const errDiv = document.getElementById("divErrorHorario");
+    errDiv.classList.add("d-none")
+
+
+    let result = await fetch(`/api/horarios-disponibles?fecha=${fechaSeleccionada}`);
+
+    const { success, horarios, msg} = await result.json();
+    
+    if (success) {
+        construirSelectBox(horarios);
+        errDiv.innerText = ""
+        document.getElementById("horario").style.display = "block";
+        document.getElementById("horario").classList.remove("d-none");
+        document.querySelector("#spinnerHorario i").style.display = "none";
+        document.querySelector("#spinnerHorario").classList.remove("m-t-5");
+        activarBotones([botonSubmit])
+        botonSubmit.style.backgroundColor = "var(--primary)";
+    } else {
+        errDiv.innerText = msg;
+        errDiv.classList.remove("d-none")
+
+        document.querySelector("#spinnerHorario i").style.display = "none";
+        document.querySelector("#spinnerHorario").classList.remove("m-t-5");
+
+    } 
+
+}
+
+function construirSelectBox(horarios) {
+
+    const selectBox = document.querySelector("#horario");
+    limpiar(selectBox);
+
+    horarios.forEach(horario => {
+
+        const option = document.createElement("option");
+
+        option.value = horario.id;
+
+        option.innerText = `${horario.hora_inicio} - ${horario.hora_fin}`;
+
+        selectBox.appendChild(option);
+    })
+
+}
+
+function limpiar(selectBox) {
+
+    while (selectBox.firstChild) {
+        selectBox.firstChild.remove()
+    }
+}
+
 
 function enviarImagen() {
 
@@ -118,12 +195,12 @@ solicitud.addEventListener("submit", async (e) => {
     }
 
 
-    const dia_id = document.querySelector("#dia").value;
+    const fecha_solicitada = document.querySelector("#dia").value;
     const horario_id = document.querySelector("#horario").value;
     const msg = document.querySelector("#msg").value;
 
     const data = {
-        dia_id,
+        fecha_solicitada,
         horario_id,
         msg,
         imgPath: imgUrl

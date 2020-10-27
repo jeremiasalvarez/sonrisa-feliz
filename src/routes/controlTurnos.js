@@ -5,7 +5,7 @@ const moment = require("moment");
 const aws = require('aws-sdk');
 const router = express.Router();
 const { isLoggedIn } = require("../lib/auth");
-const { getUserData, getHorarios, getDias, guardarSolicitud }  = require("../lib/helpers");
+const { getUserData, getHorarios, getDias, guardarSolicitud, fechaHorarioValidos }  = require("../lib/helpers");
 
 const S3_BUCKET = process.env.S3_BUCKET_NAME;
 aws.config.region = 'sa-east-1';
@@ -84,43 +84,25 @@ router.get("/pedirTurno", isLoggedIn, async (req, res) => {
   res.render("turnos/solicitarTurno", data);
 });
 
-// router.post("/upload-img", (req, res) => {
-
-//   // console.log(req.mensaje);
-
-//   if (!req.file) {
-//       console.log("no imagen");
-//       return res.json({success: false, msg: "Debe proprorcionar una imagen"})
-//   } else {
-//     console.log("hay imagen");
-//   }
-
-//   if (req.fileValidationError) {
-//     return res.json({msg : "La imagen proporcionada no es un formato valido. Formatos aceptados: '.jpg', '.jpeg', '.png'", success: false})
-//   } 
-//   return res.json({success: true, msg: "imagen insertada", path: `solicitud_${req.user.email}${req.newImgPathExt.toUpperCase()}`});
-
-// })
-
-
 router.post("/pedirTurno", isLoggedIn, async (req, res, next) => {
   
   const data = {
     user_id: req.user.id,
     horario_id: req.body.horario_id,
-    dia_id: req.body.dia_id,
+    fecha_solicitada: req.body.fecha_solicitada,
     msg: req.body.msg,
     imgPath: req.body.imgPath
   }
 
+  const fechaHorarioValido = await fechaHorarioValidos(req.body.horario_id, req.body.fecha_solicitada);
+
+  if (!fechaHorarioValido) {
+      return res.json({success: false, msg: "La fecha y el horario seleccionado no son validos. Debe seleccionar una fecha posterior a la actual"})
+  }   
+
   const result = await guardarSolicitud(data);
   
-
-  // // console.log(result);
-
   if (result.success) {
-
-    
 
     res.status(200).json(result);
 

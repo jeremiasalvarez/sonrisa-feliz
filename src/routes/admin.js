@@ -4,7 +4,8 @@ const fs  = require("fs");
 const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno, guardarHistoriaClinica,
 getHistoriaClinica, 
-getUserData, editarObservacion} = require("../lib/helpers");
+getUserData, editarObservacion,
+horariosDisponibles ,fechaHorarioValidos} = require("../lib/helpers");
 const helpers = require("../lib/helpers")
 
 const moment = require("moment");
@@ -69,13 +70,10 @@ router.get("/solicitudes", isLoggedIn, isAdmin, async (req, res) => {
 
         const solicitudes = await getSolicitudes();
 
-        const horarios = await getHorarios();
-
         const prestaciones = await getPrestaciones();
 
         const data = {
             solicitudes: solicitudes,
-            horarios: horarios,
             prestaciones: prestaciones
         } 
         
@@ -297,42 +295,16 @@ router.post("/api/observaciones", isLoggedIn, isAdmin, async (req, res) => {
     
 })
 
-async function fechaHorarioValidos(idHorario, fecha) {
 
-    // console.log("COMPARAR fecHAS:");
-    // console.log(`${moment(fecha)} vs ${moment()}`)
+router.get("/api/horarios-disponibles", isLoggedIn, isAdmin, async (req, res) => {
 
-    if (moment(fecha).isAfter(moment())) {
-        // console.log("FECHA VALIDA")
-        return true;
-    } else if (moment(fecha).format("L") === moment().format("L")) {
+    const { fecha } = req.query;
 
-        const horario = await getHorario(idHorario);
+    const result = await horariosDisponibles(fecha);
 
-        const horaActual = moment().format("LT").split(":")[0];
+    return res.status(200).json(result);
 
-        const horarioTurno = horario.hora_inicio.split(":")[0];
-
-        // console.log("COMPARAR horarios:");
-        // console.log(`${horaActual} vs ${horarioTurno}`);
-
-        if (horarioTurno <= horaActual) {
-            // console.log("HORARIO INVALIDO");
-            return false;
-        } else {
-            // console.log("HORARIO VALIDO");
-            return true;
-        }
-    } else if (moment(fecha).dayOfYear() < moment().dayOfYear()) {
-        return false;
-    }
-
-    console.log("NO SE COMPARO NADA")
-    return true;
-    
-
-
-}   
+})
 
 
 module.exports = router;
