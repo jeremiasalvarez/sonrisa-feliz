@@ -3,6 +3,7 @@ const helpers = {};
 const pool = require("../datebase");
 const nodemailer = require("nodemailer");
 const moment = require("moment");
+const momentTimeZone = require("moment-timezone");
 //const { transporter } = require("../lib/mailer");
 
 moment.locale("es-mx");
@@ -32,6 +33,11 @@ const fechaOcupada = async (data) => {
   }
 
 }
+
+helpers.fechaDeHoy = () => {
+  return momentTimeZone().tz("America/Argentina/Buenos_Aires").format('LLL');
+}
+
 
 helpers.fechaHorarioValidos = async (idHorario, fecha) => {
     if (moment(fecha).isAfter(moment())) {

@@ -35,6 +35,10 @@ section {
   height: 100%;
 }
 
+.display-none {
+    display: none;
+}
+
 /*[ FONT SIZE ]
 ///////////////////////////////////////////////////////////
 */
