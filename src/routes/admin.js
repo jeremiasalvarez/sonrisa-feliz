@@ -23,7 +23,6 @@ router.get("/admin", isLoggedIn, isAdmin, (req, res) => {
     }
 })
 
-
 router.get("/pacientes", isLoggedIn, isAdmin, async (req,res) => {
     if (req.admin){
 

@@ -21,19 +21,19 @@ router.get("/", isLoggedIn, isAdmin, async (req, res) => {
   //Si no se inicio sesion redireccionar a /login
 });
 
-
-router.get("/ficha", isLoggedIn, async (req,res) =>{
+router.get("/ficha", isLoggedIn, async (req, res) => {
 
   const userData = await helpers.getUserData(req.user.id);
   const fechaFormateada = helpers.formatearFecha(userData[0].fecha_nacimiento,"DF");
   const historia = await helpers.getHistoriaClinica(req.user.id);
-  const data = {
+  const data = { 
     userData: userData[0],
     fechaFormateada,
-    historia  
+    historia, 
+    fechaDeHoy: helpers.fechaDeHoy() 
   }  
-  
+
   return res.render("usuario/ficha",data)
-})
+}) 
 
 module.exports = router;
