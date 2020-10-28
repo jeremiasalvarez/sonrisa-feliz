@@ -1,97 +1,117 @@
 {{!-- solicitar turno --}}
-
-<!-- End Header -->
-<section style="height: unset;" id="appointment" class="appointment section-bg">
-    <div class="container">
-        <div class="section-title">
-            <h2>Solicitar un turno</h2>
-            <p>
-                Complete el formulario con un dia y un horario
-                tentativo para su turno. Luego evaluaremos su solicitud y nos pondremos en contacto con usted.
-            </p>
+<div class="container p-4 ">
+    <!--la clase rompe el footer !-->
+    <div class="row shadow-lg rounded">
+        <div class="col-md-3">
+            <div class="contact-info">
+                <img src="/assets/img/turno.png" width="80" height="80" alt="image" />
+                <h2>Solicita tu turno</h2>
+                <h4>Nos contactaremos con vos!</h4>
+            </div>
         </div>
 
-        <form id="solicitudTurno" method="POST" class="php-email-form">
-            <div class="form-row">
-                <div class="col-md-4 form-group">
+        <div class="col-sm-4 p-3">
+            <div class="contact-form">
+                <h4>Tus Datos</h4>
+                <div class="col-auto form-group">
+                    <label class="control-label">Nombre</label>
                     {{!-- <input id="userId" type="hidden" name="user_id" value={{userData.id}}> --}}
+
                     <input disabled type="text" class="form-control" name="from_email" id="from_email"
                         placeholder="Email" data-rule="text" data-msg="Debes ingresar un email valido"
                         value={{userData.nombre}} />
                     <div class="validate"></div>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-auto form-group">
+                    <label class="control-label">Apellido</label>
                     <input type="text" class="form-control" name="from_email" id="apellido" placeholder="Email"
                         data-rule="text" data-msg="Debes ingresar un apellido valido" value={{userData.apellido}}
                         disabled />
                     <div class="validate"></div>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-auto form-group">
+                    <label class="control-label">Email</label>
                     <input type="email" class="form-control" name="from_email" id="from_email" placeholder="Email"
                         data-rule="email" data-msg="Debes ingresar un email valido" value={{userData.email}} disabled />
                     <div class="validate"></div>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-auto form-group">
+                    <label class="control-label">Teléfono</label>
                     <input type="tel" class="form-control" name="tel" id="tel" placeholder="Teléfono"
                         data-rule="minlen:4" data-msg="Debes ingresar un telefono valido" value={{userData.telefono}}
                         disabled />
                     <div class="validate"></div>
                 </div>
-            </div>
 
-            <div class="form-row">
-                <div class="col-md-4 form-group">
-                    <label for="dia">Fecha de Preferencia:</label>
-                    <input type="date" name="dia" id="dia" class="form-control">
-                </div>
-                <div class="col-md-4 form-group">
-                    <label for="dia">Horarios Disponibles en la Fecha Seleccionada:</label>
-                    <div id="divErrorHorario" class="text-danger d-none align-items-center"></div>
-                    <div id="spinnerHorario" class="d-flex justify-content-start align-items-center m-l-10">
-                        <i style="font-size: 2rem!important;" class="fas fa-spin fa-spinner"></i>
-                    </div>
-                    <select class="form-control d-none" name="horario" id="horario">
-                        {{!-- {{#each horarios}}
+            </div>
+        </div>
+
+        <div class="col-sm p-3">
+            <div class=" form-group">
+                <h4>Tu Solicitud</h4>
+                <form id="solicitudTurno" method="POST">
+                    <div class="form-row">
+                        <div class="col-auto form-group">
+                            <label for="dia">Fecha de Preferencia:</label>
+                            <input type="date" name="dia" id="dia" class="form-control">
+                        </div>
+                        <div class="col-auto form-group">
+                            <label for="dia">Horarios Disponibles en la Fecha Seleccionada:</label>
+                            <div id="divErrorHorario" class="text-danger d-none align-items-center"></div>
+                            <div id="spinnerHorario" class="d-flex justify-content-start align-items-center m-l-10">
+                                <i style="font-size: 2rem!important;" class="fas fa-spin fa-spinner"></i>
+                            </div>
+                            <select class="form-control d-none" name="horario" id="horario">
+                                {{!-- {{#each horarios}}
                         <option value={{id}}> {{hora_inicio}} - {{hora_fin}}
                         </option>
                         {{/each}} --}}
-                    </select>
-                </div>
-            </div>
+                            </select>
+                        </div>
+                    </div>
 
-            <div style="margin-top: 15px" class="form-row">
-                <div class="col-md-4 form-group">
+                    <div class="form-group">
+                        <label for="foto">Foto descriptiva del problema</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="imagen" id="customFileLang" lang="es">
+                            <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                        </div>
+                        <small>Por favor, adjunte una imagen que sea lo mas descriptiva posible del
+                            problema</small>
+                    </div>
 
-                    <label for="ficha"><small>Por favor, adjunte una imagen que sea lo mas descriptiva posible del
-                            problema</small></label>
-                    <input required id="imagen" type="file" class="form-control" name="imagen" />
-                </div>
-            </div>
+                    <div class="form-group">
+                        <textarea style="resize: none;" id="msg" class="form-control textarea-form" name="msg" rows="5"
+                            placeholder="Mensaje (opcional)"></textarea>
+                        <div class="validate"></div>
+                    </div>
 
-            <div class="form-group">
-                <textarea style="resize: none;" id="msg" class="form-control textarea-form" name="msg" rows="5"
-                    placeholder="Mensaje (opcional)"></textarea>
-                <div class="validate"></div>
+                    <div style="display: none" class="text-center error-div">
+                        <h5>
+                            Se debe solucionar estos errores antes de enviar:
+                        </h5>
+                        <ul id="errorList" class="error-list"></ul>
+                    </div>
+                    <div class="text-center">
+                        <button class="boton-submit" id="submit" type="submit">
+                            Solicitar Turno
+                        </button>
+                    </div>
+                </form>
+
             </div>
-            <!-- <div class="mb-3">
-          <div class="loading">Cargando</div>
-          <div class="error-message"></div>
-          <div class="sent-message">Su solicitud de turno a sido enviada con exito. ¡Muchas gracias!</div>
-        </div> -->
-            <div style="display: none" class="text-center error-div">
-                <h5>
-                    Se debe solucionar estos errores antes de enviar:
-                </h5>
-                <ul id="errorList" class="error-list"></ul>
-            </div>
-            <div class="text-center">
-                <button class="boton-submit" id="submit" type="submit">
-                    Solicitar Turno
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
-</section>
+
+</div>
+
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+
 
 {{!-- 
 <div id="preloader"></div> --}}
