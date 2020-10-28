@@ -9889,7 +9889,13 @@ th.column4 {
 .contact-info h2 {
   margin-bottom: 10%;
 }
-.col-md-9 {
+.col-sm {
+  background: #fff;
+  padding: 3%;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+.col-sm-4 {
   background: #fff;
   padding: 3%;
   border-top-right-radius: 0.5rem;
