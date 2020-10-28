@@ -60,11 +60,12 @@
     <div class="section-title">
         <h3>Historia Clinica</h3>
     </div>
-    <button type="button"
-        onclick="printJS({ header: '<h3> Historia Clinica - {{userData.apellido}} {{userData.nombre}}</h3>', headerStyle: 'text-align: center;', printable: 'tableImprimir', type: 'html', css: ['https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'], targetStyle: ['background-color', 'color'], targetStyles: ['*'] })">
-        Print Form with Header
-    </button>
     <div class="row">
+        <button class="btn btn-success m-b-10" type="button"
+            onclick="printJS({ header: ' <h5>Fecha: {{fechaDeHoy}}</h5> <br> <h3> Historia Clinica - {{userData.apellido}} {{userData.nombre}} - DNI {{userData.dni}}</h3> <br>', headerStyle: 'text-align: center;', printable: 'tableImprimir', type: 'html', css: ['https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'], targetStyle: ['background-color', 'color'], targetStyles: ['*'] })">
+            <i class="fas fa-print"></i>
+            Imprimir
+        </button>
         {{#if historia}}
         <div class="wrap-table100 mx-auto">
             <div class="table100 ver1 m-b-110 table-historia">

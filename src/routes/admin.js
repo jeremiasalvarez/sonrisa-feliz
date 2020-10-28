@@ -5,7 +5,7 @@ const { isLoggedIn, isAdmin } = require("../lib/auth");
 const { getPacientes, getSolicitudes, getHorarios, getPrestaciones, eliminarSolicitud, enviarMail, guardarTurno, getHorario, formatearFecha, getTurnos, reprogramarTurno, cancelarTurno, guardarHistoriaClinica,
 getHistoriaClinica, 
 getUserData, editarObservacion,
-horariosDisponibles ,fechaHorarioValidos} = require("../lib/helpers");
+horariosDisponibles ,fechaHorarioValidos, fechaDeHoy} = require("../lib/helpers");
 const helpers = require("../lib/helpers")
 
 const moment = require("moment");
@@ -54,10 +54,11 @@ router.get("/paciente", isLoggedIn, isAdmin, async (req, res) => {
         userData: userData[0],
         historia,
         fechaFormateada,
-        admin  
+        admin,
+        fechaDeHoy: fechaDeHoy()  
     }
 
-    console.log(data)
+    // console.log(data)
 
     return res.render("usuario/ficha", data);
 

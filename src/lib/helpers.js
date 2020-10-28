@@ -33,6 +33,11 @@ const fechaOcupada = async (data) => {
 
 }
 
+helpers.fechaDeHoy = () => {
+  return moment().format('LLL');
+}
+
+
 helpers.fechaHorarioValidos = async (idHorario, fecha) => {
     if (moment(fecha).isAfter(moment())) {
       // console.log("FECHA VALIDA")
