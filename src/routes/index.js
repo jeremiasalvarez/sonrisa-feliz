@@ -1,6 +1,6 @@
 const express = require("express");
-const { isLoggedIn, isAdmin } = require("../lib/auth");
 const router = express.Router();
+const { isLoggedIn, isAdmin } = require("../lib/auth");
 const helpers = require("../lib/helpers");
 
 //Ruta inicial de la pagina web
@@ -35,5 +35,11 @@ router.get("/ficha", isLoggedIn, async (req, res) => {
 
   return res.render("usuario/ficha",data)
 }) 
+
+router.get("/pago", isLoggedIn, isAdmin, (req, res) => {
+
+  return res.render("pagos/cobro")
+
+})
 
 module.exports = router;
