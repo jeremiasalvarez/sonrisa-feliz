@@ -51,7 +51,7 @@ router.post("/api/v1/mercadopago", async (req, res) => {
         },
         binary_mode: true,
         auto_return: "approved",
-        notification_url: "https://turnos-sonrisafeliz.herokuapp.coms/notifications"
+        notification_url: "https://turnos-sonrisafeliz.herokuapp.com/notifications"
       };
     
       const mp = await mercadopago.preferences.create(preference);
