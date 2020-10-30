@@ -27,11 +27,11 @@
                 <li data-aos="fade-up">
                     <div id="pendiente_{{id}}" class="solicitud-titulo d-flex justify-content-start align-items-center">
                         <i id="estado_{{id}}" class='custom-icon bx bx-info-circle icon-warning'></i>
+                        <input class="estado-pago" type="hidden" id="pagado_{{id}}" value={{ya_pago}}>
                         <a id="pendienteLink_{{id}}" data-toggle="collapse" class="collapse collapsed"
                             href="#pendiente_id_{{id}}" aria-expanded="false">
-                            Paciente: <span class="text-secondary">{{apellido}} {{nombre}} </span> <br>
-                            DNI: <span class="text-secondary"> {{dni}} </span><br>
-                            Solicitado el: <span class="text-secondary">{{fecha_solicitud}} </span>
+                            Prestacion: <span class="text-secondary"> {{nombre}} </span> <br>
+                            Fecha del Turno: <span class="text-secondary">{{fecha_solicitud}} </span>
                             <i class="bx bx-chevron-down icon-show"></i>
                             <i class="bx bx-chevron-up icon-close"></i>
                         </a>
@@ -39,145 +39,19 @@
                     <div id="pendiente_id_{{id}}" class="collapse" data-parent=".faq-list" style="">
                         <input type="hidden" id="pendientePrecio_{{id}}" value="{{precio}}">
                         <input type="hidden" id="pendienteUsuario_{{id}}" value="{{id_usuario}}">
+                        <input type="hidden" id="pendientePrestacion_{{id}}" value="{{nombre}}">
+
 
                         <p class="refer-text">Prestacion: {{nombre}}</p>
-                        <p class="refer-text">Total a Pagar: ${{precio}}</p>
+                        <p class="refer-text">Total a Pagar: <strong> ${{precio}} </strong></p>
+                        <p class="text-danger">Los turnos que no sean abonados 48 horas antes de su fecha pueden ser
+                            cancelados.</p>
 
                         <div class="d-flex justify-content-between align-items-center flex-res">
 
-                            <button data-toggle="modal" data-target="#modalPagar_{{id}}" class="btn btn-success ">Pagar
+                            <button id="botonPagar_{{id}}" data-toggle="modal" class="btn btn-success btn-pagar">Pagar
                                 Solicitud</button>
 
-                            <div class="modal fade" id="modalPagar_{{id}}" tabindex="-1" role="dialog"
-                                aria-labelledby="modalPagarTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div style="background-color: var(--light);" class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Pagar Solicitud</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-payment">
-                                                <div class="products">
-                                                    <h2 class="title">Summary</h3>
-                                                        <div class="item">
-                                                            <span class="price" id="summary-price"></span>
-                                                            <p class="item-name">Prestacion - {{nombre}}<span
-                                                                    id="summary-quantity"></span></p>
-                                                        </div>
-                                                        <h2 class="total">Total<span class="price"
-                                                                id="summary-total"></span>
-                                                        </h2>
-                                                </div>
-                                                <div class="payment-details">
-                                                    <form action="/process_payment" method="post" id="paymentForm">
-                                                        <h3 class="title">Buyer Details</h3>
-                                                        <div class="row">
-                                                            <div class="form-group col-md-10">
-                                                                <label for="email">E-Mail</label>
-                                                                <input id="email" name="email" type="text"
-                                                                    class="form-control"></select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="form-group col-sm-5">
-                                                                <label for="docType">Document Type</label>
-                                                                <select id="docType" name="docType"
-                                                                    data-checkout="docType" type="text"
-                                                                    class="form-control"></select>
-                                                            </div>
-                                                            <div class="form-group col-sm-7">
-                                                                <label for="docNumber">Document Number</label>
-                                                                <input id="docNumber" name="docNumber"
-                                                                    data-checkout="docNumber" type="text"
-                                                                    class="form-control" />
-                                                            </div>
-                                                        </div>
-                                                        <br>
-                                                        <h3 class="title">Card Details</h3>
-                                                        <div class="row">
-                                                            <div class="form-group col-sm-8">
-                                                                <label for="cardholderName">Card Holder</label>
-                                                                <input id="cardholderName"
-                                                                    data-checkout="cardholderName" type="text"
-                                                                    class="form-control">
-                                                            </div>
-                                                            <div class="form-group col-sm-4">
-                                                                <label for="">Expiration Date</label>
-                                                                <div class="input-group expiration-date">
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="MM" id="cardExpirationMonth"
-                                                                        data-checkout="cardExpirationMonth"
-                                                                        onselectstart="return false"
-                                                                        onpaste="return false" onCopy="return false"
-                                                                        onCut="return false" onDrag="return false"
-                                                                        onDrop="return false" autocomplete=off>
-                                                                    <span class="date-separator">/</span>
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="YY" id="cardExpirationYear"
-                                                                        data-checkout="cardExpirationYear"
-                                                                        onselectstart="return false"
-                                                                        onpaste="return false" onCopy="return false"
-                                                                        onCut="return false" onDrag="return false"
-                                                                        onDrop="return false" autocomplete=off>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-sm-8">
-                                                                <label for="cardNumber">Card Number</label>
-                                                                <input type="text" class="form-control input-background"
-                                                                    id="cardNumber" data-checkout="cardNumber"
-                                                                    onselectstart="return false" onpaste="return false"
-                                                                    onCopy="return false" onCut="return false"
-                                                                    onDrag="return false" onDrop="return false"
-                                                                    autocomplete=off>
-                                                            </div>
-                                                            <div class="form-group col-sm-4">
-                                                                <label for="securityCode">CVV</label>
-                                                                <input id="securityCode" data-checkout="securityCode"
-                                                                    type="text" class="form-control"
-                                                                    onselectstart="return false" onpaste="return false"
-                                                                    onCopy="return false" onCut="return false"
-                                                                    onDrag="return false" onDrop="return false"
-                                                                    autocomplete=off>
-                                                            </div>
-                                                            <div id="issuerInput" class="form-group col-sm-12 hidden">
-                                                                <label for="issuer">Issuer</label>
-                                                                <select id="issuer" name="issuer" data-checkout="issuer"
-                                                                    class="form-control"></select>
-                                                            </div>
-                                                            <div class="form-group col-sm-12">
-                                                                <label for="installments">Installments</label>
-                                                                <select type="text" id="installments"
-                                                                    name="installments" class="form-control"></select>
-                                                            </div>
-                                                            <div class="form-group col-sm-12">
-                                                                <input type="hidden" name="transactionAmount"
-                                                                    id="amount" value="{{precio}}" />
-                                                                <input type="hidden" name="paymentMethodId"
-                                                                    id="paymentMethodId" />
-                                                                <input type="hidden" name="description"
-                                                                    id="description" />
-                                                                <br>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary">Pay</button>
-
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button id="cerrarModalPagar_{{id}}" type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cancelar</button>
-                                            <button id="hiddenButtonPagar_{{id}}" style="display: none;"
-                                                data-dismiss="modal"></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </li>
@@ -191,7 +65,7 @@
             class="solicitud-titulo d-flex justify-content-center align-items-center">
             <i class='custom-icon bx bx-info-circle icon-warning m-r-10'></i>
             <a class="text-secondary">
-                Por el momento no tienes ninguna solicitud
+                Por el momento no tienes ningun servicio pendiente de pago
             </a>
         </div>
         {{/if}}

@@ -8,7 +8,7 @@ const instance = axios.create({
     timeout: 1000,
     headers: {'Authorization': 'Bearer TEST-8954245393485760-102823-0ff502ba94a16dffef79b41228a683da-665143944'}
   });
-
+//TODO cambiar al token real
 
 const mercadopago = require('mercadopago');
 
@@ -60,14 +60,13 @@ router.post("/api/v1/mercadopago", async (req, res) => {
         items: [
           {
             id: req.body.id_pendiente,
-            title: req.body.product,
-            unit_price: req.body.price,
+            title: `Sonrisa Feliz - Prestación - ${req.body.product}`,
+            unit_price: Number(req.body.price),
             quantity: 1,
           }
         ],
         payer: {
-            name: req.body.name,
-            email: req.body.email
+            email: req.user.email
         },
         payment_methods: {
             excluded_payment_methods: [
@@ -84,7 +83,7 @@ router.post("/api/v1/mercadopago", async (req, res) => {
         },
         back_urls: {
             failure: "https://turnos-sonrisafeliz.herokuapp.com",
-            success: "https://turnos-sonrisafeliz.herokuapp.com"
+            success: "http://localhost:4000/pendientes"
         },
         binary_mode: true,
         auto_return: "approved",

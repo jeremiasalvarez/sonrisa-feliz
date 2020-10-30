@@ -36,7 +36,7 @@ router.get("/ficha", isLoggedIn, async (req, res) => {
   return res.render("usuario/ficha",data)
 }) 
 
-router.get("/pendientes", async (req, res) => {
+router.get("/pendientes", isLoggedIn, async (req, res) => {
 
     const pendientes = await helpers.getPagosPendientes(req.user.id);
 

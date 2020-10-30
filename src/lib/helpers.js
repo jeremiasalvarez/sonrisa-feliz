@@ -67,7 +67,7 @@ helpers.getPagosPendientes = async (id) => {
 
       try {
 
-          const rows = await pool.query("SELECT pagos_turnos.id_pago AS id, pagos_turnos.id_turno, pagos_turnos.id_usuario, prestaciones.nombre, prestaciones.precio, turno_paciente.id_prestacion FROM pagos_turnos INNER JOIN turno_paciente ON pagos_turnos.id_turno=turno_paciente.id INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id WHERE pagos_turnos.id_usuario=?",[id]);
+          const rows = await pool.query("SELECT pagos_turnos.id_pago AS id, pagos_turnos.id_turno, pagos_turnos.id_usuario, pagos_turnos.ya_pago, prestaciones.nombre, prestaciones.precio, turno_paciente.id_prestacion FROM pagos_turnos INNER JOIN turno_paciente ON pagos_turnos.id_turno=turno_paciente.id INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id WHERE pagos_turnos.id_usuario=?",[id]);
           //TODO filtrar por pagos que no esten pagados
           return toJson(rows);
 
@@ -100,7 +100,7 @@ helpers.fechaHorarioValidos = async (idHorario, fecha) => {
       return true;
     } else if (moment(fecha).format("L") === moment().format("L")) {
 
-      const horario = await getHorario(idHorario);
+      const horario = await obtenerHorario(idHorario);
 
       const horaActual = moment().format("LT").split(":")[0];
 
@@ -178,6 +178,7 @@ helpers.getDias = async () => {
   return toJson(result);
 }
 
+
 helpers.getHorarios = async () => {
 
   const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turnos_horarios ORDER BY hora_inicio ASC");
@@ -194,6 +195,28 @@ helpers.getHorarios = async () => {
 
   return toJson(result);
 }
+
+async function obtenerHorario(id) {
+  try {
+
+    const result = await pool.query("SELECT id, hora_inicio, hora_fin FROM turnos_horarios WHERE id = ?", [id]);
+    
+    result.forEach(horario => {
+  
+      const { hora_inicio, hora_fin } = horario;
+  
+      horario.hora_inicio = formatearHorario(hora_inicio);
+      horario.hora_fin = formatearHorario(hora_fin);
+  
+    })
+  
+    return toJson(result[0]);
+  
+    } catch (e){
+      return toJson({error: e});
+    }
+}
+
 
 helpers.getHorario = async (id) => {
 
