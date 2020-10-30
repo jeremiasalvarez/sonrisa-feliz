@@ -27,15 +27,13 @@ router.post("/notifications", async (req, res) => {
         if (type === 'payment') {
             console.log(`ES UN PAGO, LA ID ES ${ID_PAGO}`);
 
-            const api = await instance.get(`v1/payments/${ID_PAGO}`);
-            const result = await api.json();
+            const result = await instance.get(`v1/payments/${ID_PAGO}`);
             
             if (result.status === 'approved') {
                 console.log("APROBADO");
                 const orderID = result.order.id;
                 console.log("BUSCANDO ORDEN");
-                const ordenApi = await instance.get(`merchant_orders/${orderID}`);
-                const orden = await ordenApi.json();
+                const orden = await instance.get(`merchant_orders/${orderID}`);
 
                 const itemId = orden.items[0].id;
 
