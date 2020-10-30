@@ -31,11 +31,11 @@ router.post("/notifications", async (req, res) => {
             console.log(result)
             if (result.data.status == "approved") {
                 console.log("APROBADO");
-                const orderID = result.order.id;
+                const orderID = result.data.order.id;
                 console.log("BUSCANDO ORDEN");
                 let resultOrden = await instance.get(`merchant_orders/${orderID}`);
-                const itemId = resultOrden.data.orden.items[0].id;
-                console.log(`ÒRDEN : ${resultOrden.data.orden.items[0]}`)
+                const itemId = resultOrden.data.items[0].id;
+                console.log(`ÒRDEN : ${resultOrden.data.items[0]}`)
                 const update = await completarPago(itemId);
                 
                 if(update.success) {
