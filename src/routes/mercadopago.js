@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios").default;
+const {completarPago} = require("../lib/helpers");
 
 const instance = axios.create({
     baseURL: 'https://api.mercadopago.com/',
@@ -17,7 +18,7 @@ mercadopago.configure({
 });
 
 
-router.post("/notifications", (req, res) => {
+router.post("/notifications", async (req, res) => {
 
     try {
         
@@ -25,6 +26,25 @@ router.post("/notifications", (req, res) => {
 
         if (type === 'payment') {
             console.log(`ES UN PAGO, LA ID ES ${ID_PAGO}`);
+
+            const api = await instance.get(`v1/payments/${ID_PAGO}`);
+            const result = await api.json();
+            
+            if (result.status === 'approved') {
+                console.log("APROBADO");
+                const orderID = result.order.id;
+                console.log("BUSCANDO ORDEN");
+                const ordenApi = await instance.get(`merchant_orders/${orderID}`);
+                const orden = await ordenApi.json();
+
+                const itemId = orden.items[0].id;
+
+                const update = await completarPago(itemId);
+                
+                if(update.success) {
+                    console.log("SE actualizo correctamente");
+                }
+            }
         }
         if (topic === 'merchant_order') {
             console.log(`ES UNA ORDEN, LA ID ES: ${id}`);
@@ -43,7 +63,7 @@ router.post("/api/v1/mercadopago", async (req, res) => {
     let preference = {
         items: [
           {
-            id: 99999999,
+            id: req.body.id_pendiente,
             title: req.body.product,
             unit_price: req.body.price,
             quantity: 1,

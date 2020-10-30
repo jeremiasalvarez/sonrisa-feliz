@@ -68,12 +68,29 @@ helpers.getPagosPendientes = async (id) => {
       try {
 
           const rows = await pool.query("SELECT pagos_turnos.id_pago AS id, pagos_turnos.id_turno, pagos_turnos.id_usuario, prestaciones.nombre, prestaciones.precio, turno_paciente.id_prestacion FROM pagos_turnos INNER JOIN turno_paciente ON pagos_turnos.id_turno=turno_paciente.id INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id WHERE pagos_turnos.id_usuario=?",[id]);
-
+          //TODO filtrar por pagos que no esten pagados
           return toJson(rows);
 
       } catch (error) {
           console.log(error);
       }
+
+}
+
+helpers.completarPago = async (id) => {
+
+    try {
+        const result = await pool.query("UPDATE pagos_turnos SET ya_pago=1 WHERE id_pago=?",[id]);
+
+        return {
+          success: result.affectedRows == 1,
+          msg: 'actualizado'
+        }
+
+    } catch (error) {
+
+        console.log(error);
+    }
 
 }
 
