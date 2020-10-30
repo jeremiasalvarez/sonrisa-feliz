@@ -83,7 +83,7 @@ router.post("/api/v1/mercadopago", async (req, res) => {
         },
         back_urls: {
             failure: "https://turnos-sonrisafeliz.herokuapp.com",
-            success: "http://localhost:4000/pendientes"
+            success: "https://turnos-sonrisafeliz.herokuapp.com/pendientes"
         },
         binary_mode: true,
         auto_return: "approved",
