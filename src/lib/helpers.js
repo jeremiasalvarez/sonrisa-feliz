@@ -38,6 +38,44 @@ helpers.fechaDeHoy = () => {
   return momentTimeZone().tz("America/Argentina/Buenos_Aires").format('LLL');
 }
 
+const crearPago = async (data) => {
+
+  try {
+
+      const nuevoPago = {
+          id_turno: data.id_turno,
+          id_usuario: data.id_usuario,
+          ya_pago: 0
+      }
+      const result = await pool.query("INSERT INTO pagos_turnos SET ?", [nuevoPago]);
+
+      return {
+        success: true,
+        msg: "Pago insertado"
+      }
+
+  } catch (error) {
+      return {
+        success: false,
+        msg: error
+      }
+  }
+
+}
+
+helpers.getPagosPendientes = async (id) => {
+
+      try {
+
+          const rows = await pool.query("SELECT pagos_turnos.id_pago AS id, pagos_turnos.id_turno, pagos_turnos.id_usuario, prestaciones.nombre, prestaciones.precio, turno_paciente.id_prestacion FROM pagos_turnos INNER JOIN turno_paciente ON pagos_turnos.id_turno=turno_paciente.id INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id WHERE pagos_turnos.id_usuario=?",[id]);
+
+          return toJson(rows);
+
+      } catch (error) {
+          console.log(error);
+      }
+
+}
 
 helpers.fechaHorarioValidos = async (idHorario, fecha) => {
     if (moment(fecha).isAfter(moment())) {
@@ -577,6 +615,10 @@ helpers.guardarTurno = async (data) => {
     const query = await pool.query("INSERT INTO turno_paciente SET ?", [nuevoTurno]);
 
     result.insert_id = query.insertId;
+
+    const pago = await crearPago({id_turno: result.insert_id, id_usuario: data.usuario_id});
+
+    console.log(pago);
 
     result.success = true;
     result.msg = "Turno Insertado";

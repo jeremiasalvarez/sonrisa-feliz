@@ -79,6 +79,7 @@ app.use(require("./routes/index.js"));
 app.use(require("./routes/authentication.js"));
 app.use(require("./routes/controlTurnos"));
 app.use(require("./routes/admin"));
+app.use(require("./routes/mercadopago"));
 
 //Inicialización del servidor
 app.listen(app.get("port"), () => {

@@ -36,4 +36,13 @@ router.get("/ficha", isLoggedIn, async (req, res) => {
   return res.render("usuario/ficha",data)
 }) 
 
+router.get("/pendientes", async (req, res) => {
+
+    const pendientes = await helpers.getPagosPendientes(req.user.id);
+
+    return res.render("usuario/pendientes", {pendientes});
+
+})
+
+
 module.exports = router;
