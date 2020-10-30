@@ -1,5 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const axios = require("axios").default;
+
+const instance = axios.create({
+    baseURL: 'https://api.mercadopago.com/',
+    timeout: 1000,
+    headers: {'Authorization': 'Bearer TEST-8954245393485760-102823-0ff502ba94a16dffef79b41228a683da-665143944'}
+  });
+
 
 const mercadopago = require('mercadopago');
 
@@ -11,8 +19,21 @@ mercadopago.configure({
 
 router.post("/notifications", (req, res) => {
 
-    console.log(req.query);
+    try {
+        
+        const { 'data.id':ID_PAGO , type, topic, id } = req.query;
 
+        if (type === 'payment') {
+            console.log(`ES UN PAGO, LA ID ES ${ID_PAGO}`);
+        }
+        if (topic === 'merchant_order') {
+            console.log(`ES UNA ORDEN, LA ID ES: ${id}`);
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+    
     return res.status(200);
 })
 

@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Federico-Benitez/Pagina-Dentista-Parte2#readme",
   "dependencies": {
     "aws-sdk": "^2.775.0",
+    "axios": "^0.21.0",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "dotenv": "^8.2.0",
