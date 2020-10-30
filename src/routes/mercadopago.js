@@ -46,8 +46,8 @@ router.post("/api/v1/mercadopago", async (req, res) => {
             installments: 1
         },
         back_urls: {
-            failure: "http://localhost:4000",
-            success: "http://localhost:4000"
+            failure: "https://turnos-sonrisafeliz.herokuapp.com",
+            success: "https://turnos-sonrisafeliz.herokuapp.com"
         },
         binary_mode: true,
         auto_return: "approved",
