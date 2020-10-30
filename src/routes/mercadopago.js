@@ -34,7 +34,7 @@ router.post("/notifications", (req, res) => {
         console.log(error);
     }
     
-    return res.status(200);
+    return res.status(201);
 })
 
 
