@@ -11,7 +11,7 @@ mercadopago.configure({
 
 router.post("/notifications", (req, res) => {
 
-    console.log(req);
+    console.log(req.query);
 
     return res.status(200);
 })
@@ -56,15 +56,6 @@ router.post("/api/v1/mercadopago", async (req, res) => {
     
       const mp = await mercadopago.preferences.create(preference);
       return res.json(mp);
-
-      mercadopago.preferences.create(preference)
-      .then(function(response){
-      // Este valor reemplazará el string "<%= global.id %>" en tu HTML
-        global.id = response.body.id;
-      }).catch(function(error){
-        console.log(error);
-      });
-    
 
 })
 
