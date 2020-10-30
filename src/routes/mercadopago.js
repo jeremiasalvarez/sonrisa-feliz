@@ -28,8 +28,8 @@ router.post("/notifications", async (req, res) => {
             console.log(`ES UN PAGO, LA ID ES ${ID_PAGO}`);
 
             let result = await instance.get(`v1/payments/${ID_PAGO}`);
-            
-            if (result.status == 'approved') {
+            console.log(result)
+            if (result.status == "app") {
                 console.log("APROBADO");
                 const orderID = result.order.id;
                 console.log("BUSCANDO ORDEN");
