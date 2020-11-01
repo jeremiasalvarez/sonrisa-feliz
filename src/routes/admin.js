@@ -195,7 +195,7 @@ router.get("/turnos", isLoggedIn, isAdmin, (req, res) => {
 router.get("/api/turnos", isLoggedIn, isAdmin, async (req, res) => {
 
     const turnos = await getTurnos();
-
+    // console.log(turnos);
     const horarios = await getHorarios();
 
     return res.json({turnos, horarios});

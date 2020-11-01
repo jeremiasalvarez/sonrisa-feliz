@@ -155,7 +155,8 @@ const appendAside = (fecha) => {
                 email,
                 dni,
                 img_ruta,
-                finalizado} = turno;
+                finalizado,
+                ya_pago} = turno;
         
         completado = finalizado === 1;
 
@@ -197,7 +198,7 @@ const appendAside = (fecha) => {
                             <p class="refer-text">E-mail: ${email} </p>
                             <p class="refer-text">Prestacion a realizar: ${nombre_prestacion}</p>
                             </p>
-                            
+                            <p class="refer-text p-t-10 p-b-10 d-flex align-items-center ${ya_pago == 1 ? 'text-success' : 'text-danger'} ">${ya_pago == 1 ? "<i class='custom-icon bx bx-check-circle icon-check m-r-8'></i> <strong>Este turno ya fue abonado</strong>": "<i class='custom-icon bx bx-info-circle icon-warning m-r-8 text-danger'></i> <strong>Este turno aun no ha sido abonado</strong>"}</p>
                             ${img_ruta ? `
                             <div class="p-t-10 d-flex justify-content-start align-items-center">
                                 <p class="refer-text p-0">Imagen ilustrativa: </p>
