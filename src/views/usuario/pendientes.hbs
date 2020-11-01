@@ -30,8 +30,10 @@
                         <input class="estado-pago" type="hidden" id="pagado_{{id}}" value={{ya_pago}}>
                         <a id="pendienteLink_{{id}}" data-toggle="collapse" class="collapse collapsed"
                             href="#pendiente_id_{{id}}" aria-expanded="false">
-                            Prestacion: <span class="text-secondary"> {{nombre}} </span> <br>
-                            Fecha del Turno: <span class="text-secondary">{{fecha_solicitud}} </span>
+                            <strong>Prestacion:</strong> <span class="text-secondary"> {{nombre}} </span> <br>
+                            <strong>Fecha del Turno: </strong> <span class="text-secondary"> {{fecha}},
+                                {{hora_inicio}}hs - {{hora_fin}}hs
+                            </span>
                             <i class="bx bx-chevron-down icon-show"></i>
                             <i class="bx bx-chevron-up icon-close"></i>
                         </a>

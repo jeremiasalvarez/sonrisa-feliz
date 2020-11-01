@@ -67,8 +67,17 @@ helpers.getPagosPendientes = async (id) => {
 
       try {
 
-          const rows = await pool.query("SELECT pagos_turnos.id_pago AS id, pagos_turnos.id_turno, pagos_turnos.id_usuario, pagos_turnos.ya_pago, prestaciones.nombre, prestaciones.precio, turno_paciente.id_prestacion FROM pagos_turnos INNER JOIN turno_paciente ON pagos_turnos.id_turno=turno_paciente.id INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id WHERE pagos_turnos.id_usuario=?",[id]);
+          const rows = await pool.query("SELECT pagos_turnos.id_pago AS id, pagos_turnos.id_turno, pagos_turnos.id_usuario, pagos_turnos.ya_pago, prestaciones.nombre, prestaciones.precio, turno_paciente.id_prestacion, turno_paciente.fecha, turno_paciente.id_horario, turnos_horarios.hora_inicio, turnos_horarios.hora_fin FROM pagos_turnos INNER JOIN turno_paciente ON pagos_turnos.id_turno=turno_paciente.id INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id INNER JOIN turnos_horarios ON turno_paciente.id_horario=turnos_horarios.id WHERE pagos_turnos.id_usuario=?",[id]);
           //TODO filtrar por pagos que no esten pagados
+
+          rows.forEach(turno => {
+              const { fecha, hora_inicio, hora_fin } = turno;
+
+              turno.fecha = formatearFecha(fecha, "DF").fecha,
+              turno.hora_inicio = formatearHorario(hora_inicio);
+              turno.hora_fin = formatearHorario(hora_fin);
+              
+          })
           return toJson(rows);
 
       } catch (error) {
@@ -560,7 +569,7 @@ helpers.getTurnos = async () => {
 
   try {
 
-      const rows = await pool.query("SELECT turno_paciente.id AS id_turno, turno_paciente.id_usuario, turno_paciente.id_horario, turno_paciente.id_prestacion, turno_paciente.fecha, turno_paciente.img_ruta, turno_paciente.finalizado, ficha_paciente.dni, ficha_paciente.nombre AS nombre_paciente, ficha_paciente.apellido, ficha_paciente.telefono, usuario.email, prestaciones.nombre AS nombre_prestacion, turnos_horarios.hora_inicio, turnos_horarios.hora_fin FROM turno_paciente INNER JOIN usuario ON turno_paciente.id_usuario=usuario.id  INNER JOIN ficha_paciente ON turno_paciente.id_usuario=ficha_paciente.id_usuario INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id INNER JOIN turnos_horarios ON turno_paciente.id_horario=turnos_horarios.id WHERE turno_paciente.fecha >= CURRENT_DATE");
+      const rows = await pool.query("SELECT turno_paciente.id AS id_turno, turno_paciente.id_usuario, turno_paciente.id_horario, turno_paciente.id_prestacion, turno_paciente.fecha, turno_paciente.img_ruta, turno_paciente.finalizado, ficha_paciente.dni, ficha_paciente.nombre AS nombre_paciente, ficha_paciente.apellido, ficha_paciente.telefono, usuario.email, prestaciones.nombre AS nombre_prestacion, turnos_horarios.hora_inicio, turnos_horarios.hora_fin, pagos_turnos.ya_pago FROM turno_paciente INNER JOIN usuario ON turno_paciente.id_usuario=usuario.id  INNER JOIN ficha_paciente ON turno_paciente.id_usuario=ficha_paciente.id_usuario INNER JOIN prestaciones ON turno_paciente.id_prestacion=prestaciones.id INNER JOIN turnos_horarios ON turno_paciente.id_horario=turnos_horarios.id INNER JOIN pagos_turnos ON turno_paciente.id=pagos_turnos.id_turno WHERE turno_paciente.fecha >= CURRENT_DATE");
 
       rows.forEach(turno => {
 
