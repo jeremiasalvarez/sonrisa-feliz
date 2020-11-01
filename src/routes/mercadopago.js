@@ -6,7 +6,7 @@ const {completarPago} = require("../lib/helpers");
 const instance = axios.create({
     baseURL: 'https://api.mercadopago.com/',
     timeout: 1000,
-    headers: {'Authorization': 'Bearer TEST-3524037665299788-102822-0e94cedee198339c807e37e24fe8fcb8-665129639'}
+    headers: {'Authorization': 'Bearer APP_USR-3524037665299788-102822-96c696e8f672be62186fd0665b676e2b-665129639'}
   });
 //TODO cambiar al token real
 
@@ -14,7 +14,7 @@ const mercadopago = require('mercadopago');
 
 
 mercadopago.configure({
-    access_token: 'TEST-3524037665299788-102822-0e94cedee198339c807e37e24fe8fcb8-665129639'
+    access_token: 'APP_USR-3524037665299788-102822-96c696e8f672be62186fd0665b676e2b-665129639'
 });
 
 
