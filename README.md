@@ -6,6 +6,7 @@ Parte del login y gestión de los turnos con manejo de base de datos para la pag
 
 ![](docs/screenshot1.png)
 ![](docs/screenshot2.png)
+![](docs/screenshot3.png)
 
 ### Pre-requisitos 📋
 
@@ -22,7 +23,7 @@ Mysql
 Ejecutar el siguiente comando por terminal en la carpeta raiz del repositorio
 
 ```
-npm i express express-handlebars express-session mysql express-mysql-session morgan bcrypt.js passport passport-local timeago.js connect-flash express-validator
+npm i
 
 ```
 
@@ -31,8 +32,6 @@ Y luego:
 ```
 npm i nodemon -D
 ```
-
-Por ultimo, importamos la base de datos que se encuentra en la carpeta `./database` a nuestra base de datos, previamente tenemos que crear una base de datos en MySQL que se llame `pacientes`
 
 Y para ejecutar corremos el siguiente comando
 
